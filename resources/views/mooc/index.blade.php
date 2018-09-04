@@ -9,7 +9,7 @@
 		<title>Intensify by TEMPLATED</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="stylesheet" href="./mooc/assets/css/main.css" />
+		<link rel="stylesheet" href="{{ asset('css/mooc/main.css') }}" />
 	</head>
 	<body>
 
@@ -61,7 +61,7 @@
 						</div>
 					</div>
 					<div class="flex-item image fit round">
-						<img src="images/pic01.jpg" alt="" />
+						<img src="{{ asset('images/pic01.jpg') }}" alt="" />
 					</div>
 					<div class="flex-item right">
 						<div>
@@ -97,7 +97,7 @@
 				<div class="inner flex flex-3">
 					<div class="flex-item box">
 						<div class="image fit">
-							<img src="images/pic02.jpg" alt="" />
+							<img src="{{ asset('images/pic02.jpg') }}" alt="" />
 						</div>
 						<div class="content">
 							<h3>Consequat</h3>
@@ -106,7 +106,7 @@
 					</div>
 					<div class="flex-item box">
 						<div class="image fit">
-							<img src="images/pic03.jpg" alt="" />
+							<img src="{{ asset('images/pic03.jpg') }}" alt="" />
 						</div>
 						<div class="content">
 							<h3>Adipiscing</h3>
@@ -115,7 +115,7 @@
 					</div>
 					<div class="flex-item box">
 						<div class="image fit">
-							<img src="images/pic04.jpg" alt="" />
+							<img src="{{ asset('images/pic04.jpg') }}" alt="" />
 						</div>
 						<div class="content">
 							<h3>Malesuada</h3>
@@ -141,11 +141,11 @@
 			</footer>
 
 		<!-- Scripts -->
-			<script src="./assets/js/jquery.min.js"></script>
-			<script src="./assets/js/jquery.scrolly.min.js"></script>
-			<script src="./assets/js/skel.min.js"></script>
-			<script src="./assets/js/util.js"></script>
-			<script src="./assets/js/main.js"></script>
+			<script src="{{ asset('js/mooc/jquery.min.js') }}"></script>
+			<script src="{{ asset('js/mooc/jquery.scrolly.min.js') }}"></script>
+			<script src="{{ asset('js/mooc/skel.min.js') }}"></script>
+			<script src="{{ asset('js/mooc/util.js') }}"></script>
+			<script src="{{ asset('js/mooc/main.js') }}"></script>
 
 	</body>
 </html>
