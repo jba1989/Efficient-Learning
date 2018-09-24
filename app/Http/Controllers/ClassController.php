@@ -3,17 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ClassController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function classList()
     {
-        return view('home');
+        $data = DB::table('menu')->paginate(20);
+        return view('/mooc/classlist', $data);
+    }
+
+    public function classOfSchool($school)
+    {
+        $data = DB::table('total_class')->where('class', $school)->orderBy('id', 'asc')->paginate(30);
+        return view('/mooc/classOfSchool', $data);
+    }
+
+    public function singleClass($className)
+    {
+        $data = DB::table('total_class')->where('class', $className)->orderBy('id', 'asc');
+        return view('/mooc/singleclass', $data);
     }
 
     /**
