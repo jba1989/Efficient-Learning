@@ -17,8 +17,8 @@ class CreateClassListTable extends Migration
             $table->increments('classId');
             $table->string('className');
             $table->string('teacher');
-            $table->integer('likeCount');
-            $table->integer('dislikeCount');
+            $table->longText('likeCount');
+            $table->longText('dislikeCount');
             $table->index('type');
         });
     }
