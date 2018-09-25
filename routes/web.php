@@ -18,3 +18,16 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::get('/index', function() {
+    return view('mooc/index')
+};
+
+Route::get('/elements', function() {
+    return view('mooc/elements')
+};
+
+Route::get('/member', function() {
+    return view('mooc/member')
+};
