@@ -26,14 +26,14 @@ Route::get('/Class/{className}', 'ClassController@classOfSchool')->name('class')
 
 
 Route::get('/index', function() {
-    return view('mooc/index');
+    return view('/mooc/index');
 });
 
 Route::get('/elements', function() {
-    return view('mooc/elements');
+    return view('/mooc/elements');
 });
 
 Route::get('/member', function() {
-    return view('mooc/member');
+    return view('/mooc/member');
 });
 
