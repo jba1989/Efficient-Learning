@@ -17,9 +17,9 @@
 				<nav class="left">
 					<a href="#menu"><span>Menu</span></a>
 				</nav>
-				<a href="/index" class="logo">intensify</a>
+				<a href="{{ route('index') }}" class="logo">Welcome</a>
 				<nav class="right">
-					<a href="#" class="button alt">Log in</a>
+					<a href="{{ route('login') }}" class="button alt">Log in</a>
 				</nav>
 			</header>
 
@@ -30,9 +30,6 @@
 					<li><a href="/member">會員資料</a></li>
 					<li><a href="/favorite">我的最愛</a></li>
 					<li><a href="/school/ntu">台大課程總覽</a></li>
-				</ul>
-				<ul class="actions vertical">
-					<li><a href="#" class="button fit">Login</a></li>
 				</ul>
 			</nav>
 

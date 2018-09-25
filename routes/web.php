@@ -27,7 +27,7 @@ Route::get('/Class/{className}', 'ClassController@classOfSchool')->name('class')
 
 Route::get('/index', function() {
     return view('/mooc/index');
-});
+})->name('index');
 
 Route::get('/elements', function() {
     return view('/mooc/elements');
@@ -35,5 +35,5 @@ Route::get('/elements', function() {
 
 Route::get('/member', function() {
     return view('/mooc/member');
-});
+})->name('member');
 
