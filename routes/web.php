@@ -37,3 +37,7 @@ Route::get('/member', function() {
     return view('/mooc/member');
 })->name('member');
 
+Route::get('/classList', function() {
+    return view('/mooc/classList');
+});
+
