@@ -19,7 +19,8 @@ class CreateClassListTable extends Migration
             $table->string('teacher');
             $table->longText('likeCount');
             $table->longText('dislikeCount');
-            $table->index('type');
+            $table->string('classType', 12);
+            $table->string('school',12);
         });
     }
 
