@@ -17,11 +17,11 @@ class MemberController extends Controller
         $this->middleware('auth');
     }
 
-    public function member()
+    public function userInfo()
     {
         $userId = Auth::id();
         $data = DB::table('users')->where('id', userId)->get();
-        return view('/mooc/member', $data);
+        return view('/mooc/userInfo', $data);
     }
 
     public function favorite()
