@@ -14,13 +14,14 @@ class CreateClassListTable extends Migration
     public function up()
     {
         Schema::create('class_list', function (Blueprint $table) {
-            $table->increments('classId');
-            $table->string('className');
-            $table->string('teacher');
-            $table->longText('likeCount');
-            $table->longText('dislikeCount');
-            $table->string('classType', 12);
-            $table->string('school',12);
+            $table->increments('id');
+            $table->string('classId', 12);
+            $table->string('className')->nullable();
+            $table->string('teacher')->nullable();
+            $table->longText('likeCount')->nullable();
+            $table->longText('dislikeCount')->nullable();
+            $table->string('classType', 12)->nullable();
+            $table->string('school',12)->nullable();
         });
     }
 

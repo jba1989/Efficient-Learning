@@ -41,3 +41,6 @@ Route::get('/classList', function() {
     return view('/mooc/classList');
 });
 
+// 爬蟲
+Route::get('/parseClassList', 'SpiderController@parseClassList');
+
