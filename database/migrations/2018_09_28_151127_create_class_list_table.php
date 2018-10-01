@@ -22,7 +22,8 @@ class CreateClassListTable extends Migration
             $table->longText('dislikeCount')->nullable();
             $table->string('classType', 12)->nullable();
             $table->string('school',12)->nullable();
-            $table->int('countTitle')->nullable();
+            $table->integer('countTitle')->nullable();
+            $table->longText('description')->nullable();
         });
     }
 

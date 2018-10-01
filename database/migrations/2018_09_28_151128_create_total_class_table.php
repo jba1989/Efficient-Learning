@@ -14,11 +14,11 @@ class CreateTotalClassTable extends Migration
     public function up()
     {
         Schema::create('total_class', function (Blueprint $table) {
-            $table->increments('titleId');
-            $table->smallInteger('classId');
-            $table->string('className');
-            $table->string('title', 50);
-            $table->mediumText('videoLink');
+            $table->increments('id');
+            $table->string('classId', 12);
+            $table->integer('titleId', false, true);
+            $table->string('title', 50)->nullable();
+            $table->mediumText('videoLink')->nullable();
         });
     }
 

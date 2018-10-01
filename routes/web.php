@@ -43,4 +43,6 @@ Route::get('/classList', function() {
 
 // 爬蟲
 Route::get('/parseClassList', 'SpiderController@parseClassList');
-Route::get('/classDiscriptionSpider', 'SpiderController@classDiscriptionSpider');
+Route::get('/videoSpider/{classId}', 'SpiderController@videoSpider');
+Route::get('/videoSpider/{classId}/{count}', 'SpiderController@videoSpider');
+Route::get('/parseClassTitle/{classId}/{count}', 'SpiderController@parseClassTitle');
