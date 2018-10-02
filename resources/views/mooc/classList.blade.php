@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('mooc.layouts.main')
 
 @section('title', 'member')
 
@@ -72,14 +72,15 @@
                     </tr>
                     </thead>
                     <tbody>
-
+                    @foreach ($data as $class)
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{ $class->classId }}</td>
+                        <td>{{ $class->className }}</td>
+                        <td>{{ 1 }}</td>
+                        <td>{{ $class->teacher }}</td>
+                        <td>{{ $class->type }}</td>
                     </tr>
-
+                    @endforeach
                     </tbody>
                 </table>
             </div>

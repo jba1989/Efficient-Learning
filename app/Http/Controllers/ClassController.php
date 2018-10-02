@@ -10,20 +10,26 @@ class ClassController extends Controller
 {
     public function classList()
     {
-        $data = ClassList->all()->paginate(20);
-        return view('/mooc/classlist', $data);
+        $data = ClassList::paginate(30);        
+        return view('mooc.classList', ['data' => $data]);
+    }
+
+    public function classListOfType($classType)
+    {
+        $data = ClassList::where('classType', $classType)->orderBy('id', 'asc')->paginate(30);
+        return view('mooc.classList', ['data' => $data]);
     }
 
     public function classOfSchool($school)
     {
-        $data = TotalClass->where('school', $school)->orderBy('id', 'asc')->paginate(30);
-        return view('/mooc/classOfSchool', $data);
+        $data = TotalClass::where('school', $school)->orderBy('id', 'asc')->paginate(30);
+        return view('mooc.classOfSchool', ['data' => $data]);
     }
 
     public function singleClass($classId)
     {
-        $data = TotalClass->where('classId', $classId)->orderBy('classId', 'asc');
-        return view('/mooc/singleclass', $data);
+        $data = TotalClass::where('classId', $classId)->orderBy('classId', 'asc');
+        return view('mooc.singleclass', ['data' => $data]);
     }
 
     /**
