@@ -19,7 +19,7 @@ class SpiderController extends Controller
             $this->parseClassDescription($classId);
             $count = $this->countClass($classId);
             $this->parseClassTitle($classId, $count);
-            $this->videoSpider($classId, $count);
+            //$this->videoSpider($classId, $count);
         }
     }
 

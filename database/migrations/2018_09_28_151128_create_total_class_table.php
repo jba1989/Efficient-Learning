@@ -17,7 +17,7 @@ class CreateTotalClassTable extends Migration
             $table->increments('id');
             $table->string('classId', 12);
             $table->integer('titleId', false, true);
-            $table->string('title', 50)->nullable();
+            $table->string('title', 200)->nullable();
             $table->mediumText('videoLink')->nullable();
         });
     }

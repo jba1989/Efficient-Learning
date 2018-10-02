@@ -19,30 +19,9 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
-Route::get('/total', 'ClassController@classList')->name('total');
+Route::get('/classList', 'ClassController@classList')->name('classList');
 Route::get('/school/{school}', 'ClassController@classOfSchool')->name('school');
 Route::get('/Class/{className}', 'ClassController@classOfSchool')->name('class');
 
-
-Route::get('/index', function() {
-    return view('/mooc/index');
-})->name('index');
-
-Route::get('/elements', function() {
-    return view('/mooc/elements');
-});
-
-Route::get('/member', function() {
-    return view('/mooc/member');
-})->name('member');
-
-Route::get('/classList', function() {
-    return view('/mooc/classList');
-});
-
-// 爬蟲
-Route::get('/parseClassList', 'SpiderController@parseClassList');
-Route::get('/videoSpider/{classId}', 'SpiderController@videoSpider');
-Route::get('/videoSpider/{classId}/{count}', 'SpiderController@videoSpider');
-Route::get('/parseClassTitle/{classId}/{count}', 'SpiderController@parseClassTitle');
+// 重新抓取課程資訊
+Route::get('/update', 'SpiderController@update');

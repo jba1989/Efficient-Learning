@@ -3,25 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\ClassList as ClassList;
+use App\Models\TotalClass as TotalClass;
 
 class ClassController extends Controller
 {
     public function classList()
     {
-        $data = DB::table('menu')->paginate(20);
+        $data = ClassList->all()->paginate(20);
         return view('/mooc/classlist', $data);
     }
 
     public function classOfSchool($school)
     {
-        $data = DB::table('total_class')->where('class', $school)->orderBy('id', 'asc')->paginate(30);
+        $data = TotalClass->where('school', $school)->orderBy('id', 'asc')->paginate(30);
         return view('/mooc/classOfSchool', $data);
     }
 
-    public function singleClass($className)
+    public function singleClass($classId)
     {
-        $data = DB::table('total_class')->where('class', $className)->orderBy('id', 'asc');
+        $data = TotalClass->where('classId', $classId)->orderBy('classId', 'asc');
         return view('/mooc/singleclass', $data);
     }
 
