@@ -21,7 +21,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/classList', 'ClassController@classList')->name('classList');
 Route::get('/school/{school}', 'ClassController@classOfSchool')->name('school');
-Route::get('/Class/{className}', 'ClassController@classOfSchool')->name('class');
+Route::get('/class/{className}', 'ClassController@singleClass')->name('class');
 
 // 重新抓取課程資訊
 Route::get('/update', 'SpiderController@update');

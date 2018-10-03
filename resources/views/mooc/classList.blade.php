@@ -1,6 +1,6 @@
 @extends('mooc.layouts.main')
 
-@section('title', 'member')
+@section('title', '開放式課程討論區-課程清單')
 
 @section('css')
     ul, li {
@@ -85,6 +85,7 @@
                 </table>
             </div>
         </div>
+        {{ $data->links() }}
     </section>
 
 @endsection

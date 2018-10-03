@@ -28,8 +28,8 @@ class ClassController extends Controller
 
     public function singleClass($classId)
     {
-        $data = TotalClass::where('classId', $classId)->orderBy('classId', 'asc');
-        return view('mooc.singleclass', ['data' => $data]);
+        $data = TotalClass::where('classId', $classId)->orderBy('titleId', 'asc')->paginate(30);
+        return view('mooc.singleClass', ['data' => $data]);
     }
 
     /**
