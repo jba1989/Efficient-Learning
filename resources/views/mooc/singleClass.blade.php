@@ -42,26 +42,26 @@
     <!-- 留言板 -->
     <div class="inner" id="board">
         <div class="12u$">
-            <h3 >留言板:</h3>                 
+            <h3 >留言板:</h3>    
+            @foreach ($message as $content)             
             <div style="margin: 2em 0 0 0;">
-                <code><b style="font-size:1.5em; padding-right:0.5em">
-                    123
-                </code>
+                <h4>name</h4>
+                <code>{{ $content->message }}</code>
             </div>            
-
+            @endforeach
             <!--留言表單-->
-            <form method="post" action="#">
+            <form method="post" action="/message/store>
                 <div class="12u$">
                     <textarea name="message" id="message" maxlength="300" placeholder="最大長度300字" rows="6" ></textarea>
                 </div>
                 
-                <div class="12u$">
-                    
+                <div class="12u$">                    
                     <ul class="actions">
                         <li><input type="submit" name="submit" value="Send Message" /></li>
                         <li><input type="reset" name="reset" value="Reset" class="alt" /></li>
                     </ul>
-                    
+                    <input type="hidden" name="classId" value="{{ $class->classId }}" />
+                    <input type="hidden" name="classId" value="{{ $class->titleId }}" />                    
                 </div>
             </form>                    
         </div>

@@ -3,35 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ClassList;
-use App\Models\TotalClass;
 use App\Models\Message;
 
-class ClassController extends Controller
+class MessageController extends Controller
 {
-    public function classList()
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
-        $data = ClassList::paginate(30);        
-        return view('mooc.classList', ['data' => $data]);
-    }
-
-    public function classListOfType($classType)
-    {
-        $data = ClassList::where('classType', $classType)->orderBy('id', 'asc')->paginate(30);
-        return view('mooc.classList', ['data' => $data]);
-    }
-
-    public function classOfSchool($school)
-    {
-        $data = ClassList::where('school', $school)->orderBy('id', 'asc')->paginate(30);
-        return view('mooc.classList', ['data' => $data]);
-    }
-
-    public function singleClass($classId)
-    {
-        $data = TotalClass::where('classId', $classId)->orderBy('titleId', 'asc')->paginate(30);
-        $message = Message::where('classId', $classId)->where('father', null)->orderBy('created_at', 'asc')->paginate(30);
-        return view('mooc.singleClass', ['data' => $data, 'message' => $message]);
+        //
     }
 
     /**
@@ -52,7 +35,14 @@ class ClassController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->all();
+
+        Message::create([
+            'classId' = $input['classId'];
+            'titleId' = $input['titleId'];
+            'message' = $input['message'];
+            'father' = $input['father'];
+        ]);
     }
 
     /**

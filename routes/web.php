@@ -19,6 +19,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+
+Route::get('/index', function () {
+    return view('mooc.index');
+})->name('index');
 Route::get('/classList', 'ClassController@classList')->name('classList');
 Route::get('/school/{school}', 'ClassController@classOfSchool')->name('school');
 Route::get('/class/{className}', 'ClassController@singleClass')->name('class');

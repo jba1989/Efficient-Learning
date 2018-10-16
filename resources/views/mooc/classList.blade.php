@@ -75,7 +75,7 @@
                     @foreach ($data as $class)
                     <tr>
                         <td>{{ $class->classId }}</td>
-                        <td>{{ $class->className }}</td>
+                        <td><a href="/class/{{ $class->classId }}" style="display:block;">{{ $class->className }}</a></td>
                         <td>{{ 1 }}</td>
                         <td>{{ $class->teacher }}</td>
                         <td>{{ $class->type }}</td>

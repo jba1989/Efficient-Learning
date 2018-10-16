@@ -26,7 +26,7 @@
         <div class="inner flex flex-3">
             <div class="flex-item box">
                 <div class="image fit">
-                    <a href="/school/ntu"><img src="{{ asset('images/NTU_logo.jpg') }}" alt="" /></a>
+                    <a href="/school/台大"><img src="{{ asset('images/NTU_logo.jpg') }}" alt="" /></a>
                 </div>
                 <div class="content">
                     <h3><a href="NTU_class.php">台大課程</a></h3>
