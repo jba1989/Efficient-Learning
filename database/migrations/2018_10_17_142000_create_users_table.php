@@ -18,9 +18,9 @@ class CreateUsersTable extends Migration
             $table->string('name')->unique();
             $table->string('email')->unique();
             $table->string('password');
-            $table->longText('favorite');
-            $table->longText('like');
-            $table->longText('dislike');
+            $table->longText('favorite')->nullable();
+            $table->longText('like')->nullable();
+            $table->longText('dislike')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
