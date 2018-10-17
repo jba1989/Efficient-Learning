@@ -27,5 +27,12 @@ Route::get('/classList', 'ClassController@classList')->name('classList');
 Route::get('/school/{school}', 'ClassController@classOfSchool')->name('school');
 Route::get('/class/{className}', 'ClassController@singleClass')->name('class');
 
+Route::prefix('message')->group(function () {
+    Route::post('/store', 'MessageController@store');
+    Route::post('/edit', 'MessageController@edit');
+    Route::post('/show', 'MessageController@show');
+    Route::post('/delete', 'MessageController@delete');
+});
+
 // 重新抓取課程資訊
 Route::get('/update', 'SpiderController@update');

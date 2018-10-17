@@ -4,89 +4,63 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Message;
+use Auth;
 
 class MessageController extends Controller
-{
+{    
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * 新增對某classId的留言
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
         $input = $request->all();
 
         Message::create([
-            'classId' = $input['classId'];
-            'titleId' = $input['titleId'];
-            'message' = $input['message'];
-            'father' = $input['father'];
+            'classId' => $input['classId'],
+            'fatherId' => $input['fatherId'],
+            'userName' => $user->name,
+            'message' => $input['message'],
         ]);
     }
 
     /**
-     * Display the specified resource.
+     * 取得所有對此classId的留言
      *
-     * @param  int  $id
+     * @param  string  $classId
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($classId)
     {
-        //
+        $data = Message::where('classId', $classId)->orderBy('created_at', 'asc')->paginate(30);
+        return $data;
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * 修改某id的留言
+     * 
+     * @param  \Illuminate\Http\Request  $request
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $user = Auth::user();
+        $input = $request->all();
+
+        Message::where('id', $id)->where('userName', $user->name)->update(['message', $input['message']]); 
     }
 
     /**
-     * Update the specified resource in storage.
+     * 刪除某id的留言
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function delete($id)
     {
-        //
-    }
+        $user = Auth::user();
+        $input = $request->all();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        Message::where('id', $id)->where('userName', $user->name)->delete();
     }
 }

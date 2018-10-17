@@ -17,8 +17,9 @@ class CreateMessageTable extends Migration
             $table->increments('id');
             $table->string('classId', 12);
             $table->integer('titleId', false, true);
+            $table->string('userName', 12);
             $table->longText('message');
-            $table->integer('father', false, true)->nullable();;
+            $table->integer('father', false, true)->nullable();
             $table->longText('like')->nullable();
             $table->longText('dislike')->nullable();
             $table->timestamp('created_at');

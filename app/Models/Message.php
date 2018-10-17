@@ -14,6 +14,7 @@ class message extends Model
         'classId',
         'titleId',
         'message',
+        'userName',
         'father',
         'like',
         'dislike',

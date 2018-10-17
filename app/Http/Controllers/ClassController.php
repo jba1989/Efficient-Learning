@@ -30,7 +30,7 @@ class ClassController extends Controller
     public function singleClass($classId)
     {
         $data = TotalClass::where('classId', $classId)->orderBy('titleId', 'asc')->paginate(30);
-        $message = Message::where('classId', $classId)->where('father', null)->orderBy('created_at', 'asc')->paginate(30);
+        $message = Message::where('classId', $classId)->where('fatherId', null)->orderBy('created_at', 'asc')->paginate(30);
         return view('mooc.singleClass', ['data' => $data, 'message' => $message]);
     }
 
