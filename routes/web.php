@@ -36,3 +36,9 @@ Route::prefix('message')->group(function () {
 
 // 重新抓取課程資訊
 Route::get('/update', 'SpiderController@update');
+
+
+Route::get('ajax',function(){
+    return view('message');
+ });
+ Route::get('/getmsg','AjaxController@index');
