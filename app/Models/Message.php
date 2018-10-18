@@ -12,10 +12,9 @@ class message extends Model
 
     protected $fillable = [
         'classId',
-        'titleId',
         'message',
         'userName',
-        'father',
+        'fatherId',
         'like',
         'dislike',
     ];
