@@ -3,7 +3,29 @@
 @section('title', '開放式課程討論區-課程內容')
 
 @section('css')
-    
+@endsection
+
+@section('script')
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+    <script>
+    $('.content h1').click(function() {
+        $.ajax({
+            type:'post',
+            url: "/api/message/show",
+            data: 
+            {
+                _token : {{ csrf_token() }}, 
+                classId : '100S213'
+            },
+            success:function(data){
+                $('.content h1').html('success');
+            },
+            error: function (data) {
+                $('content h1').html('error');
+            }
+        });
+    });  
+    </script>
 @endsection
 
 @section('banner')
@@ -44,11 +66,8 @@
         <div class="12u$">
             <h3 >留言板:</h3>    
             @foreach ($message as $content)             
-            <div style="margin: 2em 0 0 0;">
-                <code>
-                    {{ $content->userName }}
-                    {{ $content->message }}
-                </code>
+            <div id="message" style="margin: 1em 0;">
+                
             </div>            
             @endforeach
             <!--留言表單-->

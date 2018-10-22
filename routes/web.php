@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/elements', function () {
+    return view('mooc.elements');
+});
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -34,11 +38,19 @@ Route::prefix('message')->group(function () {
     Route::post('/delete', 'MessageController@delete');
 });
 
+Route::prefix('api/message')->group(function () {
+    Route::post('/store', 'ApiMessageController@store');
+    Route::post('/edit', 'ApiMessageController@edit');
+    Route::any('/show/{classId}', 'ApiMessageController@show')->name('apiShow');
+    Route::post('/delete', 'ApiMessageController@delete');
+});
+
 // 重新抓取課程資訊
 Route::get('/update', 'SpiderController@update');
 
 
 Route::get('ajax',function(){
     return view('message');
- });
- Route::get('/getmsg','AjaxController@index');
+});
+
+Route::get('/getmsg','AjaxController@index');

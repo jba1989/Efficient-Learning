@@ -13,7 +13,7 @@
 		<link rel="stylesheet" href="{{ asset('css/mooc/main.css') }}" />       
 	</head>
 	<body>
-
+	@yield('script')
 		<!-- Header -->        
 			<header id="header">
 				<nav class="left">
@@ -38,7 +38,8 @@
 			</nav>
 
         <!-- Content -->
-            <div class="container">
+			@yield('banner')
+            <div class="container">				
                 @yield('content')
             </div>
 
@@ -63,6 +64,7 @@
 			<script src="{{ asset('js/mooc/skel.min.js') }}"></script>
 			<script src="{{ asset('js/mooc/util.js') }}"></script>
 			<script src="{{ asset('js/mooc/main.js') }}"></script>
+			<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
 
 	</body>
 </html>
