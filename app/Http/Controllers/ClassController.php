@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\ClassList;
 use App\Models\TotalClass;
 use App\Models\Message;
+use App\Repositories\ClassRepository;
 
 class ClassController extends Controller
 {
     public function classList()
     {
-        $data = ClassList::paginate(30);        
+        $data = $this->classRepository->classList();
         return view('mooc.classList', ['data' => $data]);
     }
 

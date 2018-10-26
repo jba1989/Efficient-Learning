@@ -1,6 +1,9 @@
 <?php    
     
 namespace App\Services;
+
+use App\Models\ClassList;
+use App\Models\TotalClass;
     
 class NTUClassService
 {
@@ -60,7 +63,7 @@ class NTUClassService
                 'classId' => $matches[1][$i],
                 'className' => $matches[2][$i],
                 'teacher' => $matches[3][$i],
-                'school' => '台大',
+                'school' => 'NTU',
                 ]
             );
         }
