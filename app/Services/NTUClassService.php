@@ -28,8 +28,7 @@ class NTUClassService
 
         foreach ($classIdArr as $classId) {
             $this->parseClassDescription($classId);
-            $count = $this->countClass($classId);
-            $this->parseClassTitle($classId, $count);
+            $this->parseClassTitle($classId);
             //$this->videoSpider($classId, $count);
         }
     }
@@ -42,9 +41,9 @@ class NTUClassService
     public function parseClassList()
     {
         $url = 'http://ocw.aca.ntu.edu.tw/ntu-ocw/'; // 台大開放式課程網址
-        $responce = $this->myCurl($url);
+        $response = $this->myCurl($url);
         $pattern = '/<option value="\/ntu-ocw\/ocw\/cou\/([^"]+?)">(.*?)\((.*?)\)<\/option>/';
-        preg_match_all($pattern, $responce, $classContents);
+        preg_match_all($pattern, $response, $classContents);
         for ($i = 0; $i < count($classContents[1]); $i++) {
             $conditions = array(
                 'classId' => $classContents[1][$i],
@@ -71,52 +70,43 @@ class NTUClassService
     {
         $url = 'http://ocw.aca.ntu.edu.tw/ntu-ocw/ocw/cou_intro/' . $classId;
         $response = $this->myCurl($url);
-        $sBeginWith = 'og:description" content="';
-        $sEndWith = '" />';
-        $result = trim($this->strFind($response, $sBeginWith, $sEndWith, 1, FALSE));
-        
+
+        $pattern = '/og:description" content="(.*)"\s?\/>/';
+        preg_match_all($pattern, $response, $matches);
+        if (count($matches[1]) > 0) {
+            $description = $matches[1][0];
+        } else {
+            $description = null;
+        }        
+
         $conditions = array('classId' => $classId);
-        $contents = array('description' => $result);
+        $contents = array('description' => $description);
         $this->class->update($conditions, $contents);
     }
 
     /**
-     * 抓取單一課程上課次數
+     * 抓取上課次數,課程章節
      *
      * @param string
-     * @return integer
+     * @param integer
      */
-    public function countClass($classId)
+    public function parseClassTitle($classId)
     {
-        $url = 'http://ocw.aca.ntu.edu.tw/ntu-ocw/index.php/ocw/cou/' . $classId;
+        $url = 'http://ocw.aca.ntu.edu.tw/ntu-ocw/index.php/ocw/cou/' . $classId . '/1';
         $response = $this->myCurl($url);
-        $sBeginWith = 'align="texttop" />';
-        $count = substr_count($response, $sBeginWith);
+        
+        $pattern = '/align="texttop" \/>\s+(.*)\s+<\/div>/';
+        preg_match_all($pattern, $response, $matches);
+        $titles = $matches[1];
+        $count = count($titles);
 
         $conditions = array('classId' => $classId);
         $contents = array('countTitle' => $count);
         $this->class->update($conditions, $contents);
 
-        return $count;
-    }
-
-    /**
-     * 抓取課程章節
-     *
-     * @param string
-     * @param integer
-     */
-    public function parseClassTitle($classId, $count)
-    {
-        $url = 'http://ocw.aca.ntu.edu.tw/ntu-ocw/index.php/ocw/cou/' . $classId . '/1';
-        $response = $this->myCurl($url);
-        $sBeginWith = 'align="texttop" />';
-        $sEndWith = '</div>';
         $result = array();
         for ($i = 0; $i < $count; $i++)
-        {
-            $result = trim($this->strFind($response, $sBeginWith, $sEndWith, ($i+1) , FALSE));
-
+        {   
             $conditions = array(
                 'classId' => $classId,
                 'titleId' => $i + 1,
@@ -124,7 +114,7 @@ class NTUClassService
             $contents = array(
                 'classId' => $classId,
                 'titleId' => $i + 1,
-                'title' => $result,
+                'title' => $titles[$i],
             );
             $this->title->updateOrCreate($conditions, $contents);
         };
@@ -147,65 +137,7 @@ class NTUClassService
 //            TotalClass::where('classId', $classId)->where('titleId', $i + 1)->update(['videoLink' => $result]);
 //        }
     }
-
-    /**
-     * 解析網頁內容
-     *
-     * @param string
-     * @param string
-     * @param string
-     * @param integer
-     * @param boolean
-     * @return string
-     */
-    public function strFind($response, $sBeginWith, $sEndWith, $iTh = 1 , $bIncludeBeginEnd = TRUE) 
-    { 
-        //(資料來源,開始字串,結束字串,第X次出現的字串,是否包含開始結數字元)
-        $result = "";   //先將結果設為空字串
-        $iStartPosition = - 1;   //配合後續$iStartPosition+1可往下查下一次出現的位置
-        
-        // <---搜尋指定之$sBeginWith位置--->
-        for($i = 1; $i <= $iTh; $i ++) {
-            $iStartPosition = strpos ( $response, $sBeginWith, $iStartPosition + 1 );
-        }
-        $istartPoint = $iStartPosition;  //做開始位置的備存
-        
-        
-        // <---搜尋指定之$sBeginWith位置--->
-        if ($iStartPosition < 0) {
-            return $result;    //若無找到$response中有$sBeginWith回傳空字串
-        }
-
-        
-        // <---搜尋指定之$iEndPosition位置--->
-        $iEndPosition = strpos ( $response, $sEndWith, $iStartPosition + strlen($sBeginWith) );
-        if ($iEndPosition < 0){
-            return $result;
-        }
-
-            
-        // <---判斷是否有多重table--->
-        $icount = -1;    //計算幾次的計數器,因會先計算一次故從-1開始
-        do {
-            $istartPoint = strpos ( $response, $sBeginWith, $istartPoint + 1 );
-            $icount ++;
-        } while ( ($istartPoint < $iEndPosition) && ($istartPoint > 0) );
-            
-        // <---重新尋找正確的$iEndPosition--->
-        for ($j = 0 ; $j < $icount ; $j++) {
-            $iEndPosition =  strpos ( $response, $sEndWith, $iEndPosition + 1 );
-        }
-        
-        // <---重組字串並判斷是否連接"$sBeginWith"/"$sEndWith"字串--->
-        if ($bIncludeBeginEnd) {
-            $result = $sBeginWith . substr ($response, $iStartPosition + strlen ( $sBeginWith ), $iEndPosition - $iStartPosition - strlen ( $sBeginWith ) ) . $sEndWith;
-        } else {
-            $result = substr ( $response, $iStartPosition + strlen ( $sBeginWith ), $iEndPosition - $iStartPosition - strlen ( $sBeginWith ) );
-        }
-
-        return $result;
-    }
-
+  
     /**
      * curl請求, 並返回網站內容
      *
