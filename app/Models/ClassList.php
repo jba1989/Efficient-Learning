@@ -23,4 +23,9 @@ class classList extends Model
         'school',
         'countTitle',
     ];
+
+    public function titles()
+    {
+        return $this->hasMany('App\Models\TotalClass', 'classId', 'classId');
+    }
 }

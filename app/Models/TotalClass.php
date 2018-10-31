@@ -16,4 +16,9 @@ class TotalClass extends Model
         'title',
         'videoLink',
     ];
+
+    public function classes()
+    {
+        return $this->belongsTo('App\Models\ClassList', 'classId', 'classId');
+    }
 }
