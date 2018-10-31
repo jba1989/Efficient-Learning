@@ -2,17 +2,28 @@
 
 namespace App\Services;
 
-use App\Models\ClassList;
-use App\Models\TotalClass;
+use App\Repositories\ClassRepository;
+use App\Repositories\TitleRepository;
 
 class NCTUClassService
 {    
     protected $ch;
+    protected $class;
+    protected $title;
+
+    /**
+     * 注入repository
+     */    
+    public function __construct(ClassRepository $classRepository, TitleRepository $titleRepository)
+    {
+        $this->class = $classRepository;
+        $this->title = $titleRepository;
+    }
 
     /**
      * 更新交大課程清單
      */
-    public function parseClassList()
+    public function update()
     {        
         $this->ch = curl_init();
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
@@ -48,18 +59,23 @@ class NCTUClassService
                 preg_match_all($pattern, $response, $classContents);
 
                 for ($j = 0; $j < count($classContents[1]); $j++) {
-                    $description = $this->parseClassDescription($page, $classTypeIdArr[$i]);
+                    $conditions = array(
+                        'classId' => $classContents[1][$j],
+                    );
 
-                    ClassList::firstOrCreate(['classId' => $classContents[1][$j]], [
+                    $contents = array(
                         'classId' => $classContents[1][$j],
                         'className' => $classContents[2][$j],
                         'teacher' => $classContents[3][$j],
                         'classType' => $classTypeNameArr[$i],
                         'school' => 'NCTU',
-                        'description' => $description,
-                    ]);
+                        'description' => $this->parseClassDescription($page, $classTypeIdArr[$i]),
+                    );
 
-                    // 依照每個課程id抓取單一課程上課次數,課程章節
+                    // 寫入資料庫
+                    $this->class->firstOrCreate($conditions, $contents);
+
+                    // 依照每個課程id抓取單一課程上課次數,課程章節,寫入資料庫
                     $this->parseClassTitle($classContents[1][$j]);
                 }
             }
@@ -73,7 +89,7 @@ class NCTUClassService
      * 抓取單一課程描述
      *
      * @param string $classId
-     * @param integer
+     * @return string
      */
     protected function parseClassDescription($classId)
     {
@@ -93,10 +109,9 @@ class NCTUClassService
     }
 
     /**
-     * 抓取單一課程上課次數,課程章節
+     * 依課程id抓取上課次數,課程章節,寫入資料庫
      *
      * @param string $classId
-     * @return integer
      */
     protected function parseClassTitle($classId)
     {
@@ -116,11 +131,30 @@ class NCTUClassService
         }
 
         $count = count($titles);
-        ClassList::where('classId', $classId)->update(['countTitle' => $count]);
+
+        $conditions = array(
+            'classId' => $classId,
+        );
+        $contents = array(
+            'countTitle' => $count,
+        );
+        $this->class->update($conditions, $contents);
 
         for ($i = 0; $i < $count; $i++) {
-            TotalClass::updateOrCreate(['classId' => $classId, 'titleId' => $i + 1], 
-            ['classId' => $classId, 'titleId' => $i + 1, 'title' => $titles[$i], 'videoLink' => $url]);
+            $conditions = array(
+                'classId' => $classId,
+                'titleId' => $i + 1,
+            );
+
+            $contents = array(
+                'classId' => $classId,
+                'titleId' => $i + 1,
+                'title' => $titles[$i],
+                'videoLink' => $url,
+            );
+
+            // 寫入資料庫
+            $this->title->updateOrCreate($conditions, $contents);
         }        
     }
 

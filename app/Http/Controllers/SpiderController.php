@@ -28,11 +28,11 @@ class SpiderController extends Controller
         switch ($school) {
             case 'NTU':
             case 'ntu':
-                $this->ntu->parseClassList();
+                $this->ntu->update();
                 break;
             case 'NCTU':
             case 'nctu':
-                $this->nctu->parseClassList();
+                $this->nctu->update();
                 break;            
         }
         echo 'finish';

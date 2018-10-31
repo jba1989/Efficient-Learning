@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\ClassList;
 use App\Models\TotalClass;
 use App\Models\Message;
-use App\Repositories\ClassRepository;
 
 class ClassController extends Controller
 {
