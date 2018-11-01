@@ -23,15 +23,17 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/index', function () {
     return view('mooc.index');
 })->name('index');
-Route::get('/classList', 'ClassController@classList')->name('classList');
-Route::get('/school/{school}', 'ClassController@classOfSchool')->name('school');
-Route::get('/class/{className}', 'ClassController@singleClass')->name('class');
+
+Route::get('/class', 'ClassController@showClass');
+Route::get('/class/{className}', 'ClassController@showTitleById');
+Route::get('/school/{school}', 'ClassController@showClassBySchool');
+Route::get('/type/{school}', 'ClassController@showClassByType');
 
 Route::prefix('message')->group(function () {
-    Route::post('/store', 'MessageController@store');
-    Route::post('/edit', 'MessageController@edit');
-    Route::post('/show', 'MessageController@show');
-    Route::post('/delete', 'MessageController@delete');
+    Route::post('/create', 'MessageController@create');
+    Route::put('/update', 'MessageController@update');
+    Route::get('/show/{classId}', 'MessageController@show');
+    Route::delete('/delete', 'MessageController@delete');
 });
 
 // 重新抓取課程資訊

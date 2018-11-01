@@ -3,100 +3,63 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ClassList;
-use App\Models\TotalClass;
-use App\Models\Message;
+use App\Services\ClassService;
 
 class ClassController extends Controller
 {
-    public function classList()
+    protected $classService;
+
+    /**
+     * 注入repository
+     */    
+    public function __construct(ClassService $classService)
     {
-        $data = $this->classRepository->classList();
+        $this->classService = $classService;
+    }
+
+    public function showClass()
+    {       
+        $data = $this->classService->showClass();
         return view('mooc.classList', ['data' => $data]);
     }
 
-    public function classListOfType($classType)
+    /**
+     * 依課程分類查詢
+     * 
+     * @param string $classType
+     * @return view
+     */
+    public function showClassByType($classType)
     {
-        $data = ClassList::where('classType', $classType)->orderBy('id', 'asc')->paginate(30);
+        $conditions = array('classType' => $classType);
+        $data = $this->classService->showClassBy($conditions);
         return view('mooc.classList', ['data' => $data]);
     }
 
-    public function classOfSchool($school)
+    /**
+     * 依學校查詢課程
+     * 
+     * @param string $school
+     * @return view
+     */
+    public function showClassBySchool($school)
     {
-        $data = ClassList::where('school', $school)->orderBy('id', 'asc')->paginate(30);
+        $conditions = array('school' => $school);
+        $data = $this->classService->showClassBy($conditions);
         return view('mooc.classList', ['data' => $data]);
     }
 
-    public function singleClass($classId)
+    /**
+     * 依條件查詢章節
+     * 
+     * @param string $classId
+     * @return view
+     */
+    public function showTitleById($classId)
     {
-        $data = TotalClass::where('classId', $classId)->orderBy('titleId', 'asc')->paginate(30);
+        $conditions = array('classId' => $classId);
+        $data = $this->classService->showTitleBy($conditions);
         $message = Message::where('classId', $classId)->where('fatherId', null)->orderBy('created_at', 'asc')->paginate(30);
         return view('mooc.singleClass', ['data' => $data, 'message' => $message]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

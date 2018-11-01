@@ -38,4 +38,25 @@ class TitleRepository
    {
         TotalClass::where($conditions)->update($contents);
    }
+
+   /**
+     * 查詢所有課程
+     * 
+     * @return array
+     */
+    public function show()
+    {        
+        return TotalClass::paginate(30);
+    }
+
+    /**
+     * 依條件查詢資料
+     * 
+     * @param array $conditions
+     * @return array
+     */
+    public function showBy($conditions)
+    {        
+        return TotalClass::where($conditions)->orderBy('titleId', 'asc')->paginate(30);
+    }
 }

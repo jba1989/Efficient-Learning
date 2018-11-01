@@ -3,17 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Message;
+use App\Repositories\MessageRepository;
 use Auth;
+use Validator;
 
 class MessageController extends Controller
 {    
+    protected $message;
+
+    /**
+     * 注入repository
+     */    
+    public function __construct(MessageRepository $messageRepository)
+    {
+        $this->message = $messageRepository;
+    }
+    
     /**
      * 新增對某classId的留言
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function store(Request $request)
+    public function create(Request $request)
     {
         $user = Auth::user();
         $input = $request->all();
@@ -37,12 +48,14 @@ class MessageController extends Controller
             return redirect("/class/$classId")->withErrors($validator)->withInput();
         }
 
-        Message::create([
+        $conditions = array(
             'classId' => $input['classId'],
             'fatherId' => $input['fatherId'],
             'userName' => $user->name,
             'message' => htmlspecialchars($input['message']),
-        ]);
+        );
+
+        $this->message->create($conditions);
     }
 
     /**
@@ -53,8 +66,25 @@ class MessageController extends Controller
      */
     public function show($classId)
     {
-        $data = Message::where('classId', $classId)->orderBy('created_at', 'asc')->paginate(30);
-        return $data;
+        $rules = [
+            'classId' => 'required|alpha_num|max:12',
+        ];
+
+        $messages = [
+            'required' => ':attribute 為必填欄位',
+            'alpha_dash' => ':attribute 請勿輸入特殊字元',
+            'max'=> ':attribute 不可超過 :max 個字',
+        ];
+
+        $validator = Validator::make(['classId' => $classId], $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json(['data' => null], 200);
+        }
+
+        $conditions = array('classId' => $classId);
+        $data = $this->message->show($conditions);
+        return response()->json(['data' => $data], 200);
     }
 
     /**
@@ -62,8 +92,8 @@ class MessageController extends Controller
      * 
      * @param  \Illuminate\Http\Request  $request
      */
-    public function edit(Request $request)
-    {
+    public function update(Request $request)
+    {        
         $user = Auth::user();
         $input = $request->all();
 
@@ -83,8 +113,8 @@ class MessageController extends Controller
         if ($validator->fails()) {
             return redirect("/class/$classId")->withErrors($validator)->withInput();
         }
-
-        Message::where('id', $id)->where('userName', $user->name)->update(['message', $input['message']]); 
+        
+        $this->message->update($user, $input);
     }
 
     /**
@@ -92,9 +122,9 @@ class MessageController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function delete($id)
-    {
-        $user = Auth::user();
+    public function delete(Request $request)
+    {                
+        $user = Auth::user();        
         $input = $request->all();
 
         $rules = [
@@ -110,7 +140,7 @@ class MessageController extends Controller
         if ($validator->fails()) {
             return redirect("/class/$classId")->withErrors($validator);
         }
-
-        Message::where('id', $id)->where('userName', $user->name)->delete();
+        
+        $this->message->delete($user, $input);
     }
 }

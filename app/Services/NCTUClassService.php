@@ -7,7 +7,6 @@ use App\Repositories\TitleRepository;
 
 class NCTUClassService
 {    
-    protected $ch;
     protected $class;
     protected $title;
 
@@ -25,13 +24,8 @@ class NCTUClassService
      */
     public function update()
     {        
-        $this->ch = curl_init();
-        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($this->ch, CURLOPT_HEADER, 0);
-        
         $url = 'http://ocw.nctu.edu.tw/course.php'; // 交大開放式課程網址
-        curl_setopt($this->ch, CURLOPT_URL, $url);        
-        $response = curl_exec($this->ch);
+        $response = $this->myCurl($url);
 
         // 依課程分類抓取所有課程清單
         $pattern = '/<option value="([0-9]+)">\s+(.*)\s+<\/option>/';
@@ -43,8 +37,7 @@ class NCTUClassService
         for ($i = 0; $i < count($classTypeIdArr); $i++) {
          
             $url = 'http://ocw.nctu.edu.tw/course_list_search.php?&s1=' . $classTypeIdArr[$i];
-            curl_setopt($this->ch, CURLOPT_URL, $url);        
-            $response = curl_exec($this->ch);
+            $response = $this->myCurl($url);
 
             $pattern = '/<li><a href="#">([0-9]?)<\/a><\/li>/';
             preg_match_all($pattern, $response, $pages);
@@ -52,8 +45,7 @@ class NCTUClassService
             // 從每一頁爬取開課清單
             foreach ($pages[1] as $page) {
                 $url = 'http://ocw.nctu.edu.tw/course_list_search.php?page=' . $page . '&s1=' . $classTypeIdArr[$i];
-                curl_setopt($this->ch, CURLOPT_URL, $url);        
-                $response = curl_exec($this->ch);
+                $response = $this->myCurl($url);
 
                 $pattern = '/<h3><a href=.*bgid.*nid=([0-9]+)">\s+(.*)?<\/h3>\s+<\/div>\s+<.*>\s+<span class="pull-right">(.*)?<\/span>/';
                 preg_match_all($pattern, $response, $classContents);
@@ -79,8 +71,7 @@ class NCTUClassService
                     $this->parseClassTitle($classContents[1][$j]);
                 }
             }
-        }        
-        curl_close($this->ch);
+        }
 
         echo 'finished';
     }
@@ -94,8 +85,7 @@ class NCTUClassService
     protected function parseClassDescription($classId)
     {
         $url = 'http://ocw.nctu.edu.tw/course_detail.php?nid=' . $classId;        
-        curl_setopt($this->ch, CURLOPT_URL, $url);
-        $response = curl_exec($this->ch);
+        $response = $this->myCurl($url);
 
         $pos = strpos($response, '&nbsp;</p>');
         if ($pos != FALSE) {
@@ -116,8 +106,7 @@ class NCTUClassService
     protected function parseClassTitle($classId)
     {
         $url = 'http://ocw.nctu.edu.tw/course_detail-v.php?nid=' . $classId;        
-        curl_setopt($this->ch, CURLOPT_URL, $url);
-        $response = curl_exec($this->ch);
+        $response = $this->myCurl($url);
 
         $titles = array();
         for ($i = 1; $i < substr_count($response, '<tr>'); $i++) {
@@ -157,7 +146,7 @@ class NCTUClassService
             $this->title->updateOrCreate($conditions, $contents);
         }        
     }
-
+    
     /**
      * 解析網頁內容
      *
@@ -212,4 +201,25 @@ class NCTUClassService
 
         return $result;
     }
+
+    /**
+     * curl請求, 並返回網站內容
+     *
+     * @param $url
+     * @return string
+     */
+    public function myCurl($url)
+    {        
+        $ch = curl_init();
+        
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+       
+        $response = curl_exec($ch);
+        
+        curl_close($ch);
+
+        return $response;
+    }    
 }
