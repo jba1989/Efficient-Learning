@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Repositories\MessageRepository;
+use App\Services\MessageService;
 use Auth;
 use Validator;
 
@@ -12,11 +12,11 @@ class MessageController extends Controller
     protected $message;
 
     /**
-     * 注入repository
+     * 注入Service
      */    
-    public function __construct(MessageRepository $messageRepository)
+    public function __construct(MessageService $messageService)
     {
-        $this->message = $messageRepository;
+        $this->message = $messageService;
     }
     
     /**
@@ -48,14 +48,14 @@ class MessageController extends Controller
             return redirect("/class/$classId")->withErrors($validator)->withInput();
         }
 
-        $conditions = array(
+        $contents = [
             'classId' => $input['classId'],
             'fatherId' => $input['fatherId'],
             'userName' => $user->name,
             'message' => htmlspecialchars($input['message']),
-        );
+        ];
 
-        $this->message->create($conditions);
+        $this->message->create($contents);
     }
 
     /**
@@ -82,8 +82,9 @@ class MessageController extends Controller
             return response()->json(['data' => null], 200);
         }
 
-        $conditions = array('classId' => $classId);
+        $conditions = ['classId' => $classId];
         $data = $this->message->show($conditions);
+        
         return response()->json(['data' => $data], 200);
     }
 
@@ -114,7 +115,16 @@ class MessageController extends Controller
             return redirect("/class/$classId")->withErrors($validator)->withInput();
         }
         
-        $this->message->update($user, $input);
+        $conditions = [
+            'id' => $input['id'],
+            'userName' => $user->name,
+        ];
+        
+        $contents = [
+            'message' => htmlspecialchars($input['message'])
+        ];
+
+        $this->message->update($conditions, $contents);
     }
 
     /**
@@ -127,13 +137,8 @@ class MessageController extends Controller
         $user = Auth::user();        
         $input = $request->all();
 
-        $rules = [
-            'id' => 'integer',
-        ];
-
-        $messages = [
-            'integer' => ':attribute 只限輸入數字',
-        ];
+        $rules = ['id' => 'integer'];
+        $messages = ['integer' => ':attribute 只限輸入數字'];
 
         $validator = Validator::make($input, $rules, $messages);
 
@@ -141,6 +146,11 @@ class MessageController extends Controller
             return redirect("/class/$classId")->withErrors($validator);
         }
         
-        $this->message->delete($user, $input);
+        $conditions = [
+            'id'=> $input['id'],
+            'userName'=> $user->name,
+        ];
+
+        $this->message->delete($conditions);
     }
 }

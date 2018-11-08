@@ -12,42 +12,33 @@ class TitleRepository
     * @param array $conditions
     * @param array $contents 
     */
-   public function firstOrCreate($conditions, $contents)
-   {
+    public function firstOrCreate($conditions, $contents)
+    {
         TotalClass::firstOrCreate($conditions, $contents);
-   }
+    }
 
-   /**
+    /**
     * 更新或新增一筆資料
     * 
     * @param array $conditions
     * @param array $contents 
     */
-   public function updateOrCreate($conditions, $contents)
-   {
+    public function updateOrCreate($conditions, $contents)
+    {
         TotalClass::updateOrCreate($conditions, $contents);
-   }
+    }
 
-   /**
+    /**
     * 更新一筆資料
     * 
     * @param array $conditions
     * @param array $contents
     */
-   public function update($conditions, $contents)
-   {
+    public function update($conditions, $contents)
+    {
         TotalClass::where($conditions)->update($contents);
-   }
-
-   /**
-     * 查詢所有課程
-     * 
-     * @return array
-     */
-    public function show()
-    {        
-        return TotalClass::paginate(30);
     }
+
 
     /**
      * 依條件查詢資料

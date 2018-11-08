@@ -50,4 +50,15 @@ class ClassService
     {        
         return $this->title->showBy($conditions);
     }
+
+    /**
+     * 依條件查詢留言板資料
+     * 
+     * @param array $conditions
+     * @return array
+     */
+    public function showMessageBy($conditions)
+    {        
+        return $this->class->showMessageBy($conditions);
+    }
 }
