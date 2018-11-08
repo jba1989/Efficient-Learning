@@ -6,38 +6,33 @@
     
 @endsection
 
-@section('banner')
-    <section id="banner">
-        <div class="content">
-            <h1>開放式課程討論區</h1>
-            <p><br />一起增加學習效率吧!</p>
-            <ul class="actions">
-                <li><a href="#one" class="button scrolly">Get Started</a></li>
-            </ul>
-        </div>
-    </section>
+@section('banner')    
 @endsection
 
 @section('content')
     <!--課程表 -->
-    <div class="inner">
-        <div class="table-wrapper">
-            <table id="classList" style="width:90%">
-                <caption><h3>課程表</h3></caption>
-                <tbody>                    
-                    <!--由資料庫撈取的data-->
-                    @foreach ($data as $class)
-                        <tr>
-                            <td style="width=100%; padding-left:10%; padding-right:10%; white-space:nowrap">
-                                <a href="{{ $class->videoLink }}" target=blank >{{ $class->title }}</a>
-                            </td>
-                        </tr>                    
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        {{ $data->links() }}
-    </div>
+    <div class="container">
+    <table class="table table-striped">
+    <thead>
+        <tr>        
+            <th scope="col">章節</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($data as $class)
+            <tr>            
+                <td><a href="{{ $class->videoLink }}" target=blank >{{ $class->title }}</a></td>
+            </tr>
+        @endforeach        
+    </tbody>
+    </table>   
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {{ $data->links() }}
+        </ul>
+    </nav>
+    
 
     <!-- 留言板 -->
     <div class="inner" id="board">
@@ -67,5 +62,6 @@
                 </div>
             </form>                    
         </div>
+    </div>
     </div>
 @endsection

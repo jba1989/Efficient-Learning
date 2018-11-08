@@ -1,8 +1,13 @@
-@extends('layouts.app')
+@extends('mooc.layouts.main')
+
+@section('title', 'Login')
+
+@section('css')    
+@endsection
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row position-relative justify-content-center" style="top: 100px;">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Register') }}</div>
