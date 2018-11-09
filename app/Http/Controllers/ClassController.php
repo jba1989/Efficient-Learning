@@ -19,8 +19,8 @@ class ClassController extends Controller
 
     public function showClass()
     {       
-        $data = $this->classService->showClass();
-        return view('mooc.classList', ['data' => $data]);
+        $classes = $this->classService->showClass();
+        return view('mooc.classList', ['classes' => $classes]);
     }
 
     /**
@@ -32,8 +32,8 @@ class ClassController extends Controller
     public function showClassByType($classType)
     {
         $conditions = array('classType' => $classType);
-        $data = $this->classService->showClassBy($conditions);
-        return view('mooc.classList', ['data' => $data]);
+        $classes = $this->classService->showClassBy($conditions);
+        return view('mooc.classList', ['classes' => $classes, 'classType' => $classType]);
     }
 
     /**
@@ -45,8 +45,8 @@ class ClassController extends Controller
     public function showClassBySchool($school)
     {
         $conditions = array('school' => $school);
-        $data = $this->classService->showClassBy($conditions);
-        return view('mooc.classList', ['data' => $data]);
+        $classes = $this->classService->showClassBy($conditions);
+        return view('mooc.classList', ['classes' => $classes]);
     }
 
     /**
@@ -58,8 +58,9 @@ class ClassController extends Controller
     public function showTitleById($classId)
     {
         $conditions = array('classId' => $classId);
-        $data = $this->classService->showTitleBy($conditions);
-        $message = $this->classService->showMessageBy($conditions);
-        return view('mooc.singleClass', ['data' => $data, 'message' => $message]);
+        $classes = $this->classService->showClassBy($conditions);
+        $titles = $this->classService->showTitleBy($conditions);
+        $messages = $this->classService->showMessageBy($conditions);
+        return view('mooc.singleClass', ['classes' => $classes, 'titles' => $titles, 'messages' => $messages]);
     }
 }
