@@ -59,7 +59,7 @@ class ClassController extends Controller
     {
         $conditions = array('classId' => $classId);
         $data = $this->classService->showTitleBy($conditions);
-        $message = Message::where('classId', $classId)->where('fatherId', null)->orderBy('created_at', 'asc')->paginate(30);
+        $message = $this->classService->showMessageBy($conditions);
         return view('mooc.singleClass', ['data' => $data, 'message' => $message]);
     }
 }
