@@ -13,11 +13,11 @@
 
 	</head>
 	<body>
-		<!-- Header -->
+		<!-- Nav -->
 		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 			<a class="navbar-brand" href="#">Carousel</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
+				<span class="navbar-toggler-icon"></span>
 			</button>
         	<div class="collapse navbar-collapse" id="navbarCollapse">
 				<ul class="navbar-nav mr-auto">
@@ -58,16 +58,20 @@
         	</div>
       	</nav>
 
-		<!-- Menu -->
-			
+		<!-- Error message -->
+		@if (isset($errors))
+			@foreach (($errors->all()) as $message)
+				<div class="alert alert-warning" role="alert">
+					{{ $message }}
+				</div>
+			@endforeach
+		@endif
 
 		<!-- Banner -->
 			@yield('banner')
 
         <!-- Content -->
-            <div>
-                @yield('content')
-            </div>
+            @yield('content')            
 
 		<!-- Footer -->
 		<footer class="blog-footer fixed-bottom bg-light mt-3 p-2">		
