@@ -10,58 +10,73 @@
 @endsection
 
 @section('content')
-    <!--課程表 -->
-    <div class="container">
-    <table class="table table-striped">
-    <thead>
-        <tr>        
-            <th scope="col">章節</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($data as $class)
-            <tr>            
-                <td><a href="{{ $class->videoLink }}" target=blank >{{ $class->title }}</a></td>
-            </tr>
-        @endforeach        
-    </tbody>
-    </table>   
+    <div class="container mt-5 position-relative" style="top:56px;">
 
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            {{ $data->links() }}
-        </ul>
-    </nav>
-    
-
-    <!-- 留言板 -->
-    <div class="inner" id="board">
-        <div class="12u$">
-            <h3 >留言板:</h3>    
-            @foreach ($message as $content)             
-            <div style="margin: 2em 0 0 0;">
-                <code>
-                    {{ $content->userName }}
-                    {{ $content->message }}
-                </code>
-            </div>            
-            @endforeach
-            <!--留言表單-->
-            <form method="post" action="/message/store">
-            {{ csrf_field() }}
-                <div class="12u$">
-                    <textarea name="message" id="message" maxlength="300" placeholder="最大長度300字" rows="6" ></textarea>
-                </div>
-                
-                <div class="12u$">                    
-                    <ul class="actions">
-                        <li><input type="submit" name="submit" value="Send Message" /></li>
-                        <li><input type="reset" name="reset" value="Reset" class="alt" /></li>
-                    </ul>
-                    <input type="hidden" name="classId" value="{{ $class->classId }}" />                 
-                </div>
-            </form>                    
+    <!-- 課程描述 -->
+        <div class="jumbotron">
+            <h2 class="text-center">{{ $classes->first()->className }}</h2>
+            <p class="font-italic text-center">{{ $classes->first()->teacher }}</p>
+            <hr class="my-4">
+            <p>{{ $classes->first()->description }}</p>
+            <p class="lead">
+                <a class="badge badge-pill badge-info" href="#" role="button">前往資料來源網站</a>
+            </p>
         </div>
-    </div>
+
+
+    <!-- 章節 -->    
+        <table class="table table-striped">
+            <thead>
+                <tr>        
+                    <th scope="col">章節</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($titles as $title)
+                    <tr>            
+                        <td><a href="{{ $title->videoLink }}" target=blank >{{ $title->title }}</a></td>
+                    </tr>
+                @endforeach        
+            </tbody>
+        </table>
+
+    <!-- 章節頁數 -->
+        <div class="mt-3 mx-auto">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    {{ $titles->links() }}
+                </ul>
+            </nav>
+        </div>    
+
+    <!-- 留言板 --> 
+        <h3 class="mb-3">留言板:</h3>    
+        @foreach ($messages as $message)
+            <div class=" mb-3 mx-auto col-sm-12 col-lg-10">
+                <div class="card" style="overflow:scroll;overflow-X:hidden;height:10em;">
+                    <div class="card-body">
+                        <h5 class="card-title text-info">{{ $message->userName }}</h5>
+                        <p class="card-text pl-3 text-muted">{{ $message->message }}</p>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+
+    <!--留言表單-->
+        <div class="pb-5 mb-5 mx-auto col-sm-12 col-lg-10">
+            <div class="card">                
+                <div class="card-body">
+                    <h5 class="card-title text-info">Name</h5>
+                    <form method="post" action="/message/store">
+                    @csrf
+                        <div class="form-group">                        
+                            <textarea class="form-control bg-light" style="height:15em;"></textarea>
+                            <button type="submit" class="btn btn-primary mt-2 float-right">Submit</button>
+                        </div>
+                    </form>  
+                </div>                  
+            </div>
+        </div>
+
     </div>
 @endsection

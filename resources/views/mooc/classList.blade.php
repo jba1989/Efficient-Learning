@@ -16,52 +16,54 @@
 @endsection
 
 @section('content')
-
-    
-    
+    <div class="container my-5">
 
     <!-- 課程表 -->
-    
-    <div class="container mt-5">
         <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link active" href="#">Active</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link 
+                @isset ($classType)
+                    @if ($classType == '1') 
+                        active
+                    @endif
+                @endisset
+                " href="1">熱門課程
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>        
         </ul>
 
-        <h3>課程表</h3>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th style="text-align:center">課程ID:</th>
-                <th>課程名稱:</th>
-                <th style="text-align:center">讚數:</th>
-                <th>開課教授:</th>
-                <th>課程分類:</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach ($data as $class)
-            <tr>
-                <td>{{ $class->classId }}</td>
-                <td><a href="/class/{{ $class->classId }}" style="display:block;">{{ $class->className }}</a></td>
-                <td>{{ 1 }}</td>
-                <td>{{ $class->teacher }}</td>
-                <td>{{ $class->type }}</td>
-            </tr>
-            @endforeach
-            </tbody>
-        </table>               
-        {{ $data->links() }}
+        <div class="my-5">
+            <table class="table table-striped">                
+                <thead>
+                <tr>
+                    <th class="text-right">課程ID:</th>
+                    <th class="text-center">課程名稱:</th>
+                    <th class="text-center">讚數:</th>
+                    <th class="text-center">開課教授:</th>
+                    <th class="text-center">課程分類:</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach ($classes as $class)
+                <tr>
+                    <td class="text-right">{{ $class->classId }}</td>
+                    <td class="pl-3"><a href="/class/{{ $class->classId }}" style="display:block;">{{ $class->className }}</a></td>
+                    <td class="text-center">{{ 1 }}</td>
+                    <td class="text-center">{{ $class->teacher }}</td>
+                    <td>{{ $class->type }}</td>
+                </tr>
+                @endforeach
+                </tbody>
+            </table>               
+            {{ $classes->links() }}
+        </div>
+        
     </div>
 
 @endsection
