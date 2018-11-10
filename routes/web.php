@@ -24,10 +24,8 @@ Route::get('/index', function () {
     return view('mooc.index');
 })->name('index');
 
-Route::get('/class', 'ClassController@showClass');
-Route::get('/class/{className}', 'ClassController@showTitleById');
-Route::get('/school/{school}', 'ClassController@showClassBySchool');
-Route::get('/type/{classType}', 'ClassController@showClassByType');
+
+Route::get('/index/class', 'ClassController@showClass');
 
 Route::prefix('message')->group(function () {
     Route::post('/create', 'MessageController@create');
