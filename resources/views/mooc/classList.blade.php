@@ -16,9 +16,9 @@
 @endsection
 
 @section('content')
-    <div class="container my-5">
+    <div class="container my-5 ">
 
-    <!-- 課程表 -->
+    <!-- 分類選單 -->
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link 
@@ -38,6 +38,7 @@
             </li>        
         </ul>
 
+    <!-- 課程表 -->
         <div class="my-5">
             <table class="table table-striped">                
                 <thead>
@@ -60,10 +61,20 @@
                 </tr>
                 @endforeach
                 </tbody>
-            </table>               
-            {{ $classes->links() }}
+            </table>
         </div>
-        
+
+    <!-- 課程頁數 -->
+        <div class="w-100">
+            <div class="mx-auto">
+                @if (isset($school) || isset($type))
+                    {{ $classes->appends(['school' => $school, 'type' => $type])->links() }}
+                @else
+                    {{ $classes->links() }}
+                @endif
+            </div>
+        </div>
+
     </div>
 
 @endsection

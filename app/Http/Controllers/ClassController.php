@@ -22,6 +22,8 @@ class ClassController extends Controller
     {
         $input = $request->all();
         $conditions = array();
+        $school = '';
+        $classType = '';
 
         $rules = [
             'school' => 'nullable|alpha_num|max:12',
@@ -49,15 +51,17 @@ class ClassController extends Controller
             ]);
         }
 
-        if (isset($input['school'])) {
+        if (isset($input['school']) && $input['school'] != '') {
+            $school = $input['school'];
             $conditions = array_merge($conditions, ['school' => $input['school']]);
         }
 
-        if (isset($input['type'])) {
+        if (isset($input['type']) && $input['type'] != '') {
+            $classType = $input['type'];
             $conditions = array_merge($conditions, ['classType' => $input['type']]);
         }
 
         $classes = $this->classService->showClassBy($conditions);
-        return view('mooc.classList', ['classes' => $classes]);
+        return view('mooc.classList', ['classes' => $classes, 'school' => $school, 'type' => $classType]);
     }
 }
