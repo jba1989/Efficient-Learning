@@ -2,8 +2,7 @@
 
 @section('title', '開放式課程討論區-課程內容')
 
-@section('css')
-    
+@section('head-extension')    
 @endsection
 
 @section('banner')    
