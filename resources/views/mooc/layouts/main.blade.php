@@ -9,8 +9,20 @@
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        		
+
+
+			<script type="text/javascript" src="http://www.daimajiayuan.com/download/jquery/jquery-1.10.2.min.js"></script>
+			<script type="text/javascript" src="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.js"></script>  
+			<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/css/bootstrap-select.css"> 
+	
         @yield('head-extension')        
+		<script>
+        $(document).ready(function() {
+			$('.selectpicker').selectpicker({
+				'selectedText': 'cat'
+			});
+        });
+    </script>
 
 	</head>
 	<body>
@@ -42,12 +54,18 @@
 								<a class="dropdown-item" href="/school/nctu">交大</a>
 							</div>						
 						</div>
-					</li>
+					</li>					
 				</ul>
-				<form class="form-inline mt-2 mt-md-0">
-					<input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-				</form>	
+
+				<input type="text" id="country" list="classList" placeholder="搜尋課程" onchange="selectClass()">
+				<datalist id="classList">
+					@isset ($classes)
+						@foreach ($classes as $class)
+							<option value="{{ $class->classId }}}">{{ $class->className }}}</option>
+						@endforeach
+					@endisset
+				</datalist>
+
 				<ul class="navbar-nav mr-2em">
 					<li class="nav-item">
 						<a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
