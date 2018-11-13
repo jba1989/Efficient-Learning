@@ -19,13 +19,11 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/index', 'ClassController@showIndex')->name('index');
 
-Route::get('/index', function () {
-    return view('mooc.index');
-})->name('index');
+Route::get('/index/class', 'ClassController@showClass')->name('class');
 
-
-Route::get('/index/class', 'ClassController@showClass');
+Route::get('/index/api/class', 'ApiClassController@showClass');
 
 Route::prefix('message')->group(function () {
     Route::post('/create', 'MessageController@create');
