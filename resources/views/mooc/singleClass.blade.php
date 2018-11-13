@@ -2,14 +2,15 @@
 
 @section('title', '開放式課程討論區-課程內容')
 
-@section('head-extension')    
+@section('script-extension')
+    @parent
 @endsection
 
 @section('banner')    
 @endsection
 
 @section('content')
-    <div class="container mt-5 position-relative" style="top:56px;">
+    <div class="container mt-5 position-relative">
 
     <!-- 課程描述 -->
         <div class="jumbotron">

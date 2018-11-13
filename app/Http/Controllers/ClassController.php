@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\ClassService;
+use App\Models\ClassList;
 use Validator;
 
 class ClassController extends Controller
 {
     protected $classService;
+    public $classOptions;
 
     /**
      * 注入repository
@@ -16,6 +18,12 @@ class ClassController extends Controller
     public function __construct(ClassService $classService)
     {
         $this->classService = $classService;
+        $this->classOptions = ClassList::select('classId', 'className')->get();
+    }
+
+    public function showIndex()
+    {
+        return view('mooc.index', ['classOptions' => $this->classOptions]);
     }
 
     public function showClass(Request $request)
@@ -45,6 +53,7 @@ class ClassController extends Controller
             $messages = $this->classService->showMessageBy($conditions);
 
             return view('mooc.singleClass', [
+                'classOptions' => $this->classOptions,
                 'classes' => $classes,
                 'titles' => $titles,
                 'messages' => $messages,
@@ -62,6 +71,11 @@ class ClassController extends Controller
         }
 
         $classes = $this->classService->showClassBy($conditions);
-        return view('mooc.classList', ['classes' => $classes, 'school' => $school, 'type' => $classType]);
+        return view('mooc.classList', [
+            'classOptions' => $this->classOptions,
+            'classes' => $classes,
+            'school' => $school,
+            'type' => $classType
+        ]);
     }
 }

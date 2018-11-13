@@ -9,20 +9,24 @@
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-
-
-			<script type="text/javascript" src="http://www.daimajiayuan.com/download/jquery/jquery-1.10.2.min.js"></script>
-			<script type="text/javascript" src="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.js"></script>  
-			<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/css/bootstrap-select.css"> 
-	
-        @yield('head-extension')        
+		            
 		<script>
-        $(document).ready(function() {
-			$('.selectpicker').selectpicker({
-				'selectedText': 'cat'
+			$(document).ready(function() {
+                $("#searchClass").find("input").focus(function() {
+                    $("#searchClass").css("width","100%");
+                });
+                $("#searchClass").find("input").blur(function() {
+                    $("#searchClass").css("width","15em");
+                });
+
+                $("#findClass").click(function() {
+                    var classId = $("#searchClass").find("input").val();
+                    window.location.assign("{{ route('class') }}?class=" + classId);
+                });
+
+			 	@yield('script-extension')   
 			});
-        });
-    </script>
+    	</script>
 
 	</head>
 	<body>
@@ -43,29 +47,36 @@
 					<li class="nav-item">
 						<a class="nav-link" href="#">Disabled</a>
 					</li>
-					<li class="nav-item">
+					<li class="nav-item mr-5">
 						<div class="btn-group">
 							<button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								各校開放式課程
 							</button>
 							<div class="dropdown-menu">
-								<a class="dropdown-item" href="/school/ntu">台大</a>
-								<a class="dropdown-item" href="/school/ntu">清大</a>
-								<a class="dropdown-item" href="/school/nctu">交大</a>
+								<a class="dropdown-item" href="{{ route('class') }}?school=ntu">台大</a>
+								<a class="dropdown-item" href="{{ route('class') }}?school=ntu">清大</a>
+								<a class="dropdown-item" href="{{ route('class') }}?school=nctu">交大</a>
 							</div>						
 						</div>
 					</li>					
 				</ul>
 
-				<input type="text" id="country" list="classList" placeholder="搜尋課程" onchange="selectClass()">
-				<datalist id="classList">
-					@isset ($classes)
-						@foreach ($classes as $class)
-							<option value="{{ $class->classId }}}">{{ $class->className }}}</option>
-						@endforeach
-					@endisset
-				</datalist>
+		<!-- 課程搜尋input框 -->
+				<div class="input-group mr-2" id="searchClass" style="width:15em;">
+					<input type="text" id="searchClass" class="form-control" list="classList" placeholder="快速尋找課程">
+					<datalist id="classList">
+						@isset ($classOptions)
+							@foreach ($classOptions as $classOption)
+								<option value="{{ $classOption->classId }}">{{ $classOption->classId }} - {{ $classOption->className }}</option>
+							@endforeach
+						@endisset
+					</datalist>
+					<div class="input-group-append">
+						<button id="findClass" class="btn btn-outline-info" type="button">確認</button>
+					</div>
+				</div>
 
+		<!-- 登入等按鈕 -->
 				<ul class="navbar-nav mr-2em">
 					<li class="nav-item">
 						<a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>

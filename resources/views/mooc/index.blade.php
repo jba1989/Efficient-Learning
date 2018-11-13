@@ -17,7 +17,9 @@
         <div class="card-deck">
             <div class="card">
                 <div class="card-body">
-                    <img class="card-img-top" src="{{ asset('images/NTU_logo.jpg') }}" alt="Card image cap">
+                    <a href="{{ route('class') }}?school=ntu">
+                        <img class="card-img-top" src="{{ asset('images/NTU_logo.jpg') }}" alt="Card image cap">
+                    </a>
                 </div>
                 <div class="card-footer">
                     <h5 class="text-info text-center">台大開放式課程</h5>
@@ -25,7 +27,9 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    <img class="card-img-top" src="{{ asset('images/NTHU_logo.png') }}" alt="Card image cap">
+                    <a href="{{ route('class') }}?school=nthu">
+                        <img class="card-img-top" src="{{ asset('images/NTHU_logo.png') }}" alt="Card image cap">
+                    </a>
                 </div>
                 <div class="card-footer">
                     <h5 class="text-info text-center">清大開放式課程</h5>
@@ -33,7 +37,9 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    <img class="card-img-top" src="{{ asset('images/NCTU_logo.png') }}" alt="Card image cap">
+                    <a href="{{ route('class') }}?school=nctu">
+                        <img class="card-img-top" src="{{ asset('images/NCTU_logo.png') }}" alt="Card image cap">
+                    </a>
                 </div>
                 <div class="card-footer">
                     <h5 class="text-info text-center">交大開放式課程</h5>
