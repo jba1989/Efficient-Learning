@@ -28,7 +28,7 @@ class MessageController extends Controller
     {
         $user = Auth::user();
         $input = $request->all();
-
+//dd ($input);
         $rules = [
             'classId' => 'required|alpha_num|max:12',
             'fatherId' => 'nullable|integer',
@@ -45,17 +45,19 @@ class MessageController extends Controller
         $validator = Validator::make($input, $rules, $messages);
 
         if ($validator->fails()) {
-            return redirect("/class/$classId")->withErrors($validator)->withInput();
+            return redirect('/index/class?class=' . $input['classId'])->withErrors($validator)->withInput();
         }
 
         $contents = [
             'classId' => $input['classId'],
-            'fatherId' => $input['fatherId'],
+            'fatherId' => (isset($input['fatherId']) ? $input['fatherId'] : null),
             'userName' => $user->name,
             'message' => htmlspecialchars($input['message']),
         ];
 
         $this->message->create($contents);
+
+        return redirect('/index/class?class=' . $input['classId']);
     }
 
     /**

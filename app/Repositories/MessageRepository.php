@@ -9,12 +9,11 @@ class MessageRepository
     /**
      * 插入一筆資料
      * 
-     * @param array $conditions
      * @param array $contents
      */
-    public function create($conditions)
+    public function create($contents)
     {
-        Message::create($conditions);
+        Message::insert($contents);
     }
 
     /**

@@ -67,12 +67,13 @@
             <div class="card">                
                 <div class="card-body">
                     <h5 class="card-title text-info">Name</h5>
-                    <form method="post" action="/message/store">
+                    <form method="post" action="/message/create">
                     @csrf
                         <div class="form-group">                        
-                            <textarea class="form-control bg-light" style="height:15em;"></textarea>
-                            <button type="submit" class="btn btn-primary mt-2 float-right">Submit</button>
+                            <textarea class="form-control bg-light" name="message" rows="5"></textarea>
+                            <button type="submit" class="btn btn-primary mt-2 float-right">送出</button>
                         </div>
+                        <input type="hidden" name="classId" value="{{ $classes->first()->classId }}">
                     </form>  
                 </div>                  
             </div>
