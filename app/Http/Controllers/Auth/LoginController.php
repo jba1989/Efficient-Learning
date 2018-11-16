@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Auth;
 
 class LoginController extends Controller
 {
@@ -35,5 +36,24 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+        preg_match_all('/\/index(.*)/', url()->previous(), $matches);
+        
+        if (isset ($matches[1][0])) {
+            if (substr_count($matches[1][0], 'class') > 0) {
+                session(['preUrl' => $matches[1][0]]);
+            }
+        }
+    }
+    
+    public function redirectTo(){
+        $preUrl = session('preUrl', '/index');
+        session()->forget('preUrl');
+        
+        return 'index' . $preUrl;
+    }
+
+    public function logout(){
+        Auth::logout();
+        return redirect('/index');
     }
 }

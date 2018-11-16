@@ -32,5 +32,7 @@ Route::prefix('message')->group(function () {
     Route::delete('/delete', 'MessageController@delete');
 });
 
+Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
+
 // 重新抓取課程資訊
 Route::get('/update/{school}', 'SpiderController@update');
