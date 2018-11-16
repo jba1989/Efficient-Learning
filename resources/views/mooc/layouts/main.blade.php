@@ -78,12 +78,18 @@
 
 		<!-- 登入等按鈕 -->
 				<ul class="navbar-nav mr-2em">
-					<li class="nav-item">
-						<a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-					</li>					
+					@if (Auth::check())
+						<li class="nav-item">
+							<a class="nav-link" href="{{ route('logout') }}">{{ __('Logout') }}</a>
+						</li>
+					@else
+						<li class="nav-item">
+							<a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+						</li>
+					@endif
 				</ul>			
         	</div>
       	</nav>
