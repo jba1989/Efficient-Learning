@@ -6,14 +6,14 @@
     @parent
 @endsection
 
-@section('banner')    
+@section('banner')
 @endsection
 
 @section('content')
     <div class="container mt-5 position-relative">
 
     <!-- 課程描述 -->
-        <div class="jumbotron">
+        <div class="jumbotron" style="background-image: url({{ asset('images/class_bg' . rand(0, 3) . '.jpg') }});">
             <h2 class="text-center">{{ $classes->first()->className }}</h2>
             <p class="font-italic text-center">{{ $classes->first()->teacher }}</p>
             <hr class="my-4">
