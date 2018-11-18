@@ -6,7 +6,7 @@
     @parent
 @endsection
 
-@section('banner')    
+@section('banner')
 @endsection
 
 @section('content')
