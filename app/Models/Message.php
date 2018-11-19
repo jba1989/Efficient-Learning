@@ -10,6 +10,10 @@ class message extends Model
 
     public $timestamps = true;
 
+    protected $guarded = [
+        'id',
+    ];
+
     protected $fillable = [
         'classId',
         'message',

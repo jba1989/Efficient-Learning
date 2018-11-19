@@ -90,7 +90,7 @@ class MessageController extends Controller
     {        
         $user = Auth::user();
         $input = $request->all();
-
+dd ($input);
         $rules = [
             'id' => 'integer',
             'message' => 'required|max:300',

@@ -19,12 +19,14 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+// 課程頁面
 Route::prefix('index')->group(function () {
     Route::get('/', 'ClassController@showIndex')->name('index');
     Route::get('/class', 'ClassController@showClass')->name('class');
     
 });
 
+// 留言板功能
 Route::prefix('message')->group(function () {
     Route::post('/create', 'MessageController@create');
     Route::put('/update', 'MessageController@update');
@@ -32,11 +34,11 @@ Route::prefix('message')->group(function () {
     Route::delete('/delete', 'MessageController@delete');
 });
 
-Route::prefix('api')->group(function () {
-    Route::get('/class', 'ApiClassController@showClass');
-    Route::get('/message', 'ApiClassController@showClass');
+// 留言板功能API
+Route::prefix('api/message')->group(function () {
+    Route::put('/update', 'ApiMessageController@update');
+    Route::delete('/delete', 'ApiMessageController@delete');
 });
-
 
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
