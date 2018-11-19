@@ -19,11 +19,11 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/index', 'ClassController@showIndex')->name('index');
-
-Route::get('/index/class', 'ClassController@showClass')->name('class');
-
-Route::get('/index/api/class', 'ApiClassController@showClass');
+Route::prefix('index')->group(function () {
+    Route::get('/', 'ClassController@showIndex')->name('index');
+    Route::get('/class', 'ClassController@showClass')->name('class');
+    
+});
 
 Route::prefix('message')->group(function () {
     Route::post('/create', 'MessageController@create');
@@ -32,7 +32,14 @@ Route::prefix('message')->group(function () {
     Route::delete('/delete', 'MessageController@delete');
 });
 
+Route::prefix('api')->group(function () {
+    Route::get('/class', 'ApiClassController@showClass');
+    Route::get('/message', 'ApiClassController@showClass');
+});
+
+
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
 // 重新抓取課程資訊
-Route::get('/update/{school}', 'SpiderController@update');
+Route::get('/update/ntu', 'NTUClassController@update');
+Route::get('/update/nctu', 'NCTUClassController@update');
