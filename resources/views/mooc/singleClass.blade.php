@@ -61,7 +61,7 @@
                 </div>
             </div>
         @endforeach
-
+        {{ $messages->appends(['class' => $classes->first()->classId])->links() }}
     <!--留言表單-->
         <div class="pb-5 mb-5 mx-auto col-sm-12 col-lg-10">
             <div class="card">                
@@ -75,7 +75,7 @@
                         </div>
                         <input type="hidden" name="classId" value="{{ $classes->first()->classId }}">
                     </form>  
-                </div>                  
+                </div>
             </div>
         </div>
 

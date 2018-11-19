@@ -68,6 +68,6 @@ class ClassRepository
      */
     public function showMessageBy($conditions)
     {        
-        return ClassList::find(1)->messages()->where($conditions)->orderBy('id', 'asc')->paginate(30);
+        return ClassList::find(1)->messages()->where($conditions)->orderBy('id', 'asc')->paginate(30, ['*'], 'msg_page');
     }
 }

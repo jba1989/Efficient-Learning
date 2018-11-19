@@ -34,7 +34,7 @@ class MessageRepository
      */
     public function show($conditions)
     {        
-        return Message::where($conditions)->orderBy('created_at', 'desc')->paginate(30);
+        return Message::where($conditions)->orderBy('created_at', 'desc')->paginate(30, ['*'], 'msg_page');
     }
 
     /**
