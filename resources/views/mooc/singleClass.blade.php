@@ -44,7 +44,7 @@
         <div class="mt-3 mx-auto">
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
-                    {{ $titles->links() }}
+                    {{ $titles->appends(['class' => $classes->first()->classId])->links() }}
                 </ul>
             </nav>
         </div>    

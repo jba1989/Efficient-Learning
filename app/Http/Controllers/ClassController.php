@@ -49,7 +49,7 @@ class ClassController extends Controller
             $msg_page = (isset($input['msg_page'])) ? $input['msg_per_page'] : 1;
             $msg_per_page = (isset($input['msg_per_page'])) ? $input['msg_per_page'] : 25;
         
-            $classes = ClassList::where($conditions)->orderBy('id', 'asc')->paginate(30);
+            $classes = ClassList::where($conditions);
             $titles = TotalClass::where($conditions)->orderBy('titleId', 'asc')->paginate(30);
             $messages = ClassList::find(1)->messages()->where($conditions)->orderBy('id', 'asc')->paginate($msg_per_page, ['*'], $msg_page);
 
