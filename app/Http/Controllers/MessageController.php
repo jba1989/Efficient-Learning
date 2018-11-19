@@ -3,22 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\MessageService;
+use App\Models\Message;
 use Auth;
 use Validator;
 
 class MessageController extends Controller
-{    
-    protected $message;
-
-    /**
-     * 注入Service
-     */    
-    public function __construct(MessageService $messageService)
-    {
-        $this->message = $messageService;
-    }
-    
+{        
     /**
      * 新增對某classId的留言
      *
@@ -28,7 +18,7 @@ class MessageController extends Controller
     {
         $user = Auth::user();
         $input = $request->all();
-//dd ($input);
+
         $rules = [
             'classId' => 'required|alpha_num|max:12',
             'fatherId' => 'nullable|integer',
@@ -48,14 +38,12 @@ class MessageController extends Controller
             return redirect('/index/class?class=' . $input['classId'])->withErrors($validator)->withInput();
         }
 
-        $contents = [
+        Message::insert([
             'classId' => $input['classId'],
             'fatherId' => (isset($input['fatherId']) ? $input['fatherId'] : null),
             'userName' => $user->name,
             'message' => htmlspecialchars($input['message']),
-        ];
-
-        $this->message->create($contents);
+            ]);
 
         return redirect('/index/class?class=' . $input['classId']);
     }
@@ -66,26 +54,29 @@ class MessageController extends Controller
      * @param  string  $classId
      * @return \Illuminate\Http\Response
      */
-    public function show($classId)
+    public function show(Request $request)
     {
+        $input = $request->all();
+
         $rules = [
             'classId' => 'required|alpha_num|max:12',
+            'msg_page' => 'nullable|integer|max:4',
+            'msg_per_page' => 'nullable|integer|in([25, 50,100])',
         ];
 
-        $messages = [
-            'required' => ':attribute 為必填欄位',
-            'alpha_dash' => ':attribute 請勿輸入特殊字元',
-            'max'=> ':attribute 不可超過 :max 個字',
-        ];
-
-        $validator = Validator::make(['classId' => $classId], $rules, $messages);
+        $validator = Validator::make(['classId' => $classId], $rules);
 
         if ($validator->fails()) {
             return response()->json(['data' => null], 200);
         }
 
-        $conditions = ['classId' => $classId];
-        $data = $this->message->show($conditions);
+        // 設定讀取頁數
+        $msg_page = (isset($input['msg_page'])) ? $input['msg_per_page'] : 1;
+        $msg_per_page = (isset($input['msg_per_page'])) ? $input['msg_per_page'] : 25;
+        
+        $data = Message::where('classId', $classId)
+            ->orderBy('id', 'asc')
+            ->paginate($msg_per_page, ['*'], $msg_page);
         
         return response()->json(['data' => $data], 200);
     }
@@ -117,16 +108,9 @@ class MessageController extends Controller
             return redirect("/class/$classId")->withErrors($validator)->withInput();
         }
         
-        $conditions = [
-            'id' => $input['id'],
-            'userName' => $user->name,
-        ];
+        Message::where(['id' => $input['id'], 'userName' => $user->name])
+            ->update(['id' => $input['id'], 'userName' => $user->name]);
         
-        $contents = [
-            'message' => htmlspecialchars($input['message'])
-        ];
-
-        $this->message->update($conditions, $contents);
     }
 
     /**
@@ -148,11 +132,9 @@ class MessageController extends Controller
             return redirect("/class/$classId")->withErrors($validator);
         }
         
-        $conditions = [
+        Message::where($conditions)->delete([
             'id'=> $input['id'],
             'userName'=> $user->name,
-        ];
-
-        $this->message->delete($conditions);
+        ]);
     }
 }
