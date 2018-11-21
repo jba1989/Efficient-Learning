@@ -35,7 +35,7 @@ class MessageController extends Controller
         $validator = Validator::make($input, $rules, $messages);
 
         if ($validator->fails()) {
-            return redirect('/index/class?class=' . $input['classId'])->withErrors($validator)->withInput();
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         Message::insert([
@@ -105,11 +105,11 @@ dd ($input);
         $validator = Validator::make($input, $rules, $messages);
 
         if ($validator->fails()) {
-            return redirect("/class/$classId")->withErrors($validator)->withInput();
+            return redirect()->back()->withErrors($validator)->withInput();
         }
         
         Message::where(['id' => $input['id'], 'userName' => $user->name])
-            ->update(['id' => $input['id'], 'userName' => $user->name]);
+            ->update(['message' => $input['message']]);
         
     }
 
@@ -129,7 +129,7 @@ dd ($input);
         $validator = Validator::make($input, $rules, $messages);
 
         if ($validator->fails()) {
-            return redirect("/class/$classId")->withErrors($validator);
+            return redirect()->back()->withErrors($validator);
         }
         
         Message::where($conditions)->delete([
