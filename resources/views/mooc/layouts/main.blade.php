@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>開放式課程討論區-@yield('title')</title>
+		<title>{{ __('dictionary.Web site Name') }}</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -41,23 +41,23 @@
         	<div class="collapse navbar-collapse" id="navbarCollapse">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item active">
-						<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+						<a class="nav-link" href="#">{{ __('dictionary.HomePage') }} <span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#">Link</a>
+						<a class="nav-link" href="#">{{ __('dictionary.Account') }}</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#">Disabled</a>
+						<a class="nav-link" href="#">{{ __('dictionary.Favorite') }}</a>
 					</li>
 					<li class="nav-item mr-5">
 						<div class="btn-group">
 							<button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								各校開放式課程
+								{{ __('dictionary.Select By School') }}
 							</button>
 							<div class="dropdown-menu">
-								<a class="dropdown-item" href="{{ route('class') }}?school=ntu">台大</a>
-								<a class="dropdown-item" href="{{ route('class') }}?school=ntu">清大</a>
-								<a class="dropdown-item" href="{{ route('class') }}?school=nctu">交大</a>
+								<a class="dropdown-item" href="{{ route('class') }}?school=ntu">{{ __('dictionary.NTU') }}</a>
+								<a class="dropdown-item" href="{{ route('class') }}?school=nthu">{{ __('dictionary.NTHU') }}</a>
+								<a class="dropdown-item" href="{{ route('class') }}?school=nctu">{{ __('dictionary.NCTU') }}</a>
 							</div>						
 						</div>
 					</li>					
@@ -65,7 +65,7 @@
 
 		<!-- 課程搜尋input框 -->
 				<div class="input-group mr-2" id="searchClass" style="width:15em;">
-					<input type="text" id="searchClass" class="form-control" list="classList" placeholder="快速尋找課程">
+					<input type="text" id="searchClass" class="form-control" list="classList" placeholder="{{ __('dictionary.Search Class') }}">
 					<datalist id="classList">
 						@isset ($classOptions)
 							@foreach ($classOptions as $classOption)
@@ -74,7 +74,7 @@
 						@endisset
 					</datalist>
 					<div class="input-group-append">
-						<button id="findClass" class="btn btn-outline-info" type="button">確認</button>
+						<button id="findClass" class="btn btn-outline-info" type="button">{{ __('dictionary.Submit') }}</button>
 					</div>
 				</div>
 
@@ -82,14 +82,14 @@
 				<ul class="navbar-nav mr-2em">
 					@if (Auth::check())
 						<li class="nav-item">
-							<a class="nav-link" href="{{ route('logout') }}">{{ __('Logout') }}</a>
+							<a class="nav-link" href="{{ route('logout') }}">{{ __('auth.Logout') }}</a>
 						</li>
 					@else
 						<li class="nav-item">
-							<a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+							<a class="nav-link" href="{{ route('login') }}">{{ __('auth.Login') }}</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+							<a class="nav-link" href="{{ route('register') }}">{{ __('auth.Register') }}</a>
 						</li>
 					@endif
 				</ul>			

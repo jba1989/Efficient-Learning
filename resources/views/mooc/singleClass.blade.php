@@ -1,7 +1,5 @@
 @extends('mooc.layouts.main')
 
-@section('title', '開放式課程討論區-課程內容')
-
 @section('head-extension')
     <script>
         function updateMessage(id){            
@@ -48,16 +46,15 @@
             <hr class="my-4">
             <p>{{ $classes->first()->description }}</p>
             <p class="lead">
-                <a class="badge badge-pill badge-info" href="#" role="button">前往資料來源網站</a>
+                <a class="badge badge-pill badge-info" href="#" role="button">{{ __('dictionary.ResourceURL') }}</a>
             </p>
         </div>
-
 
     <!-- 章節 -->    
         <table class="table table-striped">
             <thead>
                 <tr>        
-                    <th scope="col">章節</th>
+                    <th scope="col">{{ __('dictionary.Title') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -79,7 +76,7 @@
         </div>    
 
     <!-- 留言板 --> 
-        <h3 class="mb-3">留言板:</h3>    
+        <h3 class="mb-3">{{ __('dictionary.Message Board') }}:</h3>    
         @foreach ($messages as $message)
             <div class=" mb-3 mx-auto col-sm-12 col-lg-10">
                 <div class="card">
@@ -94,8 +91,8 @@
                                         
                                     </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" data-toggle="modal" data-target="#update_message_box_{{ $message->id }}">修改</a>
-                                            <a class="dropdown-item" data-toggle="modal" data-target="#delete_message_box_{{ $message->id }}">刪除</a>
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#update_message_box_{{ $message->id }}">{{ __('dictionary.Edit') }}</a>
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#delete_message_box_{{ $message->id }}">{{ __('dictionary.Delete') }}</a>
                                         </div>
                                     </div>
 
@@ -105,7 +102,7 @@
                                             <div class="modal-content">
 
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="messageDropdownList">修改留言</h5>
+                                                <h5 class="modal-title" id="messageDropdownList">{{ __('dictionary.Edit Message') }}</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -120,8 +117,8 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                 <p class="my-auto mx-auto text-danger" id="updateMessageError_{{ $message->id }}"></p>
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                                                    <button type="button" class="btn btn-success" onclick="updateMessage({{ $message->id }})">送出</button>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('dictionary.Cancel') }}</button>
+                                                    <button type="button" class="btn btn-success" onclick="updateMessage({{ $message->id }})">{{ __('dictionary.Send') }}</button>
                                                 </div>                                                
                                             </form>
 
@@ -135,7 +132,7 @@
                                             <div class="modal-content">
 
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="messageDropdownList">確認刪除留言?</h5>
+                                                <h5 class="modal-title" id="messageDropdownList">{{ __('dictionary.Delete Confirm') }}</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -148,8 +145,8 @@
                                                 
                                                 <div class="modal-footer">
                                                 <p class="my-auto mx-auto text-danger" id="deleteMessageError_{{ $message->id }}"></p>
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                                                    <button type="button" class="btn btn-danger" onclick="deleteMessage({{ $message->id }})">確認</button>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('dictionary.Cancel') }}</button>
+                                                    <button type="button" class="btn btn-danger" onclick="deleteMessage({{ $message->id }})">{{ __('dictionary.Submit') }}</button>
                                                 </div>                                                
                                             </form>
 
@@ -170,12 +167,16 @@
         <div class="pb-5 mb-5 mx-auto col-sm-12 col-lg-10">
             <div class="card">                
                 <div class="card-body">
-                    <h5 class="card-title text-info">Name</h5>
+                    @if (Auth::check())
+                        <h5 class="card-title text-info">{{ Auth::user()->name }}</h5>
+                    @else
+                        <h5 class="card-title text-info">{{ __('auth.Guest') }}</h5>
+                    @endif
                     <form method="post" action="/message/create">
                     @csrf
                         <div class="form-group">                        
                             <textarea class="form-control bg-light" name="message" rows="5"></textarea>
-                            <button type="submit" class="btn btn-primary mt-2 float-right">送出</button>
+                            <button type="submit" class="btn btn-primary mt-2 float-right">{{ __('dictionary.Submit') }}</button>
                         </div>
                         <input type="hidden" name="classId" value="{{ $classes->first()->classId }}">
                     </form>  

@@ -1,7 +1,5 @@
 @extends('mooc.layouts.main')
 
-@section('title', '開放式課程討論區-課程清單')
-
 @section('script-extension')
     @parent
                 // 選中的學校選單增加active特效
@@ -35,10 +33,10 @@
 
     <!-- 學校選單 -->
         <nav class="nav nav-pills nav-justified my-5">
-            <a class="nav-item nav-link btn btn-lg btn-outline-info mr-2 school" href="{{ route('class') }}?school=ntu" name="ntu">台灣大學</a>
-            <a class="nav-item nav-link btn btn-lg btn-outline-info mr-2 school" href="{{ route('class') }}?school=nthu" name="nthu">清華大學</a>
-            <a class="nav-item nav-link btn btn-lg btn-outline-info mr-2 school" href="{{ route('class') }}?school=nctu" name="nctu">交通大學</a>
-            <a class="nav-item nav-link btn btn-lg btn-outline-secondary mr-2 school disabled" href="#">陸續新增中</a>
+            <a class="nav-item nav-link btn btn-lg btn-outline-info mr-2 school" href="{{ route('class') }}?school=ntu" name="ntu">{{ __('dictionary.NTU') }}</a>
+            <a class="nav-item nav-link btn btn-lg btn-outline-info mr-2 school" href="{{ route('class') }}?school=nthu" name="nthu">{{ __('dictionary.NTHU') }}</a>
+            <a class="nav-item nav-link btn btn-lg btn-outline-info mr-2 school" href="{{ route('class') }}?school=nctu" name="nctu">{{ __('dictionary.NCTU') }}</a>
+            <a class="nav-item nav-link btn btn-lg btn-outline-secondary mr-2 school disabled" href="#">{{ __('dictionary.Opening soon') }}</a>
         </nav>
 
     <!-- 分類選單 -->
@@ -59,12 +57,12 @@
             <table class="table table-striped">                
                 <thead>
                 <tr>
-                    <th class="text-right text-nowrap">課程ID:</th>
-                    <th class="text-center text-nowrap">課程名稱:</th>
-                    <th class="text-center text-nowrap">讚數:</th>
-                    <th class="text-center text-nowrap">開課學校:</th>
-                    <th class="text-center text-nowrap">開課教授:</th>
-                    <th class="text-center text-nowrap">課程分類:</th>
+                    <th class="text-right text-nowrap">{{ __('dictionary.ClassId') }}:</th>
+                    <th class="text-center text-nowrap">{{ __('dictionary.ClassName') }}:</th>
+                    <th class="text-center text-nowrap">{{ __('dictionary.Like') }}:</th>
+                    <th class="text-center text-nowrap">{{ __('dictionary.School') }}:</th>
+                    <th class="text-center text-nowrap">{{ __('dictionary.Teacher') }}:</th>
+                    <th class="text-center text-nowrap">{{ __('dictionary.ClassType') }}:</th>
                 </tr>
                 </thead>
                 <tbody>     

@@ -22,7 +22,7 @@
                     </a>
                 </div>
                 <div class="card-footer">
-                    <h5 class="text-info text-center">台大開放式課程</h5>
+                    <h5 class="text-info text-center">{{ __('dictionary.NTU') }}</h5>
                 </div>
             </div>
             <div class="card">
@@ -32,7 +32,7 @@
                     </a>
                 </div>
                 <div class="card-footer">
-                    <h5 class="text-info text-center">清大開放式課程</h5>
+                    <h5 class="text-info text-center">{{ __('dictionary.NTHU') }}</h5>
                 </div>
             </div>
             <div class="card">
@@ -42,7 +42,7 @@
                     </a>
                 </div>
                 <div class="card-footer">
-                    <h5 class="text-info text-center">交大開放式課程</h5>
+                    <h5 class="text-info text-center">{{ __('dictionary.NCTU') }}</h5>
                 </div>
             </div>
         </div>
