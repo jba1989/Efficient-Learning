@@ -30,24 +30,111 @@
                 error: function (response) {                    
                     var data = $.parseJSON(response.responseText);                    
                     $("#deleteMessageError_" + id).text(data.errMsg);
-                },
+                }
+            });
+        };
+
+        function updateLikeCount(classId){            
+            $.ajax({
+                type: "get",
+                datatype: "json",
+                url: "/api/class/like",
+                data: {"_token": "{{ csrf_token() }}", "classId": "{{ $classes->classId }}"},
+                success: function(response){
+                    location.reload();
+                }
             });
         };
     </script>
+
+    <style>
+        #like_img, #dislike_img {
+            height: 50px;
+            width: 50px;
+            margin: 10px;
+        };
+    </style>    
+@endsection
+
+@section('script-extension')
+        $.ajax({
+            type: "get",
+            datatype: "json",
+            url: "/api/class/like",
+            data: {"_token": "{{ csrf_token() }}", "classId": "{{ $classes->classId }}"},
+            success:function(response) {
+                $("#like_count").text(response.data.likeCount);
+                $("#dislike_count").text(response.data.dislikeCount);
+                switch (response.data.prefer) {
+                    case "like":
+                        $("#like_img").attr("src", "{{ asset('images/like3.png') }}");
+                        break;
+                    case "dislike":
+                        $("#dislike_img").attr("src", "{{ asset('images/like3.png') }}");
+                        break;
+                    default:
+                        $("#like_img").attr("src", "{{ asset('images/like2.png') }}");
+                        $("#dislike_img").attr("src", "{{ asset('images/like2.png') }}");
+                        break;
+                }
+            }
+        });
+
+        $("img").click(function(){
+            var prefer = $(this).attr("alt");
+            $.ajax({
+                type: "put",
+                datatype: "json",
+                url: "/api/class/like",
+                data: {"_token": "{{ csrf_token() }}", "classId": "{{ $classes->classId }}", "prefer": prefer},
+                success: function(response){                    
+                    switch (response.data.prefer) {
+                    case "like":
+                        $("#like_img").attr("src", "{{ asset('images/like3.png') }}");
+                        $("#dislike_img").attr("src", "{{ asset('images/like2.png') }}");
+                        break;
+                    case "dislike":
+                        $("#like_img").attr("src", "{{ asset('images/like2.png') }}");
+                        $("#dislike_img").attr("src", "{{ asset('images/like3.png') }}");
+                        break;
+                    default:
+                        $("#like_img").attr("src", "{{ asset('images/like2.png') }}");
+                        $("#dislike_img").attr("src", "{{ asset('images/like2.png') }}");
+                        break;
+                    }
+                    $("#like_count").text(response.data.likeCount);
+                    $("#dislike_count").text(response.data.dislikeCount);
+                }
+                
+            });
+        });
+        
+        
 @endsection
 
 @section('content')
-    <div class="container mt-5 position-relative">
+    <div class="container mt-5">
 
     <!-- 課程描述 -->
-        <div class="jumbotron">
-            <h2 class="text-center">{{ $classes->first()->className }}</h2>
-            <p class="font-italic text-center">{{ $classes->first()->teacher }}</p>
+        <div class="jumbotron pb-1">
+            <h2 class="text-center">{{ $classes->className }}</h2>
+            <p class="font-italic text-center">{{ $classes->teacher }}</p>
             <hr class="my-4">
-            <p>{{ $classes->first()->description }}</p>
-            <p class="lead">
-                <a class="badge badge-pill badge-info" href="#" role="button">{{ __('dictionary.ResourceURL') }}</a>
-            </p>
+            <p>{{ $classes->description }}</p>
+            <p class="lead">123456 </p>
+            <p class="text-center mt-2"><a class="badge badge-pill badge-info" href="#" role="button">{{ __('dictionary.ResourceURL') }}</a></p>
+            
+            <!-- 讚按鈕 -->
+            <table class="mx-auto">
+                <tr>
+                    <td class="text-center"><img id="like_img" src="{{ asset('images/like2.png') }}" alt="like"></td>
+                    <td class="text-center"><img id="dislike_img" class="ml-2" src="{{ asset('images/like2.png') }}" alt="dislike"></td>
+                </tr>
+                <tr>
+                    <td class="text-center"><p id="like_count"></p></td>
+                    <td class="text-center"><p id="dislike_count"></p></td>
+                </tr>
+            </table>            
         </div>
 
     <!-- 章節 -->    
@@ -70,7 +157,7 @@
         <div class="mt-3 mx-auto">
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
-                    {{ $titles->appends(['class' => $classes->first()->classId])->links() }}
+                    {{ $titles->appends(['class' => $classes->classId])->links() }}
                 </ul>
             </nav>
         </div>    

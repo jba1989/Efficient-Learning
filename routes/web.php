@@ -34,10 +34,19 @@ Route::prefix('message')->group(function () {
     Route::delete('/delete', 'MessageController@delete');
 });
 
-// 留言板功能API
-Route::prefix('api/message')->group(function () {
-    Route::put('/update', 'ApiMessageController@update');
-    Route::delete('/delete', 'ApiMessageController@delete');
+// API
+Route::prefix('api')->group(function () {
+    // 留言板功能
+    Route::prefix('/message')->group(function () {
+        Route::put('/update', 'ApiMessageController@update');
+        Route::delete('/delete', 'ApiMessageController@delete');
+    });
+
+    // 課程讚數
+    Route::prefix('/class')->group(function () {
+        Route::get('/like', 'ApiClassController@showLikeCount');
+        Route::put('/like', 'ApiClassController@updateLikeCount')->middleware('guest');
+    });
 });
 
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
