@@ -22,14 +22,14 @@
 @endsection
 
 @section('content')
-    <div class="container my-5 ">
+    <div class="container my-5">
 
     <!-- 學校選單 -->
-        <nav class="nav nav-pills nav-justified my-5">
-            <a class="nav-item nav-link btn btn-lg btn-outline-info mr-2 school" href="{{ route('class') }}?school=ntu" name="ntu">{{ __('dictionary.NTU') }}</a>
-            <a class="nav-item nav-link btn btn-lg btn-outline-info mr-2 school" href="{{ route('class') }}?school=nthu" name="nthu">{{ __('dictionary.NTHU') }}</a>
-            <a class="nav-item nav-link btn btn-lg btn-outline-info mr-2 school" href="{{ route('class') }}?school=nctu" name="nctu">{{ __('dictionary.NCTU') }}</a>
-            <a class="nav-item nav-link btn btn-lg btn-outline-secondary mr-2 school disabled" href="#">{{ __('dictionary.Opening soon') }}</a>
+        <nav class="nav nav-pills flex-column flex-lg-row nav-justified my-5">
+            <a class="nav-item nav-link btn btn-lg btn-outline-info mr-lg-2 mb-2 school" href="{{ route('class') }}?school=ntu" name="ntu">{{ __('dictionary.NTU') }}</a>
+            <a class="nav-item nav-link btn btn-lg btn-outline-info mr-lg-2 mb-2 school" href="{{ route('class') }}?school=nthu" name="nthu">{{ __('dictionary.NTHU') }}</a>
+            <a class="nav-item nav-link btn btn-lg btn-outline-info mr-lg-2 mb-2 school" href="{{ route('class') }}?school=nctu" name="nctu">{{ __('dictionary.NCTU') }}</a>
+            <a class="nav-item nav-link btn btn-lg btn-outline-secondary mb-2 school disabled" href="#">{{ __('dictionary.Opening soon') }}</a>
         </nav>
 
     <!-- 分類選單 -->
