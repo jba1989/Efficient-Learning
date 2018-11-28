@@ -108,8 +108,6 @@
                 
             });
         });
-        
-        
 @endsection
 
 @section('content')
@@ -119,6 +117,7 @@
         <div class="jumbotron pb-1">
             <h2 class="text-center">{{ $classes->className }}</h2>
             <p class="font-italic text-center">{{ $classes->teacher }}</p>
+
             <hr class="my-4">
             <p>{{ $classes->description }}</p>
             <p class="lead">123456 </p>
