@@ -20,7 +20,7 @@ class RedirectIfAuthenticated
         // ajax 請求，判斷用戶是否登入
         if ($request->ajax()) {            
             if (Auth::guard($guard)->check() == false) {
-                return response()->json(['data' => '', 'errMsg' => ''], 403);
+                return response()->json(['data' => '', 'errMsg' => trans('Login Please')], 403);
             } else {
                 return $next($request);
             }

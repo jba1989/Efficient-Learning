@@ -48,7 +48,7 @@
     </script>
 
     <style>
-        #like_img, #dislike_img {
+        #like_img, #dislike_img, #love_img {
             height: 50px;
             width: 50px;
             margin: 10px;
@@ -80,7 +80,7 @@
             }
         });
 
-        $("img").click(function(){
+        $(".like").click(function(){
             var prefer = $(this).attr("alt");
             $.ajax({
                 type: "put",
@@ -108,6 +108,19 @@
                 
             });
         });
+
+        $(".love").click(function(){
+            var prefer = $(this).attr("alt");
+            $.ajax({
+                type: "put",
+                datatype: "json",
+                url: "/api/user/update",
+                data: {"_token": "{{ csrf_token() }}", "classId": "{{ $classes->classId }}"},
+                success: function(response){                    
+                    $("#love_img").attr("src", "{{ asset('images/like2.png') }}");
+                }
+            });
+        });
 @endsection
 
 @section('content')
@@ -126,12 +139,14 @@
             <!-- 讚按鈕 -->
             <table class="mx-auto">
                 <tr>
-                    <td class="text-center"><img id="like_img" src="{{ asset('images/like2.png') }}" alt="like"></td>
-                    <td class="text-center"><img id="dislike_img" class="ml-2" src="{{ asset('images/like2.png') }}" alt="dislike"></td>
+                    <td class="text-center"><img id="like_img" class="like" src="{{ asset('images/like2.png') }}" alt="like"></td>
+                    <td class="text-center"><img id="dislike_img" class="like" src="{{ asset('images/like2.png') }}" alt="dislike"></td>
+                    <td class="text-center"><img id="love_img" class="love" src="{{ asset('images/love.png') }}" alt="love"></td>
                 </tr>
                 <tr>
                     <td class="text-center"><p id="like_count"></p></td>
                     <td class="text-center"><p id="dislike_count"></p></td>
+                    <td></td>
                 </tr>
             </table>            
         </div>

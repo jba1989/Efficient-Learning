@@ -28,4 +28,5 @@ return [
     'Confirm Password' => '再次輸入密碼',
     'Guest' => '訪客',
     'Reset Password' => '重設密碼',
+    'Login Please' => '請先登入',
 ];

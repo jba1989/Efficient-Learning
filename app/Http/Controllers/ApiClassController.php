@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ClassList;
+use App\Models\ClassListLike;
 use Validator;
 use Illuminate\Validation\Rule;
 use Auth;
 
 class ApiClassController extends Controller
 {
-    public function showLikeCount(Request $request)
+    public function show(Request $request)
     {
         $input = $request->all();
 
@@ -24,33 +25,32 @@ class ApiClassController extends Controller
             return response()->json(['data' => '', 'errMsg' => ''], 403);
         }
 
-        $data = ClassList::select('likeCount', 'dislikeCount')->where('classId', $input['classId'])->first();
+        $data = ClassListLike::where('classId', $input['classId'])->first();
         $prefer = '';
 
-        // like
-        if (isset($data->likeCount) && ($data->likeCount != '')) {
-            $likeCountArr = explode(',', $data->likeCount);
-            $likeCount = count($likeCountArr);
-
-            if (Auth::check() && in_array(Auth::user()->id, $likeCountArr)) {
-                $prefer = 'like';
-            }
-        } else {
+        // 若無這筆資料則新建一個實例
+        if (empty($data)) {
             $likeCount = 0;
-        }
-
-        // dislikeCount
-        if (isset($data->dislikeCount) && ($data->dislikeCount != '')) {
-            $dislikeCountArr = explode(',', $data->dislikeCount);
-            $dislikeCount = count($dislikeCountArr);
-
-            if (Auth::check() && in_array(Auth::user()->id, $dislikeCountArr)) {
-                $prefer = 'dislike';
-            }
-        } else {
             $dislikeCount = 0;
+        } else {
+            $likeArr = (isset($data->likeCount)) ? $data->likeCount : array();
+            $dislikeArr = (isset($data->dislikeCount)) ? $data->dislikeCount : array();
+
+            // like
+            $likeCount = count($likeArr);
+            $dislikeCount = count($dislikeArr);
+
+            if (Auth::check()) {
+                if (in_array(Auth::user()->id, $likeArr)) {
+                    $prefer = 'like';
+                } 
+
+                if (in_array(Auth::user()->id, $dislikeArr)) {
+                    $prefer = 'dislike';
+                }
+            }
         }
-        
+
         $data = array(
             'likeCount' => $likeCount, 
             'dislikeCount' => $dislikeCount, 
@@ -60,7 +60,7 @@ class ApiClassController extends Controller
         return response()->json(['data' => $data, 'errMsg' => ''], 200);
     }
 
-    public function updateLikeCount(Request $request)
+    public function update(Request $request)
     {
         $input = $request->all();
 
@@ -74,69 +74,54 @@ class ApiClassController extends Controller
         if ($validator->fails()) {
             return response()->json(['data' => '', 'errMsg' => ''], 403);
         }
-
-        $data = ClassList::select('likeCount', 'dislikeCount')->where('classId', $input['classId'])->first();
         
-        $likeStr = $data->likeCount;
-        $dislikeStr = $data->dislikeCount;
-        $likeArr = array();
-        $dislikeArr = array();
-        $status = false;
+        $data = ClassListLike::where('classId', $input['classId'])->first();
+
+        // 若無這筆資料則新建一個實例
+        if (empty($data)) {
+            $data = new ClassListLike;            
+        }
+
+        // 資料設定
+        $likeArr = (isset($data->likeCount)) ? $data->likeCount : array();
+        $dislikeArr = (isset($data->dislikeCount)) ? $data->dislikeCount : array();
         $prefer = '';
-
-        if (isset($likeStr) && ($likeStr != '')) {
-            $likeArr = explode(',', $likeStr);
-        }
-
-        if (isset($dislikeStr) && ($dislikeStr != '')) {
-            $dislikeArr = explode(',', $dislikeStr);
-        }
 
         $inLikeIndex = array_search(Auth::user()->id, $likeArr);
         $inDislikeIndex = array_search(Auth::user()->id, $dislikeArr);
         
         switch ($input['prefer']) {
             case 'like':
-                if ($inLikeIndex === false) {                    
-                    $likeArr[] = Auth::user()->id;
-                    $likeStr = implode(',', $likeArr);
-                    $status = true;
+                if ($inLikeIndex === false) {
+                    array_push($likeArr, Auth::user()->id);
                     $prefer = 'like';
                 } else {
                     unset($likeArr[$inLikeIndex]);
-                    $likeStr = implode(',', $likeArr);
-                    $status = true;                    
                 }
 
                 if ($inDislikeIndex !== false) {
                     unset($dislikeArr[$inDislikeIndex]);
-                    $status = true;
-                    $dislikeStr = implode(',', $dislikeArr);
                 }
-                break;                
+                break;
             case 'dislike':
                 if ($inLikeIndex !== false) {
                     unset($likeArr[$inLikeIndex]);
-                    $likeStr = implode(',', $likeArr);
-                    $status = true;
                 }
 
                 if ($inDislikeIndex === false) {
-                    $dislikeArr[] = Auth::user()->id;
-                    $dislikeStr = implode(',', $dislikeArr);
-                    $status = true;
+                    array_push($dislikeArr, Auth::user()->id);
                     $prefer = 'dislike';
                 } else {
                     unset($dislikeArr[$inDislikeIndex]);
-                    $dislikeStr = implode(',', $dislikeArr);
-                    $status = true;
                 }
                 break;
         }
-
-        if ($status == true) {
-            ClassList::where('classId', $input['classId'])->update(['likeCount' => $likeStr, 'dislikeCount' => $dislikeStr]);
-        }
+    
+        // 寫入資料庫
+        $data->classId = $input['classId'];
+        $data->likeCount = $likeArr;
+        $data->dislikeCount = $dislikeArr;
+        $data->save();
 
         $data = array(
             'likeCount' => count($likeArr), 

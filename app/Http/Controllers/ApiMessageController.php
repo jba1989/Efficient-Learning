@@ -42,7 +42,7 @@ class ApiMessageController extends Controller
         if ($status) {
             return response()->json(['data' => '', 'errMsg' => ''], 200);
         } else {            
-            return response()->json(['data' => '', 'errMsg' => '修改失敗'], 403);
+            return response()->json(['data' => '', 'errMsg' => trans('Edit.Fail') . trans('dictionart.Fail')], 403);
         }
     }
 
@@ -70,7 +70,7 @@ class ApiMessageController extends Controller
         if ($status) {
             return response()->json(['data' => '', 'errMsg' => ''], 200);
         } else {            
-            return response()->json(['data' => '', 'errMsg' => '刪除失敗'], 403);
+            return response()->json(['data' => '', 'errMsg' => trans('Delete.Fail') . trans('dictionart.Fail')], 403);
         }
     }
 }

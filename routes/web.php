@@ -44,8 +44,13 @@ Route::prefix('api')->group(function () {
 
     // 課程讚數
     Route::prefix('/class')->group(function () {
-        Route::get('/like', 'ApiClassController@showLikeCount');
-        Route::put('/like', 'ApiClassController@updateLikeCount')->middleware('guest');
+        Route::get('/like', 'ApiClassController@show');
+        Route::put('/like', 'ApiClassController@update')->middleware('guest');
+    });
+
+    // 留言板功能
+    Route::prefix('/user')->group(function () {
+        Route::put('/update', 'ApiUserController@update')->middleware('guest');
     });
 });
 
