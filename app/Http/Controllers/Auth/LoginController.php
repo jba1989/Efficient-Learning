@@ -46,7 +46,7 @@ class LoginController extends Controller
     }
     
     public function redirectTo(){
-        $preUrl = session('preUrl', '/index');
+        $preUrl = session('preUrl', '');
         session()->forget('preUrl');
         
         return 'index' . $preUrl;
