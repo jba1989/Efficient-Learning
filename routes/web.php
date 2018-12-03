@@ -18,6 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/index/member', 'MemberController@userInfo')->name('member');
 
 // 課程頁面
 Route::prefix('index')->group(function () {
@@ -48,9 +49,11 @@ Route::prefix('api')->group(function () {
         Route::put('/like', 'ApiClassController@update')->middleware('guest');
     });
 
-    // 留言板功能
+    // 我的最爱功能
     Route::prefix('/user')->group(function () {
+        Route::get('/show', 'ApiUserController@show');
         Route::put('/update', 'ApiUserController@update')->middleware('guest');
+        Route::delete('/delete', 'ApiUserController@delete')->middleware('guest');
     });
 });
 

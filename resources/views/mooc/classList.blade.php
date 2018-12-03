@@ -18,9 +18,6 @@
                 });
 @endsection
 
-@section('banner')
-@endsection
-
 @section('content')
     <div class="container my-5">
 

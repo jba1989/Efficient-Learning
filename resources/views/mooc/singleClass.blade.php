@@ -109,15 +109,30 @@
             });
         });
 
-        $(".love").click(function(){
-            var prefer = $(this).attr("alt");
+        $.ajax({
+            type: "get",
+            datatype: "json",
+            url: "/api/user/show",
+            data: {"_token": "{{ csrf_token() }}", "classId": "{{ $classes->classId }}"},
+            success:function(response) {
+                if (response.data.favorite) {
+                    $("#love_img").attr("src", "{{ asset('images/like2.png') }}");
+                }
+            }
+        });
+
+        $(".love").click(function(){           
             $.ajax({
                 type: "put",
                 datatype: "json",
                 url: "/api/user/update",
                 data: {"_token": "{{ csrf_token() }}", "classId": "{{ $classes->classId }}"},
-                success: function(response){                    
-                    $("#love_img").attr("src", "{{ asset('images/like2.png') }}");
+                success: function(response){
+                    if (response.data.favorite) {
+                        $("#love_img").attr("src", "{{ asset('images/like2.png') }}");
+                    } else {
+                        $("#love_img").attr("src", "{{ asset('images/love.png') }}");
+                    }
                 }
             });
         });

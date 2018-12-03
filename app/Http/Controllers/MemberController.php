@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\ClassList;
+use Auth;
 
 class MemberController extends Controller
 {
@@ -19,18 +20,8 @@ class MemberController extends Controller
 
     public function userInfo()
     {
-        $userId = Auth::id();
-        $data = DB::table('users')->where('id', userId)->get();
-        return view('/mooc/userInfo', $data);
-    }
+        $favorites = ClassList::select('classId', 'className')->whereIn('classId', Auth::user()->favorite)->get();
 
-    public function favorite()
-    {
-        $userId = Auth::id();
-        $favoriteStr = DB::table('users')->where('id', userId)->value('favorite');
-        $favoriteIdArr = explode($favoriteStr, ',');
-        $favoriteClass = DB::table('class_list')->select('classId', 'className')
-            ->whereIn('classId', $favoriteIdArr)->get()->orderBy('asc');
-        return view('/mooc/favorite', $favoriteClass);
+        return view('/mooc/member', ['favorites' => $favorites]);
     }
 }
