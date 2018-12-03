@@ -12,8 +12,8 @@
                     location.reload();
                 },
                 error: function (response) {
-                    var data = $.parseJSON(response.responseText);
-                    $("#updateMessageError_" + id).text(data.errMsg);
+                    var data = response.responseJSON.errors.message;
+                    $("#updateMessageError_" + id).text(data[0]);
                 },
             });
         };
@@ -109,7 +109,7 @@
             }
         });
 
-        $(".love").click(function(){           
+        $(".love").click(function(){
             $.ajax({
                 type: "put",
                 datatype: "json",
