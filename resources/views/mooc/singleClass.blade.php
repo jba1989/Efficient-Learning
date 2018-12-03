@@ -172,9 +172,9 @@
 
     <!-- 章節頁數 -->
         <div class="mt-3 mx-auto">
-            <nav aria-label="Page navigation example">
+            <nav class="mx-auto">
                 <ul class="pagination">
-                    {{ $titles->appends(['class' => $classes->classId])->links() }}
+                    {{ $titles->appends(['class' => $classes->classId, 'page' => $page, 'msg_page' => $msg_page])->links() }}
                 </ul>
             </nav>
         </div>    
@@ -266,7 +266,7 @@
                 </div>
             </div>
         @endforeach
-        {{ $messages->appends(['class' => $classes->first()->classId])->links() }}
+        {{ $messages->appends(['class' => $classes->classId, 'page' => $page, 'msg_page' => $msg_page])->links() }}
     <!--留言表單-->
         <div class="pb-5 mb-5 mx-auto col-sm-12 col-lg-10">
             <div class="card">                
@@ -282,7 +282,7 @@
                             <textarea class="form-control bg-light" name="message" rows="5"></textarea>
                             <button type="submit" class="btn btn-primary mt-2 float-right">{{ __('dictionary.Submit') }}</button>
                         </div>
-                        <input type="hidden" name="classId" value="{{ $classes->first()->classId }}">
+                        <input type="hidden" name="classId" value="{{ $classes->classId }}">
                     </form>  
                 </div>
             </div>

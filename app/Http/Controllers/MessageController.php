@@ -45,7 +45,7 @@ class MessageController extends Controller
             'message' => htmlspecialchars($input['message']),
             ]);
 
-        return redirect('/index/class?class=' . $input['classId']);
+        return redirect()->back();
     }
 
     /**
@@ -76,7 +76,7 @@ class MessageController extends Controller
         
         $data = Message::where('classId', $classId)
             ->orderBy('id', 'asc')
-            ->paginate($msg_per_page, ['*'], $msg_page);
+            ->paginate($msg_per_page, ['*'], 'msg_page');
         
         return response()->json(['data' => $data], 200);
     }
@@ -90,7 +90,7 @@ class MessageController extends Controller
     {        
         $user = Auth::user();
         $input = $request->all();
-dd ($input);
+
         $rules = [
             'id' => 'integer',
             'message' => 'required|max:300',

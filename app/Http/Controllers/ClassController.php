@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ClassList;
 use App\Models\TotalClass;
 use Validator;
+use Config;
 
 class ClassController extends Controller
 {   
@@ -30,7 +31,9 @@ class ClassController extends Controller
             'school' => 'nullable|alpha_num|max:12',
             'type' => 'nullable|alpha_num|max:12',
             'classId' => 'nullable|alpha_num|max:12',
+            'page' => 'nullable|integer|max:4',
             'msg_page' => 'nullable|integer|max:4',
+            'title_per_page' => 'nullable|integer|in([25, 50,100])',
             'msg_per_page' => 'nullable|integer|in([25, 50,100])',
         ];
 
@@ -46,18 +49,22 @@ class ClassController extends Controller
             $conditions = array('classId' => $input['class']);
 
             // 設定讀取頁數
-            $msg_page = (isset($input['msg_page'])) ? $input['msg_per_page'] : 1;
-            $msg_per_page = (isset($input['msg_per_page'])) ? $input['msg_per_page'] : 25;
+            $title_page = (isset($input['page'])) ? $input['page'] : 1;
+            $msg_page = (isset($input['msg_page'])) ? $input['msg_page'] : 1;
+            $title_per_page = (isset($input['title_per_page'])) ? $input['title_per_page'] : Config::get('constants.options.title_per_page');
+            $msg_per_page = (isset($input['msg_per_page'])) ? $input['msg_per_page'] : Config::get('constants.options.msg_per_page');
         
             $classes = ClassList::where($conditions)->first();
-            $titles = TotalClass::where($conditions)->orderBy('titleId', 'asc')->paginate(30);
-            $messages = ClassList::find(1)->messages()->where($conditions)->orderBy('id', 'asc')->paginate($msg_per_page, ['*'], $msg_page);
+            $titles = TotalClass::where($conditions)->orderBy('titleId', 'asc')->paginate($title_per_page);
+            $messages = ClassList::find(1)->messages()->where($conditions)->orderBy('id', 'asc')->paginate($msg_per_page, ['*'], 'msg_page');
 
             return view('mooc.singleClass', [
                 'classOptions' => $this->classOptions,
                 'classes' => $classes,
                 'titles' => $titles,
                 'messages' => $messages,
+                'page' => $title_page,
+                'msg_page' => $msg_page,
             ]);
         }
 
