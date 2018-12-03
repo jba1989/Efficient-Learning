@@ -5,27 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ClassList;
 use App\Models\ClassListLike;
-use Validator;
 use Illuminate\Validation\Rule;
+use App\Http\Requests\ClassIdValidate;
+use Validator;
 use Auth;
 
 class ApiClassController extends Controller
 {
-    public function show(Request $request)
+    public function show(ClassIdValidate $request)
     {
-        $input = $request->all();
+        $classId = $request->input('classId');
 
-        $rules = [            
-            'classId' => 'nullable|alpha_num|max:12',            
-        ];
-
-        $validator = Validator::make($input, $rules);
-        
-        if ($validator->fails()) {
-            return response()->json(['data' => '', 'errMsg' => ''], 403);
-        }
-
-        $data = ClassListLike::where('classId', $input['classId'])->first();
+        $data = ClassListLike::where('classId', $classId)->first();
         $prefer = '';
 
         // 若無這筆資料則新建一個實例
@@ -65,7 +56,7 @@ class ApiClassController extends Controller
         $input = $request->all();
 
         $rules = [
-            'classId' => 'nullable|alpha_num|max:12',
+            'classId' => 'bail|required|alpha_num|max:12',
             'prefer' => Rule::in(['like', 'dislike']),
         ];
 

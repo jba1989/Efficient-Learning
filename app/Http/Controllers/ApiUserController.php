@@ -2,30 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\User;
+use App\Http\Requests\ClassIdValidate;
 use Validator;
-use Illuminate\Validation\Rule;
 use Auth;
 
 class ApiUserController extends Controller
 {
-    public function __construct(Request $request)
-    {
-        $input = $request->all();
-
-        $rules = [
-            'classId' => 'alpha_num|max:12',
-        ];
-
-        $validator = Validator::make($input, $rules);
-        
-        if ($validator->fails()) {
-            return response()->json(['data' => '', 'errMsg' => ''], 403);
-        }
-    }
-
-    public function show(Request $request)
+    public function show(ClassIdValidate $request)
     {
         $classId = $request->input('classId');
         if (Auth::check()) {
@@ -38,7 +21,7 @@ class ApiUserController extends Controller
         return response()->json(['data' => '', 'errMsg' => ''], 200);
     }
 
-    public function update(Request $request)
+    public function update(ClassIdValidate $request)
     {
         $classId = $request->input('classId');
         $favoriteArr = (isset(Auth::user()->favorite)) ? Auth::user()->favorite : array();
@@ -64,7 +47,7 @@ class ApiUserController extends Controller
         return response()->json(['data' => ['favorite' => $favorite], 'errMsg' => ''], 200);
     }
 
-    public function delete(Request $request)
+    public function delete(ClassIdValidate $request)
     {
         $classId = $request->input('classId');
         $favoriteArr = (isset(Auth::user()->favorite)) ? Auth::user()->favorite : array();
