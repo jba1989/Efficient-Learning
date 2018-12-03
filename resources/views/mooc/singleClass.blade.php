@@ -18,7 +18,7 @@
             });
         };
 
-        function deleteMessage(id){            
+        function deleteMessage(id){
             $.ajax({
                 type: "delete",
                 datatype: "json",
@@ -30,18 +30,6 @@
                 error: function (response) {                    
                     var data = $.parseJSON(response.responseText);                    
                     $("#deleteMessageError_" + id).text(data.errMsg);
-                }
-            });
-        };
-
-        function updateLikeCount(classId){            
-            $.ajax({
-                type: "get",
-                datatype: "json",
-                url: "/api/class/like",
-                data: {"_token": "{{ csrf_token() }}", "classId": "{{ $classes->classId }}"},
-                success: function(response){
-                    location.reload();
                 }
             });
         };
@@ -254,7 +242,7 @@
                                                 </button>
                                             </div>
 
-                                            <form method="post" id="updateMessageForm_{{ $message->id }}">
+                                            <form method="post" id="deleteMessageForm_{{ $message->id }}">
                                                 @csrf
                                                 <input type="hidden" name="_method" value="delete">
                                                 <input type="hidden" name="id" value="{{ $message->id }}">

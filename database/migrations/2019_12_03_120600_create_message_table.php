@@ -21,7 +21,7 @@ class CreateMessageTable extends Migration
             $table->integer('fatherId', false, true)->nullable();
             $table->longText('like')->nullable();
             $table->longText('dislike')->nullable();
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
     }
 
