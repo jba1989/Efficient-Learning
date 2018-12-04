@@ -8,8 +8,9 @@
                 datatype: "json",
                 url: "/api/message/update",
                 data: $("#updateMessageForm_" + id).serialize(),
-                success:function(response){
-                    location.reload();
+                success:function(response){                    
+                    $(".modal").modal('hide');
+                    $("#message_" + id).text(response.message);
                 },
                 error: function (response) {
                     var data = response.responseJSON.errors.message;
@@ -25,11 +26,12 @@
                 url: "/api/message/delete",
                 data: {"_token": "{{ csrf_token() }}", "id": id},
                 success:function(response){
-                    location.reload();
+                    $(".modal").modal('hide');
+                    $("#message_" + id).parents("div.card").hide();
                 },
                 error: function (response) {                    
-                    var data = $.parseJSON(response.responseText);                    
-                    $("#deleteMessageError_" + id).text(data.errMsg);
+                    var data = response.responseJSON.errors.message;
+                    $("#deleteMessageError_" + id).text(data[0]);
                 }
             });
         };
@@ -135,8 +137,7 @@
             <p class="font-italic text-center">{{ $classes->teacher }}</p>
 
             <hr class="my-4">
-            <p>{{ $classes->description }}</p>
-            <p class="lead">123456 </p>
+            <p>{{ $classes->description }}</p>            
             <p class="text-center mt-2"><a class="badge badge-pill badge-info" href="#" role="button">{{ __('dictionary.ResourceURL') }}</a></p>
             
             <!-- 讚按鈕 -->
@@ -181,110 +182,105 @@
 
     <!-- 留言板 --> 
         <h3 class="mb-3">{{ __('dictionary.Message Board') }}:</h3>    
-        @foreach ($messages as $message)
-            <div class=" mb-3 mx-auto col-sm-12 col-lg-10">
-                <div class="card">
-                    <div class="card-body">                        
-                            <h5 class="card-title text-info">{{ $message->userName }}</h5>
-                            
-                            <!-- 修改留言下拉選單 -->
-                            @if (Auth::check())
-                                @if (Auth::user()->name == $message->userName)
-                                    <div class="dropdown position-absolute " style="top:0.5em;right:0.5em;">
-                                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @foreach ($messages as $message)            
+            <div class="card mb-3 mx-auto col-sm-12 col-lg-10">
+                <div class="card-body">                        
+                    <h5 class="card-title text-info">{{ $message->userName }}</h5>
+                    
+                    <!-- 修改留言下拉選單 -->
+                    @if (Auth::check())
+                        @if (Auth::user()->name == $message->userName)
+                            <div class="dropdown position-absolute " style="top:0.5em;right:0.5em;">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                
+                            </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" data-toggle="modal" data-target="#updateMessageBox_{{ $message->id }}">{{ __('dictionary.Edit') }}</a>
+                                    <a class="dropdown-item" data-toggle="modal" data-target="#deleteMessageBox_{{ $message->id }}">{{ __('dictionary.Delete') }}</a>
+                                </div>
+                            </div>
+
+                            <!-- 彈出修改留言input box -->
+                            <div class="modal fade" id="updateMessageBox_{{ $message->id }}" tabindex="-1" role="dialog" aria-labelledby="messageDropdownList" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="messageDropdownList">{{ __('dictionary.Edit Message') }}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <form method="post" id="updateMessageForm_{{ $message->id }}">
+                                        @csrf
+                                        <input type="hidden" name="_method" value="put">
+                                        <input type="hidden" name="id" value="{{ $message->id }}">
+                                        <div class="modal-body">
+                                            <textarea class="form-control bg-light" id="updateMessageText_{{ $message->id }}" name="message" rows="6">{{ $message->message }}</textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                        <p class="my-auto mx-auto text-danger" id="updateMessageError_{{ $message->id }}"></p>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('dictionary.Cancel') }}</button>
+                                            <button type="button" class="btn btn-success" onclick="updateMessage({{ $message->id }})">{{ __('dictionary.Send') }}</button>
+                                        </div>                                                
+                                    </form>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 彈出刪除留言確認 box -->
+                            <div class="modal fade" id="deleteMessageBox_{{ $message->id }}" tabindex="-1" role="dialog" aria-labelledby="messageDropdownList" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="messageDropdownList">{{ __('dictionary.Delete Confirm') }}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <form method="post" id="deleteMessageForm_{{ $message->id }}">
+                                        @csrf
+                                        <input type="hidden" name="_method" value="delete">
+                                        <input type="hidden" name="id" value="{{ $message->id }}">
                                         
-                                    </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" data-toggle="modal" data-target="#update_message_box_{{ $message->id }}">{{ __('dictionary.Edit') }}</a>
-                                            <a class="dropdown-item" data-toggle="modal" data-target="#delete_message_box_{{ $message->id }}">{{ __('dictionary.Delete') }}</a>
-                                        </div>
+                                        <div class="modal-footer">
+                                        <p class="my-auto mx-auto text-danger" id="deleteMessageError_{{ $message->id }}"></p>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('dictionary.Cancel') }}</button>
+                                            <button type="button" class="btn btn-danger" onclick="deleteMessage({{ $message->id }})">{{ __('dictionary.Submit') }}</button>
+                                        </div>                                                
+                                    </form>
+
                                     </div>
-
-                                    <!-- 彈出修改留言input box -->
-                                    <div class="modal fade" id="update_message_box_{{ $message->id }}" tabindex="-1" role="dialog" aria-labelledby="messageDropdownList" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="messageDropdownList">{{ __('dictionary.Edit Message') }}</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-
-                                            <form method="post" id="updateMessageForm_{{ $message->id }}">
-                                                @csrf
-                                                <input type="hidden" name="_method" value="put">
-                                                <input type="hidden" name="id" value="{{ $message->id }}">
-                                                <div class="modal-body">
-                                                    <textarea class="form-control bg-light" id="updateMessageText_{{ $message->id }}" name="message" rows="6">{{ $message->message }}</textarea>
-                                                </div>
-                                                <div class="modal-footer">
-                                                <p class="my-auto mx-auto text-danger" id="updateMessageError_{{ $message->id }}"></p>
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('dictionary.Cancel') }}</button>
-                                                    <button type="button" class="btn btn-success" onclick="updateMessage({{ $message->id }})">{{ __('dictionary.Send') }}</button>
-                                                </div>                                                
-                                            </form>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- 彈出刪除留言確認 box -->
-                                    <div class="modal fade" id="delete_message_box_{{ $message->id }}" tabindex="-1" role="dialog" aria-labelledby="messageDropdownList" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="messageDropdownList">{{ __('dictionary.Delete Confirm') }}</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-
-                                            <form method="post" id="deleteMessageForm_{{ $message->id }}">
-                                                @csrf
-                                                <input type="hidden" name="_method" value="delete">
-                                                <input type="hidden" name="id" value="{{ $message->id }}">
-                                                
-                                                <div class="modal-footer">
-                                                <p class="my-auto mx-auto text-danger" id="deleteMessageError_{{ $message->id }}"></p>
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('dictionary.Cancel') }}</button>
-                                                    <button type="button" class="btn btn-danger" onclick="deleteMessage({{ $message->id }})">{{ __('dictionary.Submit') }}</button>
-                                                </div>                                                
-                                            </form>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            @endif
-                        
-                            <p class="card-text pl-3 text-muted">{{ $message->message }}</p>
-                        
-                    </div>
-                </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endif                
+                    <p class="card-text pl-3 text-muted" id="message_{{ $message->id }}">{{ $message->message }}</p>
+                </div>                
             </div>
         @endforeach
         {{ $messages->appends(['class' => $classes->classId, 'page' => $page, 'msg_page' => $msg_page])->links() }}
-    <!--留言表單-->
-        <div class="pb-5 mb-5 mx-auto col-sm-12 col-lg-10">
-            <div class="card">                
-                <div class="card-body">
-                    @if (Auth::check())
-                        <h5 class="card-title text-info">{{ Auth::user()->name }}</h5>
-                    @else
-                        <h5 class="card-title text-info">{{ __('auth.Guest') }}</h5>
-                    @endif
-                    <form method="post" action="/message/create">
-                    @csrf
-                        <div class="form-group">                        
-                            <textarea class="form-control bg-light" name="message" rows="5"></textarea>
-                            <button type="submit" class="btn btn-primary mt-2 float-right">{{ __('dictionary.Submit') }}</button>
-                        </div>
-                        <input type="hidden" name="classId" value="{{ $classes->classId }}">
-                    </form>  
-                </div>
+    
+    <!--留言表單-->        
+        <div class="card mb-5 mx-auto col-sm-12 col-lg-10">                
+            <div class="card-body">
+                @if (Auth::check())
+                    <h5 class="card-title text-info">{{ Auth::user()->name }}</h5>
+                @else
+                    <h5 class="card-title text-info">{{ __('auth.Guest') }}</h5>
+                @endif
+                <form method="post" action="/message/create">
+                @csrf
+                    <div class="form-group">
+                        <textarea class="form-control bg-light" name="message" rows="5">{{ old('message') }}</textarea>
+                        <button type="submit" class="btn btn-primary mt-2 float-right">{{ __('dictionary.Submit') }}</button>
+                    </div>
+                    <input type="hidden" name="classId" value="{{ $classes->classId }}">
+                </form>  
             </div>
         </div>
 
