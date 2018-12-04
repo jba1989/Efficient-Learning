@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ClassList;
 use App\Models\TotalClass;
+use App\Models\Message;
 use Validator;
 use Config;
 
@@ -56,8 +57,8 @@ class ClassController extends Controller
         
             $classes = ClassList::where($conditions)->first();
             $titles = TotalClass::where($conditions)->orderBy('titleId', 'asc')->paginate($title_per_page);
-            $messages = ClassList::find(1)->messages()->where($conditions)->orderBy('id', 'asc')->paginate($msg_per_page, ['*'], 'msg_page');
-
+            $messages = Message::where($conditions)->orderBy('id', 'asc')->paginate($msg_per_page, ['*'], 'msg_page');
+            
             return view('mooc.singleClass', [
                 'classOptions' => $this->classOptions,
                 'classes' => $classes,
