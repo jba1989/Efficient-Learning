@@ -39,6 +39,7 @@ Route::prefix('message')->group(function () {
 Route::prefix('api')->group(function () {
     // 留言板功能
     Route::prefix('/message')->group(function () {
+        Route::post('/create', 'ApiMessageController@create');
         Route::put('/update', 'ApiMessageController@update');
         Route::delete('/delete', 'ApiMessageController@delete');
     });
