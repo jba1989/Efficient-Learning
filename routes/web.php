@@ -24,7 +24,7 @@ Route::prefix('index')->group(function () {
 
 // 留言板功能
 Route::prefix('message')->group(function () {
-    Route::post('/create', 'MessageController@create');
+    Route::post('/create', 'MessageController@create')->middleware('login');
     Route::put('/update', 'MessageController@update');
     Route::get('/show/{classId}', 'MessageController@show');
     Route::delete('/delete', 'MessageController@delete');
@@ -42,18 +42,18 @@ Route::prefix('api')->group(function () {
     // 課程讚數
     Route::prefix('/class')->group(function () {
         Route::get('/like', 'ApiClassController@show');
-        Route::put('/like', 'ApiClassController@update')->middleware('guest');
+        Route::put('/like', 'ApiClassController@update')->middleware('login');
     });
 
     // 我的最爱功能
     Route::prefix('/user')->group(function () {
         Route::get('/show', 'ApiUserController@show');
-        Route::put('/update', 'ApiUserController@update')->middleware('guest');
-        Route::delete('/delete', 'ApiUserController@delete')->middleware('guest');
+        Route::put('/update', 'ApiUserController@update')->middleware('login');
+        Route::delete('/delete', 'ApiUserController@delete')->middleware('login');
     });
 });
 
-Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
+Route::get('/logout', 'Auth\LoginController@logout')->middleware('login')->name('logout');
 
 // 重新抓取課程資訊
 Route::get('/update/ntu', 'NTUClassController@update');
