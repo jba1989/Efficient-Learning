@@ -183,9 +183,9 @@
     <!-- 留言板 --> 
         <h3 class="mb-3">{{ __('dictionary.Message Board') }}:</h3>    
         @foreach ($messages as $message)            
-            <div class="card mb-3 mx-auto col-sm-12 col-lg-10">
+            <div class="card mb-3 pb-1 mx-auto col-sm-12 col-lg-10">
                 <div class="card-body">                        
-                    <h5 class="card-title text-info">{{ $message->userName }}</h5>
+                    <h4 class="card-title text-info">{{ $message->userName }}</h4>
                     
                     <!-- 修改留言下拉選單 -->
                     @if (Auth::check())
@@ -259,7 +259,7 @@
                             </div>
                         @endif
                     @endif                
-                    <p class="card-text pl-3 text-muted" id="message_{{ $message->id }}">{{ $message->message }}</p>
+                    <pre class="px-3" style="min-height: 3em;"><code class="card-text text-muted" id="message_{{ $message->id }}">{{ $message->message }}</code></pre>
                 </div>                
             </div>
         @endforeach
@@ -267,11 +267,11 @@
     
     <!--留言表單-->        
         <div class="card mb-5 mx-auto col-sm-12 col-lg-10">                
-            <div class="card-body">
+            <div class="card-body">                
                 @if (Auth::check())
-                    <h5 class="card-title text-info">{{ Auth::user()->name }}</h5>
+                    <h4 class="card-title text-info">{{ Auth::user()->name }}</h4>
                 @else
-                    <h5 class="card-title text-info">{{ __('auth.Guest') }}</h5>
+                    <h4 class="card-title text-info">{{ __('auth.Guest') }}</h4>
                 @endif
                 <form method="post" action="/message/create">
                 @csrf
