@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Message;
-use App\Http\Requests\MessageValidate;
+use App\Http\Requests\ApiMessageValidate;
 use Validator;
 use Auth;
 
@@ -13,9 +13,9 @@ class ApiMessageController extends Controller
     /**
      * 新增對某classId的留言
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\ApiMessageValidate  $request
      */
-    public function create(MessageValidate $request)
+    public function create(ApiMessageValidate $request)
     {        
         $input = $request->all();
 
@@ -37,9 +37,9 @@ class ApiMessageController extends Controller
     /**
      * 修改某id的留言
      * 
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\ApiMessageValidate  $request
      */
-    public function update(MessageValidate $request)
+    public function update(ApiMessageValidate $request)
     {
         $id = $request->input('id');
         $message = htmlspecialchars($request->input('message'));
@@ -58,9 +58,9 @@ class ApiMessageController extends Controller
     /**
      * 刪除某id的留言
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\ApiMessageValidate  $request
      */
-    public function delete(MessageValidate $request)
+    public function delete(ApiMessageValidate $request)
     { 
         $id = $request->input('id');
 

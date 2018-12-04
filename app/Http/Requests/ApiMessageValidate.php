@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MessageValidate extends FormRequest
+class ApiMessageValidate extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,9 @@ class MessageValidate extends FormRequest
     public function rules()
     {
         return [
-            'classId' => 'required|alpha_num|max:12',
+            'id' => 'integer',
+            'message' => 'sometimes|max:300',
             'fatherId' => 'nullable|integer',
-            'message' => 'required|max:300',
         ];
     }
 }
