@@ -22,7 +22,7 @@ class MessageController extends Controller
             'classId' => $input['classId'],
             'fatherId' => (isset($input['fatherId']) ? $input['fatherId'] : null),
             'userName' => Auth::user()->name,
-            'message' => htmlspecialchars($input['message']),
+            'message' => $input['message'],
             ]);
 
         return redirect()->back();
