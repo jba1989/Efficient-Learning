@@ -10,6 +10,10 @@ class TotalClass extends Model
 
     public $timestamps = false;
 
+    protected $guarded = [
+        'id',
+    ];
+    
     protected $fillable = [
         'classId',
         'titleId',

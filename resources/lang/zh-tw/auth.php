@@ -19,8 +19,8 @@ return [
     'Login' => '登入',
     'Logout' => '登出',
     'Register' => '註冊',
-    'E-Mail Address' => 'Email信箱',
-    'Email' => 'Email信箱',
+    'E-Mail Address' => 'Email',
+    'Email' => 'Email',
     'Password' => '密碼',
     'Remember Me' => '記住我',
     'Forgot Your Password?' => '忘記密碼?',
@@ -28,4 +28,6 @@ return [
     'Confirm Password' => '再次輸入密碼',
     'Guest' => '訪客',
     'Reset Password' => '重設密碼',
+    'Login Please' => '請先登入',
+
 ];

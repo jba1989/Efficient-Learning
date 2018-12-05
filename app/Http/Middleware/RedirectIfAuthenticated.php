@@ -17,8 +17,9 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        // 判斷用戶是否登入
         if (Auth::guard($guard)->check()) {
-            return redirect('/home');
+            return redirect()->back();
         }
 
         return $next($request);

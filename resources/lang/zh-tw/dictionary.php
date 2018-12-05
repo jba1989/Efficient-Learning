@@ -36,4 +36,8 @@ return [
     'Delete' => '刪除',
     'Cancel' => '取消',
     'Send' => '送出',
+
+    // 提示
+    'Success' => '成功',
+    'Fail' => '失敗',
 ];

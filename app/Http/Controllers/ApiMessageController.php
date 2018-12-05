@@ -4,73 +4,73 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Message;
-use Auth;
+use App\Http\Requests\ApiMessageValidate;
 use Validator;
+use Auth;
 
 class ApiMessageController extends Controller
 {
     /**
-     * 修改某id的留言
-     * 
-     * @param  \Illuminate\Http\Request  $request
+     * 新增對某classId的留言
+     *
+     * @param  \App\Http\Requests\ApiMessageValidate  $request
      */
-    public function update(Request $request)
-    {
-        $user = Auth::user();
+    public function create(ApiMessageValidate $request)
+    {        
         $input = $request->all();
 
-        $rules = [
-            'id' => 'integer',
-            'message' => 'required|max:300',
-        ];
-
-        $messages = [
-            'required' => ':attribute 為必填欄位',
-            'integer' => ':attribute 只限輸入數字',
-            'max'=> ':attribute 不可超過 :max 個字',
-        ];
-
-        $validator = Validator::make($input, $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['data' => '', 'errMsg' => $validator->errors()->first()], 403);
-        }
-
-        $status = Message::where(['id' => $input['id'], 'userName' => $user->name])
-            ->update(['message' => $input['message']]);
+        $status = Message::insert([
+            'classId' => $input['classId'],
+            'fatherId' => (isset($input['fatherId']) ? $input['fatherId'] : null),
+            'userName' => Auth::user()->name,
+            'message' => htmlspecialchars($input['message']),
+            ]);
 
         if ($status) {
-            return response()->json(['data' => '', 'errMsg' => ''], 200);
+            return response()->json(['message' => '', 'errors' => array()], 200);
         } else {            
-            return response()->json(['data' => '', 'errMsg' => '修改失敗'], 403);
+            $errMsg = array(trans('dictionary.Fail'));
+            return response()->json(['message' => '', 'errors' => ['message' => $errMsg]], 403);
+        }
+    }
+
+    /**
+     * 修改某id的留言
+     * 
+     * @param  \App\Http\Requests\ApiMessageValidate  $request
+     */
+    public function update(ApiMessageValidate $request)
+    {
+        $id = $request->input('id');
+        $message = htmlspecialchars($request->input('message'));
+
+        $status = Message::where(['id' => $id, 'userName' => Auth::user()->name])
+            ->update(['message' => $message]);
+            
+        if ($status) {
+            return response()->json(['message' => '', 'errors' => array()], 200);
+        } else {            
+            $errMsg = array(trans('dictionary.Edit') . trans('dictionary.Fail'));
+            return response()->json(['message' => '', 'errors' => ['message' => $errMsg]], 403);
         }
     }
 
     /**
      * 刪除某id的留言
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\ApiMessageValidate  $request
      */
-    public function delete(Request $request)
-    {                
-        $user = Auth::user();        
-        $input = $request->all();
+    public function delete(ApiMessageValidate $request)
+    { 
+        $id = $request->input('id');
 
-        $rules = ['id' => 'integer'];
-        $messages = ['integer' => ':attribute 只限輸入數字'];
-
-        $validator = Validator::make($input, $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['data' => '', 'errMsg' => $validator->errors()->first()], 403);
-        }
-        
-        $status = Message::where(['id'=> $input['id'], 'userName'=> $user->name])->delete();
+        $status = Message::where(['id'=> $id, 'userName'=> Auth::user()->name])->delete();
 
         if ($status) {
-            return response()->json(['data' => '', 'errMsg' => ''], 200);
-        } else {            
-            return response()->json(['data' => '', 'errMsg' => '刪除失敗'], 403);
+            return response()->json(['message' => '', 'errors' => ''], 200);
+        } else {
+            $errMsg = array(trans('dictionary.Delete') . trans('dictionary.Fail'));
+            return response()->json(['message' => '', 'errors' => ['message' => $errMsg]], 403);
         }
     }
 }

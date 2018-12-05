@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>{{ __('dictionary.Web site Name') }}</title>
+		<title>{{ __('dictionary.Website Name') }}</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -41,17 +41,14 @@
         	<div class="collapse navbar-collapse" id="navbarCollapse">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item active">
-						<a class="nav-link" href="#">{{ __('dictionary.HomePage') }} <span class="sr-only">(current)</span></a>
+						<a class="nav-link text-nowrap" href="{{ route('index') }}">{{ __('dictionary.HomePage') }} <span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#">{{ __('dictionary.Account') }}</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">{{ __('dictionary.Favorite') }}</a>
+						<a class="nav-link text-nowrap" href="{{ route('member') }}">{{ __('dictionary.Account') }}</a>
 					</li>
 					<li class="nav-item mr-5">
 						<div class="btn-group">
-							<button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<button type="button" class="btn btn-dark dropdown-toggle text-nowrap" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								{{ __('dictionary.Select By School') }}
 							</button>
 							<div class="dropdown-menu">
@@ -82,14 +79,14 @@
 				<ul class="navbar-nav mr-2em">
 					@if (Auth::check())
 						<li class="nav-item">
-							<a class="nav-link" href="{{ route('logout') }}">{{ __('auth.Logout') }}</a>
+							<a class="nav-link text-nowrap" href="{{ route('logout') }}">{{ __('auth.Logout') }}</a>
 						</li>
 					@else
 						<li class="nav-item">
-							<a class="nav-link" href="{{ route('login') }}">{{ __('auth.Login') }}</a>
+							<a class="nav-link text-nowrap" href="{{ route('login') }}">{{ __('auth.Login') }}</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="{{ route('register') }}">{{ __('auth.Register') }}</a>
+							<a class="nav-link text-nowrap" href="{{ route('register') }}">{{ __('auth.Register') }}</a>
 						</li>
 					@endif
 				</ul>			
@@ -99,16 +96,16 @@
 
 		<!-- Error message -->
 		@if (isset($errors))
-		<div class="container mt-5">
 			@foreach (($errors->all()) as $message)
-			<div class="alert alert-warning alert-dismissible fade show" role="alert">
-				<strong>{{ $message }}</strong>
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close">					
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
+				<div class="container mt-5">
+					<div class="alert alert-warning alert-dismissible fade show" role="alert">
+						<strong>{{ $message }}</strong>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				</div>
 			@endforeach
-		</div>
 		@endif
 
 		<!-- Banner -->

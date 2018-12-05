@@ -10,6 +10,10 @@ class classList extends Model
 
     public $timestamps = false;
 
+    protected $guarded = [
+        'id',
+    ];
+
     protected $fillable = [
         'classId',
         'className',
@@ -32,5 +36,10 @@ class classList extends Model
     public function messages()
     {
         return $this->hasMany('App\Models\Message', 'classId', 'classId');
+    }
+
+    public function likes()
+    {
+        return $this->hasMany('App\Models\ClassListLike', 'classId', 'classId');
     }
 }

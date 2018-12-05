@@ -36,4 +36,8 @@ return [
     'Delete' => 'Delete',
     'Cancel' => 'Cancel',
     'Send' => 'Send',
+
+    // 提示
+    'Success' => 'Success',
+    'Fail' => 'Fail',
 ];

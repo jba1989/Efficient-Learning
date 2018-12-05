@@ -27,5 +27,6 @@ return [
     'Name' => 'Name',
     'Confirm Password' => 'Confirm Password',
     'Guest' => 'Guest',
-    'Reset Password' => 'Reset Password',    
+    'Reset Password' => 'Reset Password',
+    'Login Please' => 'Login, Please',
 ];
