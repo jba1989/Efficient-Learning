@@ -29,12 +29,18 @@
 			 	@yield('script-extension')   
 			});
     	</script>
-
+		<style>
+			.icon {
+				max-width: 200px;
+				max-height: 56px;
+				margin-right: 20px;
+			}
+		</style>
 	</head>
 	<body>
 		<!-- Nav -->
 		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-			<a class="navbar-brand" href="#">Carousel</a>
+			<img class="icon" src="{{ asset('images/icon.png') }}">
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
