@@ -6,12 +6,25 @@ use Illuminate\Http\Request;
 use App\Models\ClassList;
 use App\Models\ClassListLike;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Redis;
 use App\Http\Requests\ClassIdValidate;
 use Validator;
 use Auth;
 
+
 class ApiClassController extends Controller
 {
+    public function getOptions(Request $request)
+    {
+        $options = Redis::get('classOptions');
+        if ($options == null) {
+            $options = ClassList::select('classId', 'className')->get();
+            Redis::set('classOptions', $options);
+        }
+        
+        return response()->json(['data' => $options, 'errMsg' => ''], 200);
+    }
+
     public function show(ClassIdValidate $request)
     {
         $classId = $request->input('classId');

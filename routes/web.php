@@ -41,6 +41,7 @@ Route::prefix('api')->group(function () {
 
     // 課程讚數
     Route::prefix('/class')->group(function () {
+        Route::get('/getOptions', 'ApiClassController@getOptions');
         Route::get('/like', 'ApiClassController@show');
         Route::put('/like', 'ApiClassController@update')->middleware('login');
     });

@@ -22,9 +22,26 @@
                 });
 
                 $("#findClass").click(function() {
-                    var classId = $("#searchClass").find("input").val();
+                    var inputStr = $("#searchClass").find("input").val();
+					var input = inputStr.split(" - ");
+					var classId = input[0];
                     window.location.assign("{{ route('class') }}?class=" + classId);
                 });
+
+				$.ajax({
+					type: "get",
+					datatype: "json",
+					url: "/api/class/getOptions",
+					data: {"_token": "{{ csrf_token() }}"},
+					success: function(response){
+						var optionsArr = jQuery.parseJSON(response.data);
+						for (var index in optionsArr) {
+							var option = optionsArr[index];							
+							var optionStr = '<option value="' + option['classId'] + ' - ' + option['className'] + '">';
+							$("#classList").append(optionStr);
+						}
+					}
+				});
 
 			 	@yield('script-extension')   
 			});
@@ -69,13 +86,8 @@
 		<!-- 課程搜尋input框 -->
 				<div class="input-group mr-2" id="searchClass" style="width:15em;">
 					<input type="text" id="searchClass" class="form-control" list="classList" placeholder="{{ __('dictionary.Search Class') }}">
-					<datalist id="classList">
-						@isset ($classOptions)
-							@foreach ($classOptions as $classOption)
-								<option value="{{ $classOption->classId }}">{{ $classOption->classId }} - {{ $classOption->className }}</option>
-							@endforeach
-						@endisset
-					</datalist>
+					<datalist id="classList"></datalist>
+					
 					<div class="input-group-append">
 						<button id="findClass" class="btn btn-outline-info" type="button">{{ __('dictionary.Submit') }}</button>
 					</div>

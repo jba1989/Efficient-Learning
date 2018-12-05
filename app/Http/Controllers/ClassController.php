@@ -8,17 +8,13 @@ use App\Models\TotalClass;
 use App\Models\Message;
 use Validator;
 use Config;
+use Illuminate\Support\Facades\Redis;
 
 class ClassController extends Controller
 {   
-    public function __construct()
-    {
-        $this->classOptions = ClassList::select('classId', 'className')->get();
-    }
-
     public function showIndex()
-    {
-        return view('mooc.index', ['classOptions' => $this->classOptions]);
+    {        
+        return view('mooc.index');
     }
 
     public function showClass(Request $request)
@@ -60,7 +56,6 @@ class ClassController extends Controller
             $messages = Message::where($conditions)->orderBy('id', 'asc')->paginate($msg_per_page, ['*'], 'msg_page');
             
             return view('mooc.singleClass', [
-                'classOptions' => $this->classOptions,
                 'classes' => $classes,
                 'titles' => $titles,
                 'messages' => $messages,
@@ -83,7 +78,6 @@ class ClassController extends Controller
         $classes = ClassList::where($conditions)->orderBy('id', 'asc')->paginate(30);
         
         return view('mooc.classList', [
-            'classOptions' => $this->classOptions,
             'classes' => $classes,
             'school' => $school,
             'type' => $classType
