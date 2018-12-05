@@ -14,12 +14,12 @@
 		@yield('head-extension')   
 		<script>
 			$(document).ready(function() {
-                $("#searchClass").find("input").focus(function() {
+                $("#searchClass").find("input").mouseover(function() {
                     $("#searchClass").css("width","100%");
                 });
-                $("#searchClass").find("input").blur(function() {
-                    $("#searchClass").css("width","15em");
-                });
+                //$("#searchClass").find("input").mouseout(function() {
+                //    $("#searchClass").css("width","15em");
+                //});
 
                 $("#findClass").click(function() {
                     var inputStr = $("#searchClass").find("input").val();
