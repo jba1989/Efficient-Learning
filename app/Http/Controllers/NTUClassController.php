@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ClassList;
-use App\Models\TotalClass;
+use App\Models\TitleList;
 
 class NTUClassController extends Controller
 {
@@ -104,7 +104,7 @@ class NTUClassController extends Controller
                 'title' => $titles[$i],
             );
 
-            TotalClass::updateOrCreate($conditions, $contents);
+            TitleList::updateOrCreate($conditions, $contents);
         };
     }
 
@@ -122,7 +122,7 @@ class NTUClassController extends Controller
 //            $response = $this->myCurl($url);
 //            $parseData = $this->strFind($response, '<div class="video">', '</iframe>', 1, FALSE);
 //            $result = $this->strFind($parseData, "src='", "'>", 1, FALSE);
-//            TotalClass::where('classId', $classId)->where('titleId', $i + 1)->update(['videoLink' => $result]);
+//            TitleList::where('classId', $classId)->where('titleId', $i + 1)->update(['videoLink' => $result]);
 //        }
     }
   

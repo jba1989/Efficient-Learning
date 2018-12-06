@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ClassList;
-use App\Models\TotalClass;
+use App\Models\TitleList;
 
 class NCTUClassController extends Controller
 {
@@ -126,7 +126,7 @@ class NCTUClassController extends Controller
             );
 
             // 寫入資料庫
-            TotalClass::updateOrCreate($conditions, $contents);
+            TitleList::updateOrCreate($conditions, $contents);
         }        
     }
     

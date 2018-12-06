@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\ClassControllerValidate;
 use App\Models\ClassList;
-use App\Models\TotalClass;
+use App\Models\TitleList;
 use App\Models\Message;
 use Illuminate\Support\Facades\Redis;
 use Config;
@@ -35,7 +35,7 @@ class ClassController extends Controller
             $msgPerPage = $request->input('msg_per_page', Config::get('constants.options.msg_per_page'));
         
             $classes = ClassList::where($conditions)->first();
-            $titles = TotalClass::where($conditions)->orderBy('titleId', 'asc')->paginate($titlePerPage);
+            $titles = TitleList::where($conditions)->orderBy('titleId', 'asc')->paginate($titlePerPage);
             $messages = Message::where($conditions)->orderBy('id', 'asc')->paginate($msgPerPage, ['*'], 'msg_page');
             
             return view('mooc.singleClass', [

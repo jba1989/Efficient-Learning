@@ -28,7 +28,7 @@ class classList extends Model
 
     public function titles()
     {
-        return $this->hasMany('App\Models\TotalClass', 'classId', 'classId');
+        return $this->hasMany('App\Models\TitleList', 'classId', 'classId');
     }
 
     public function messages()

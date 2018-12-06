@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTotalClassTable extends Migration
+class CreateTitleListTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTotalClassTable extends Migration
      */
     public function up()
     {
-        Schema::create('total_class', function (Blueprint $table) {
+        Schema::create('title_list', function (Blueprint $table) {
             $table->increments('id');
             $table->string('classId', 12);
             $table->integer('titleId', false, true);
@@ -29,6 +29,6 @@ class CreateTotalClassTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('total_class');
+        Schema::dropIfExists('title_list');
     }
 }

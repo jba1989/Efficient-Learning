@@ -18,8 +18,8 @@ class CreateClassListLikeTable extends Migration
             $table->string('classId', 12);
             $table->json('likeUserList')->nullable();
             $table->json('dislikeUserList')->nullable();
-            $table->unsignedMediumInteger('likeCount')->nullable();
-            $table->unsignedMediumInteger('dislikeCount')->nullable();
+            $table->unsignedMediumInteger('likeCount')->default(0)->nullable();
+            $table->unsignedMediumInteger('dislikeCount')->default(0)->nullable();
         });
     }
 

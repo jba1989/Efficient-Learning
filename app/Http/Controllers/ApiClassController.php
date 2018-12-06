@@ -37,14 +37,13 @@ class ApiClassController extends Controller
             $likeCount = 0;
             $dislikeCount = 0;
         } else {
-            $likeArr = (isset($data->likeCount)) ? $data->likeCount : array();
-            $dislikeArr = (isset($data->dislikeCount)) ? $data->dislikeCount : array();
-
-            // like
-            $likeCount = count($likeArr);
-            $dislikeCount = count($dislikeArr);
+            $likeCount = $data->likeCount;
+            $dislikeCount = $data->dislikeCount;
 
             if (Auth::check()) {
+                $likeArr = (isset($data->likeUserList)) ? $data->likeUserList : array();
+                $dislikeArr = (isset($data->dislikeUserList)) ? $data->dislikeUserList : array();
+
                 if (in_array(Auth::user()->id, $likeArr)) {
                     $prefer = 'like';
                 } 
@@ -87,8 +86,8 @@ class ApiClassController extends Controller
         }
 
         // 資料設定
-        $likeArr = (isset($data->likeCount)) ? $data->likeCount : array();
-        $dislikeArr = (isset($data->dislikeCount)) ? $data->dislikeCount : array();
+        $likeArr = (isset($data->likeUserList)) ? $data->likeUserList : array();
+        $dislikeArr = (isset($data->dislikeUserList)) ? $data->dislikeUserList : array();
         $prefer = '';
 
         $inLikeIndex = array_search(Auth::user()->id, $likeArr);
@@ -123,8 +122,8 @@ class ApiClassController extends Controller
     
         // 寫入資料庫
         $data->classId = $input['classId'];
-        $data->likeCount = $likeArr;
-        $data->dislikeCount = $dislikeArr;
+        $data->likeUserList = $likeArr;
+        $data->dislikeUserList = $dislikeArr;
         $data->save();
 
         $data = array(

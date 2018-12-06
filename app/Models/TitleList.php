@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TotalClass extends Model
+class TitleList extends Model
 {
     protected $table = 'total_class';
 
