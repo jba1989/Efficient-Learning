@@ -5,16 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ClassList;
 use App\Models\ClassListLike;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Redis;
-use App\Http\Requests\ClassIdValidate;
-use Validator;
+use App\Http\Requests\ClassValidate;
 use Auth;
 
 
 class ApiClassController extends Controller
 {
-    public function getOptions(Request $request)
+    public function getOptions()
     {
         $options = Redis::get('classOptions');
         if ($options == null) {
@@ -25,7 +23,7 @@ class ApiClassController extends Controller
         return response()->json(['data' => $options, 'errMsg' => ''], 200);
     }
 
-    public function show(ClassIdValidate $request)
+    public function show(ClassValidate $request)
     {
         $classId = $request->input('classId');
 
@@ -63,26 +61,15 @@ class ApiClassController extends Controller
         return response()->json(['data' => $data, 'errMsg' => ''], 200);
     }
 
-    public function update(Request $request)
+    public function update(ClassValidate $request)
     {
         $input = $request->all();
-
-        $rules = [
-            'classId' => 'bail|required|alpha_num|max:12',
-            'prefer' => Rule::in(['like', 'dislike']),
-        ];
-
-        $validator = Validator::make($input, $rules);
-        
-        if ($validator->fails()) {
-            return response()->json(['data' => '', 'errMsg' => ''], 403);
-        }
         
         $data = ClassListLike::where('classId', $input['classId'])->first();
 
         // 若無這筆資料則新建一個實例
         if (empty($data)) {
-            $data = new ClassListLike;            
+            $data = new ClassListLike;
         }
 
         // 資料設定
@@ -124,6 +111,8 @@ class ApiClassController extends Controller
         $data->classId = $input['classId'];
         $data->likeUserList = $likeArr;
         $data->dislikeUserList = $dislikeArr;
+        $data->likeCount = count($likeArr);
+        $data->dislikeCount = count($dislikeArr);
         $data->save();
 
         $data = array(

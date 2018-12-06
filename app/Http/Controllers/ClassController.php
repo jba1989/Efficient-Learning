@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\ClassControllerValidate;
+use App\Http\Requests\ClassValidate;
 use App\Models\ClassList;
 use App\Models\TitleList;
 use App\Models\Message;
@@ -17,7 +17,7 @@ class ClassController extends Controller
         return view('mooc.index');
     }
 
-    public function showClass(ClassControllerValidate $request)
+    public function showClass(ClassValidate $request)
     {
         $classId = $request->input('class', '');
         $school = $request->input('school', '');
