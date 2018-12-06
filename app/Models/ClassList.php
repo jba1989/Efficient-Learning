@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class classList extends Model
+class ClassList extends Model
 {
     protected $table = 'class_list';
 

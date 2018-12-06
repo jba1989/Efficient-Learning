@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TitleList extends Model
 {
-    protected $table = 'total_class';
+    protected $table = 'title_list';
 
     public $timestamps = false;
 
