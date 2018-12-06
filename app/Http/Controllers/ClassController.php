@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ClassControllerValidate;
 use App\Models\ClassList;
 use App\Models\TotalClass;
 use App\Models\Message;
-use Validator;
-use Config;
 use Illuminate\Support\Facades\Redis;
+use Config;
 
 class ClassController extends Controller
 {   
@@ -17,34 +17,16 @@ class ClassController extends Controller
         return view('mooc.index');
     }
 
-    public function showClass(Request $request)
+    public function showClass(ClassControllerValidate $request)
     {
-        $input = $request->all();
+        $classId = $request->input('class', '');
+        $school = $request->input('school', '');
+        $classType = $request->input('type', '');
         $conditions = array();
-        $school = '';
-        $classType = '';
-
-        $rules = [
-            'school' => 'nullable|alpha_num|max:12',
-            'type' => 'nullable|alpha_num|max:12',
-            'classId' => 'nullable|alpha_num|max:12',
-            'page' => 'nullable|integer|max:4',
-            'msg_page' => 'nullable|integer|max:4',
-            'class_per_page' => 'nullable|integer|in([25, 50,100])',
-            'title_per_page' => 'nullable|integer|in([25, 50,100])',
-            'msg_per_page' => 'nullable|integer|in([25, 50,100])',
-        ];
-
-        $validator = Validator::make($input, $rules);
-
-        // 返回課程選單
-        if ($validator->fails()) {
-            return redirect("/class");
-        }
-
+        
         // 進入課程章節選單
-        if (isset($input['class'])) {
-            $conditions = array('classId' => $input['class']);
+        if ($classId != '') {
+            $conditions = array('classId' => $classId);
 
             // 設定讀取頁數
             $titlePage = $request->input('page', 1);
@@ -69,22 +51,20 @@ class ClassController extends Controller
         $classPerPage = $request->input('class_per_page', Config::get('constants.options.class_per_page'));
 
         // 進入課程選單
-        if (isset($input['school']) && $input['school'] != '') {
-            $school = $input['school'];
-            $conditions = array_merge($conditions, ['school' => $input['school']]);
+        if ($school != '') {
+            $conditions = array_merge($conditions, ['school' => $school]);
         }
 
-        if (isset($input['type']) && $input['type'] != '') {
-            $classType = $input['type'];
-            $conditions = array_merge($conditions, ['classType' => $input['type']]);
+        if ($classType != '') {
+            $conditions = array_merge($conditions, ['classType' => $classType]);
         }
         
-        $classes = ClassList::where($conditions)->orderBy('', 'asc')->paginate($classPerPage);
+        $classes = ClassList::where($conditions)->orderBy('id', 'asc')->paginate($classPerPage);
         
         return view('mooc.classList', [
             'classes' => $classes,
             'school' => $school,
-            'type' => $classType
+            'type' => $classType,
         ]);
     }
 }
