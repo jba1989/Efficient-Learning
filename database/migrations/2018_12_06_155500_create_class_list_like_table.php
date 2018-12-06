@@ -16,8 +16,10 @@ class CreateClassListLikeTable extends Migration
         Schema::create('class_list_like', function (Blueprint $table) {
             $table->increments('id');
             $table->string('classId', 12);
-            $table->json('likeCount')->nullable();
-            $table->json('dislikeCount')->nullable();
+            $table->json('likeUserList')->nullable();
+            $table->json('dislikeUserList')->nullable();
+            $table->unsignedMediumInteger('likeCount')->nullable();
+            $table->unsignedMediumInteger('dislikeCount')->nullable();
         });
     }
 

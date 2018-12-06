@@ -21,8 +21,6 @@ class classList extends Model
         'classId',
         'className',
         'teacher',
-        'likeCount',
-        'dislikeCount',
         'classType',
         'school',
         'countTitle',

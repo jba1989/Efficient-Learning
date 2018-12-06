@@ -16,12 +16,14 @@ class ClassListLike extends Model
 
     protected $fillable = [
         'classId',
+        'likeUserList',
+        'dislikeUserList',
         'likeCount',
         'dislikeCount',
     ];
 
     protected $casts = [
-        'likeCount' => 'array',
-        'dislikeCount' => 'array',
+        'likeUserList' => 'array',
+        'dislikeUserList' => 'array',
     ];
 }
