@@ -30,6 +30,7 @@ class ClassController extends Controller
             'classId' => 'nullable|alpha_num|max:12',
             'page' => 'nullable|integer|max:4',
             'msg_page' => 'nullable|integer|max:4',
+            'class_per_page' => 'nullable|integer|in([25, 50,100])',
             'title_per_page' => 'nullable|integer|in([25, 50,100])',
             'msg_per_page' => 'nullable|integer|in([25, 50,100])',
         ];
@@ -46,23 +47,26 @@ class ClassController extends Controller
             $conditions = array('classId' => $input['class']);
 
             // 設定讀取頁數
-            $title_page = (isset($input['page'])) ? $input['page'] : 1;
-            $msg_page = (isset($input['msg_page'])) ? $input['msg_page'] : 1;
-            $title_per_page = (isset($input['title_per_page'])) ? $input['title_per_page'] : Config::get('constants.options.title_per_page');
-            $msg_per_page = (isset($input['msg_per_page'])) ? $input['msg_per_page'] : Config::get('constants.options.msg_per_page');
+            $titlePage = $request->input('page', 1);
+            $msgPage = $request->input('msg_page', 1);
+            $titlePerPage = $request->input('title_per_page', Config::get('constants.options.title_per_page'));
+            $msgPerPage = $request->input('msg_per_page', Config::get('constants.options.msg_per_page'));
         
             $classes = ClassList::where($conditions)->first();
-            $titles = TotalClass::where($conditions)->orderBy('titleId', 'asc')->paginate($title_per_page);
-            $messages = Message::where($conditions)->orderBy('id', 'asc')->paginate($msg_per_page, ['*'], 'msg_page');
+            $titles = TotalClass::where($conditions)->orderBy('titleId', 'asc')->paginate($titlePerPage);
+            $messages = Message::where($conditions)->orderBy('id', 'asc')->paginate($msgPerPage, ['*'], 'msg_page');
             
             return view('mooc.singleClass', [
                 'classes' => $classes,
                 'titles' => $titles,
                 'messages' => $messages,
-                'page' => $title_page,
-                'msg_page' => $msg_page,
+                'page' => $titlePage,
+                'msg_page' => $msgPage,
             ]);
         }
+
+        $classPage = $request->input('page', 1);
+        $classPerPage = $request->input('class_per_page', Config::get('constants.options.class_per_page'));
 
         // 進入課程選單
         if (isset($input['school']) && $input['school'] != '') {
@@ -74,8 +78,8 @@ class ClassController extends Controller
             $classType = $input['type'];
             $conditions = array_merge($conditions, ['classType' => $input['type']]);
         }
-
-        $classes = ClassList::where($conditions)->orderBy('id', 'asc')->paginate(30);
+        
+        $classes = ClassList::where($conditions)->orderBy('', 'asc')->paginate($classPerPage);
         
         return view('mooc.classList', [
             'classes' => $classes,
