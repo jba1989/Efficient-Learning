@@ -16,10 +16,13 @@ class NTUClassController extends Controller
         $classIdArr = $this->parseClassList();
 
         foreach ($classIdArr as $classId) {
-            $this->parseClassDescription($classId);
-            $this->parseClassTitle($classId);
+            //$this->parseClassDescription($classId);
+            //$this->parseClassTitle($classId);
             //$this->videoSpider($classId, $count);
+            
         }
+
+        $this->parseClassType();
     }
   
     /**
@@ -106,6 +109,35 @@ class NTUClassController extends Controller
 
             TitleList::updateOrCreate($conditions, $contents);
         };
+    }
+
+    /**
+     * 抓取課程類型
+     */
+    public function parseClassType()
+    {        
+        $typeArr = array(
+            '1' => '文史哲藝',
+            '2' => '法社管理',
+            '3' => '理工電資',
+            '4' => '生農醫衛',
+        );
+
+        foreach ($typeArr as $key => $val) {       
+            $url = 'http://ocw.aca.ntu.edu.tw/ntu-ocw/home/show-category/' . $key;
+            $response = $this->myCurl($url);
+            echo $url;
+            $pattern = "/<a href='\/ntu-ocw\/ocw\/cou\/(\S+)'>/";
+            preg_match_all($pattern, $response, $matches);
+            
+            if (count($matches[1]) > 0) {
+                foreach ($matches[1] as $classId) {
+                    ClassList::where('classId', $classId)->update(['classType' => $val]);
+                }
+            }
+        }
+
+        
     }
 
     /**
