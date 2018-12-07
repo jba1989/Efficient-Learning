@@ -32,7 +32,10 @@ class ClassValidate extends FormRequest
     public function rules()
     {
         return [
-            'school' => 'sometimes|alpha_num|max:12',
+            'school' => [
+                'sometimes',
+                Rule::in(['ntu', 'nthu', 'nctu']),
+            ],
             'type' => 'sometimes|alpha_num|max:12',
             'class' => 'sometimes|alpha_num|max:12',
             'page' => 'sometimes|integer|max:4',
