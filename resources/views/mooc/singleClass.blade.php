@@ -94,8 +94,12 @@
                     }
                     $("#like_count").text(response.data.likeCount);
                     $("#dislike_count").text(response.data.dislikeCount);
-                }
-                
+                },
+                error: function(response){
+                    var data = response.responseJSON.errors.message;
+                    $(".alert").find("strong").text(data[0]);
+                    $(".alert").removeClass("d-none");
+                }                
             });
         });
 
@@ -123,6 +127,11 @@
                     } else {
                         $("#love_img").attr("src", "{{ asset('images/love.png') }}");
                     }
+                },
+                error: function(response){
+                    var data = response.responseJSON.errors.message;
+                    $(".alert").find("strong").text(data[0]);
+                    $(".alert").removeClass("d-none");
                 }
             });
         });
