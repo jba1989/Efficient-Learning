@@ -33,16 +33,16 @@ class ClassValidate extends FormRequest
     {
         return [
             'school' => [
-                'sometimes',
+                'nullable',
                 Rule::in(['ntu', 'nthu', 'nctu']),
             ],
-            'type' => 'sometimes|alpha_num|max:12',
-            'class' => 'sometimes|alpha_num|max:12',
-            'page' => 'sometimes|integer|max:4',
-            'msg_page' => 'sometimes|integer|max:4',
-            'class_per_page' => 'sometimes|integer|in([25, 50,100])',
-            'title_per_page' => 'sometimes|integer|in([25, 50,100])',
-            'msg_per_page' => 'sometimes|integer|in([25, 50,100])',
+            'type' => 'nullable|alpha_num|max:12',
+            'class' => 'nullable|alpha_num|max:12',
+            'page' => 'nullable|integer|max:4',
+            'msg_page' => 'nullable|integer|max:4',
+            'class_per_page' => 'nullable|integer|in([25, 50,100])',
+            'title_per_page' => 'nullable|integer|in([25, 50,100])',
+            'msg_per_page' => 'nullable|integer|in([25, 50,100])',
             'classId' => 'sometimes|alpha_num|max:12',
             'prefer' => [
                 'sometimes',
