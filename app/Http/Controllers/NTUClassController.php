@@ -16,13 +16,13 @@ class NTUClassController extends Controller
         $classIdArr = $this->parseClassList();
 
         foreach ($classIdArr as $classId) {
-            //$this->parseClassDescription($classId);
-            //$this->parseClassTitle($classId);
-            //$this->videoSpider($classId, $count);
-            
+            $this->parseClassDescription($classId);
+            $this->parseClassTitle($classId);                    
         }
 
         $this->parseClassType();
+
+        echo 'finished';
     }
   
     /**
@@ -77,7 +77,7 @@ class NTUClassController extends Controller
     }
 
     /**
-     * 抓取上課次數,課程章節
+     * 抓取上課次數,課程章節,影片連結
      *
      * @param string
      * @param integer
@@ -105,6 +105,7 @@ class NTUClassController extends Controller
                 'classId' => $classId,
                 'titleId' => $i + 1,
                 'title' => $titles[$i],
+                'videoLink' => "http://ocw.aca.ntu.edu.tw/ntu-ocw/ocw/cou/$classId/$i",
             );
 
             TitleList::updateOrCreate($conditions, $contents);
@@ -126,7 +127,6 @@ class NTUClassController extends Controller
         foreach ($typeArr as $key => $val) {       
             $url = 'http://ocw.aca.ntu.edu.tw/ntu-ocw/home/show-category/' . $key;
             $response = $this->myCurl($url);
-            echo $url;
             $pattern = "/<a href='\/ntu-ocw\/ocw\/cou\/(\S+)'>/";
             preg_match_all($pattern, $response, $matches);
             
@@ -136,28 +136,8 @@ class NTUClassController extends Controller
                 }
             }
         }
-
-        
     }
 
-    /**
-     * 抓取課程章節影片
-     *
-     * @param string
-     * @param integer
-     * @return array
-     */
-    public function videoSpider($classId, $count)
-    {
-//        for ($i = 0; $i < $count; $i++) {
-//            $url = "http://ocw.aca.ntu.edu.tw/ntu-ocw/index.php/ocw/cou/$classId/$i";
-//            $response = $this->myCurl($url);
-//            $parseData = $this->strFind($response, '<div class="video">', '</iframe>', 1, FALSE);
-//            $result = $this->strFind($parseData, "src='", "'>", 1, FALSE);
-//            TitleList::where('classId', $classId)->where('titleId', $i + 1)->update(['videoLink' => $result]);
-//        }
-    }
-  
     /**
      * curl請求, 並返回網站內容
      *
