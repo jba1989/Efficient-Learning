@@ -68,12 +68,12 @@ class NTUClassController extends Controller
         $pattern = '/og:description" content="(.*)"\s?\/>/';
         preg_match_all($pattern, $response, $matches);
         if (count($matches[1]) > 0) {
-            $description = $matches[1][0];
+            $description = $matches[1];
         } else {
-            $description = null;
+            $description = array();
         }        
 
-        ClassList::where('classId', $classId)->update(['description' => $description]);
+        ClassList::where('classId', $classId)->update(['description' => json_encode($description)]);
     }
 
     /**
