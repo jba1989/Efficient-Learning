@@ -10,9 +10,9 @@ class NCTUClassController extends Controller
 {
     /**
      * 更新交大課程清單
-     */
+     */    
     public function update()
-    {
+    {             
         $url = 'http://ocw.nctu.edu.tw/course.php'; // 交大開放式課程網址
         $response = $this->myCurl($url);
 
@@ -42,15 +42,15 @@ class NCTUClassController extends Controller
                 for ($j = 0; $j < count($classContents[1]); $j++) {
                     $conditions = array(
                         'classId' => $classContents[1][$j],
-                    );
-
+                    );                    
+                    
                     $contents = array(
                         'classId' => $classContents[1][$j],
                         'className' => $classContents[2][$j],
                         'teacher' => $classContents[3][$j],
                         'classType' => $classTypeNameArr[$i],
                         'school' => 'NCTU',
-                        'description' => $this->parseClassDescription($page, $classTypeIdArr[$i]),
+                        'description' => $this->parseClassDescription($classContents[1][$j]),
                     );
 
                     // 寫入資料庫
@@ -60,11 +60,11 @@ class NCTUClassController extends Controller
                     $this->parseClassTitle($classContents[1][$j]);
                 }
             }
-        }
+        }        
 
         echo 'finished';
     }
-
+    
     /**
      * 抓取單一課程描述
      *
@@ -76,17 +76,40 @@ class NCTUClassController extends Controller
         $url = 'http://ocw.nctu.edu.tw/course_detail.php?nid=' . $classId;        
         $response = $this->myCurl($url);
 
-        $pos = strpos($response, '&nbsp;</p>');
-        if ($pos != FALSE) {
-            $begin = strpos($response, '&nbsp;</p>', $pos + strlen('&nbsp;</p>'));
-            $end = strpos($response, '</p>', $begin + strlen('&nbsp;</p>'));
-            $description = trim(strip_tags(substr($response, $begin + strlen('&nbsp;</p>'), $end - $begin)));
-            return $description;
-        } else {
-            return null;
+        $begin = strpos($response, '<strong>課程首頁</strong>');
+        if ($begin == FALSE) {
+            $begin = strpos($response, '<STRONG>課程首頁</STRONG>');
+            if ($begin == FALSE) {
+                return null;                
+            }
         }
-    }
 
+        $end = strpos($response, '<div class="gap">', $begin);
+        $description = substr($response, $begin, $end - $begin);
+        
+        if (strpos($description, '<p>') != FALSE) {
+            $explodeTag = '<p>';
+        } else {
+            $explodeTag = '<P>';
+        }
+        
+        $description = str_ireplace('<li>', $explodeTag, $description);
+        $descriptionArr = explode($explodeTag, $description);
+        $finalDescriptionArr = array();
+        
+        foreach ($descriptionArr as $content) {        
+            $content = trim(strip_tags($content));
+            if ((strpos($content, '課程首頁') === false) && (strpos($content, '本課程是由交通大學') === false) && ($content != '&nbsp;')) {
+                $content = str_ireplace('&nbsp;', '', $content);
+                $content = str_ireplace('\n', '', $content);
+                $content = str_ireplace('\r', '', $content);
+                $finalDescriptionArr[] = $content;
+            }                      
+        }
+
+        return $finalDescriptionArr;  
+    }
+        
     /**
      * 依課程id抓取上課次數,課程章節,寫入資料庫
      *
@@ -102,15 +125,19 @@ class NCTUClassController extends Controller
             $rawTitle = trim(strip_tags($this->strFind($response, '<tr>', '</tr>', $i + 1, FALSE)));
             $filterArr = ['WMV', 'MP4', '下載', '線上觀看'];
             if ($rawTitle != '') {
-                $pattern = '/([\S]+)/';
-                $title = preg_match_all($pattern, $rawTitle, $matches);
-                $titles[] = implode(' ', array_diff($matches[1], $filterArr));
+                $pattern0 = '/([\S]+)/';
+                preg_match_all($pattern0, $rawTitle, $matches0);
+                $titles[] = implode(' ', array_diff($matches0[1], $filterArr));
             }
         }
 
         $count = count($titles);
 
         ClassList::where('classId', $classId)->update(['countTitle' => $count]);
+
+        $pattern1 = '/bgid=[\d]+&gid=[\d]+&nid=[\d]+&v5=[^"]+/';
+        preg_match_all($pattern1, $response, $matches1);
+        $urls = $matches1[0];
 
         for ($i = 0; $i < $count; $i++) {
             $conditions = array(
@@ -122,7 +149,7 @@ class NCTUClassController extends Controller
                 'classId' => $classId,
                 'titleId' => $i + 1,
                 'title' => $titles[$i],
-                'videoLink' => $url,
+                'videoLink' => 'http://ocw.nctu.edu.tw/course_detail-v.php?' . $urls[$i],
             );
 
             // 寫入資料庫
