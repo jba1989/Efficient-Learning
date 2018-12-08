@@ -21,7 +21,7 @@ class CreateClassListTable extends Migration
             $table->string('classType', 12)->nullable();
             $table->string('school',12)->nullable();
             $table->unsignedSmallInteger('countTitle')->nullable();
-            $table->longText('description')->nullable();
+            $table->json('description')->nullable();
         });
     }
 

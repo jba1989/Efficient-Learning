@@ -24,6 +24,11 @@ class ClassList extends Model
         'classType',
         'school',
         'countTitle',
+        'description',
+    ];
+
+    protected $casts = [
+        'description' => 'array',
     ];
 
     public function titles()
