@@ -80,16 +80,16 @@
                 success: function(response){                    
                     switch (response.data.prefer) {
                     case "like":
-                        $("#like_img").attr("src", "{{ asset('images/like3.png') }}");
-                        $("#dislike_img").attr("src", "{{ asset('images/like2.png') }}");
+                        $("#like_img").attr("src", "{{ asset('images/like2.png') }}");
+                        $("#dislike_img").attr("src", "{{ asset('images/dislike1.png') }}");
                         break;
                     case "dislike":
-                        $("#like_img").attr("src", "{{ asset('images/like2.png') }}");
-                        $("#dislike_img").attr("src", "{{ asset('images/like3.png') }}");
+                        $("#like_img").attr("src", "{{ asset('images/dislike2.png') }}");
+                        $("#dislike_img").attr("src", "{{ asset('images/like1.png') }}");
                         break;
                     default:
-                        $("#like_img").attr("src", "{{ asset('images/like2.png') }}");
-                        $("#dislike_img").attr("src", "{{ asset('images/like2.png') }}");
+                        $("#like_img").attr("src", "{{ asset('images/like1.png') }}");
+                        $("#dislike_img").attr("src", "{{ asset('images/like1.png') }}");
                         break;
                     }
                     $("#like_count").text(response.data.likeCount);
@@ -110,7 +110,7 @@
             data: {"_token": "{{ csrf_token() }}", "classId": "{{ $classes->classId }}"},
             success:function(response) {
                 if (response.data.favorite) {
-                    $("#love_img").attr("src", "{{ asset('images/like2.png') }}");
+                    $("#love_img").attr("src", "{{ asset('images/love2.png') }}");
                 }
             }
         });
@@ -123,9 +123,9 @@
                 data: {"_token": "{{ csrf_token() }}", "classId": "{{ $classes->classId }}"},
                 success: function(response){
                     if (response.data.favorite) {
-                        $("#love_img").attr("src", "{{ asset('images/like2.png') }}");
+                        $("#love_img").attr("src", "{{ asset('images/love2.png') }}");
                     } else {
-                        $("#love_img").attr("src", "{{ asset('images/love.png') }}");
+                        $("#love_img").attr("src", "{{ asset('images/love1.png') }}");
                     }
                 },
                 error: function(response){
@@ -154,9 +154,9 @@
             <!-- 讚按鈕 -->
             <table class="mx-auto">
                 <tr>
-                    <td class="text-center"><img id="like_img" class="like" src="{{ asset('images/like2.png') }}" alt="like"></td>
-                    <td class="text-center"><img id="dislike_img" class="like" src="{{ asset('images/like2.png') }}" alt="dislike"></td>
-                    <td class="text-center"><img id="love_img" class="love" src="{{ asset('images/love.png') }}" alt="love"></td>
+                    <td class="text-center"><img id="like_img" class="like" src="{{ asset('images/like1.png') }}" alt="like"></td>
+                    <td class="text-center"><img id="dislike_img" class="like" src="{{ asset('images/dislike1.png') }}" alt="dislike"></td>
+                    <td class="text-center"><img id="love_img" class="love" src="{{ asset('images/love1.png') }}" alt="love"></td>
                 </tr>
                 <tr>
                     <td class="text-center"><p id="like_count"></p></td>
