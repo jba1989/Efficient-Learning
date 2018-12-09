@@ -20,12 +20,17 @@ class ClassController extends Controller
     public function showClass(ClassValidate $request)
     {
         $classId = $request->input('class', '');
-        $school = $request->input('school', '');
-        $classType = $request->input('type', '');
-        $conditions = array();
+        $school = $request->input('school', 'ntu');
+        $classType = $request->input('type', '熱門課程');
+        
         
         // 進入課程章節選單
         if ($classId != '') {
+            // 若資料庫中沒有此classId則轉導
+            if (!in_array($classId, json_decode(Redis::get('classIdList')))) {
+                return redirect()->route('class');
+            }
+
             $conditions = array('classId' => $classId);
 
             // 設定讀取頁數
@@ -43,28 +48,35 @@ class ClassController extends Controller
                 'titles' => $titles,
                 'messages' => $messages,
                 'page' => $titlePage,
-                'msg_page' => $msgPage,
+                'msg_page' => $msgPage,                
             ]);
+        }
+
+        // 若資料庫中沒有此classType則轉導
+        if (($classType != '熱門課程') && (!in_array($classType, json_decode(Redis::get('classTypes_' . $school))))) {
+            return redirect()->route('class');
         }
 
         $classPage = $request->input('page', 1);
         $classPerPage = $request->input('class_per_page', Config::get('constants.options.class_per_page'));
-
+               
         // 進入課程選單
-        if ($school != '') {
-            $conditions = array_merge($conditions, ['school' => $school]);
-        }
-
-        if ($classType != '') {
-            $conditions = array_merge($conditions, ['classType' => $classType]);
-        }
+        $conditions = array(
+            'school' => $school,
+            'classType' => $classType,
+        );        
         
-        $classes = ClassList::where($conditions)->orderBy('id', 'asc')->paginate($classPerPage);
-        
+        if ($classType == '熱門課程') {           
+            $classes = ClassList::select('class_list.classId', 'className', 'teacher', 'classType', 'school', 'likeCount')->join('class_list_like', 'class_list.classId', 'class_list_like.classId')->orderBy('likeCount', 'desc')->paginate($classPerPage);
+        } else {
+            $classes = ClassList::where($conditions)->orderBy('id', 'asc')->paginate($classPerPage);
+        }
+         
         return view('mooc.classList', [
             'classes' => $classes,
             'school' => $school,
             'type' => $classType,
+            'classTypes' => json_decode(Redis::get('classTypes_' . $school)),
         ]);
     }
 }
