@@ -13,13 +13,13 @@
 
 Auth::routes();
 
-Route::get('/index/member', 'MemberController@userInfo')->name('member');
+
 
 // 課程頁面
-Route::prefix('index')->group(function () {
+Route::prefix('index')->middleware('read.redis.data')->group(function () {
     Route::get('/', 'ClassController@showIndex')->name('index');
     Route::get('/class', 'ClassController@showClass')->name('class');
-    
+    Route::get('/member', 'MemberController@userInfo')->name('member');
 });
 
 // 留言板功能
