@@ -24,7 +24,7 @@
     <!-- 學校選單 -->
         <nav class="nav nav-pills flex-column flex-lg-row nav-justified my-5">
             <a class="nav-item nav-link btn btn-lg btn-outline-info mr-lg-2 mb-2 school" href="{{ route('class') }}?school=ntu" name="ntu">{{ __('dictionary.NTU') }}</a>
-            <a class="nav-item nav-link btn btn-lg btn-outline-info mr-lg-2 mb-2 school" href="{{ route('class') }}?school=nthu" name="nthu">{{ __('dictionary.NTHU') }}</a>
+            <a class="nav-item nav-link btn btn-lg btn-outline-secondary mr-lg-2 mb-2 school disabled" href="{{ route('class') }}?school=nthu" name="nthu">{{ __('dictionary.NTHU') }}</a>
             <a class="nav-item nav-link btn btn-lg btn-outline-info mr-lg-2 mb-2 school" href="{{ route('class') }}?school=nctu" name="nctu">{{ __('dictionary.NCTU') }}</a>
             <a class="nav-item nav-link btn btn-lg btn-outline-secondary mb-2 school disabled" href="#">{{ __('dictionary.Opening soon') }}</a>
         </nav>
@@ -34,12 +34,11 @@
             <li class="nav-item">
                 <a class="nav-link text-dark type" href="{{ route('class') }}?school={{ $school }}&type=熱門課程">熱門課程</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark type" href="{{ route('class') }}?school={{ $school }}&type=理工類">理工類</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark type" href="{{ route('class') }}?school={{ $school }}&type=管理類">管理類</a>
-            </li>        
+            @foreach ($classTypes as $classType)
+                <li class="nav-item">
+                    <a class="nav-link text-dark type" href="{{ route('class') }}?school={{ $school }}&type={{ $classType }}">{{ $classType }}</a>
+                </li>
+            @endforeach
         </ul>
 
     <!-- 課程表 -->
@@ -61,7 +60,7 @@
                         <td class="text-right">{{ $class->classId }}</td>
                         <td class="pl-3"><a href="{{ route('class') }}?class={{ $class->classId }}" style="display:block;">{{ $class->className }}</a></td>
                     
-                        @if ($class->likeCount != '') {
+                        @if ($class->likeCount != '')
                             <td class="text-center">{{ substr_count($class->likeCount, ',') + 1 }}</td>
                         @else
                             <td class="text-center">0</td>
@@ -69,7 +68,7 @@
                                             
                         <td class="text-center">{{ $class->school }}</td>
                         <td class="text-center">{{ $class->teacher }}</td>
-                        <td>{{ $class->type }}</td>                    
+                        <td class="text-center">{{ $class->classType }}</td>                    
                     </tr>
                     @endforeach
                 </tbody>
