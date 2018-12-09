@@ -146,9 +146,11 @@
             <p class="font-italic text-center">{{ $classes->teacher }}</p>
 
             <hr class="my-4">
-            @foreach ($classes->description as $description)
-                <p>{{ $description }}</p>
-            @endforeach     
+            @isset ($classes->description)
+                @foreach ($classes->description as $description)
+                    <p>{{ $description }}</p>
+                @endforeach  
+            @endisset   
             <p class="text-center mt-2"><a class="badge badge-pill badge-info" href="#" role="button">{{ __('dictionary.ResourceURL') }}</a></p>
             
             <!-- 讚按鈕 -->
