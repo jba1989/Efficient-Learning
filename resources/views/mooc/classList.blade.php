@@ -2,13 +2,16 @@
 
 @section('script-extension')
     @parent
+                @isset ($school)
                 // 選中的學校選單增加active特效
                 $("a.school").each(function() {
                     if ($(this).attr("name") == "{{ $school }}") {
                         $(this).addClass("active");
                     }
                 });
+                @endisset
 
+                @isset ($type)
                 // 選中的分類選單增加active特效
                 $("a.type").each(function() {                
                     if ($(this).text() == "{{ $type }}") {
@@ -16,6 +19,7 @@
                         $(this).addClass("font-weight-bold");
                     }
                 });
+                @endisset
 @endsection
 
 @section('content')
@@ -31,14 +35,19 @@
 
     <!-- 分類選單 -->
         <ul class="nav nav-tabs">
+            @isset($search)
+            <li class="nav-item">
+                <a class="nav-link text-dark type" href="{{ route('class') }}?search={{ $search }}">搜尋結果</a>
+            @else</li>
             <li class="nav-item">
                 <a class="nav-link text-dark type" href="{{ route('class') }}?school={{ $school }}&type=熱門課程">熱門課程</a>
             </li>
-            @foreach ($classTypes as $classType)
-                <li class="nav-item">
-                    <a class="nav-link text-dark type" href="{{ route('class') }}?school={{ $school }}&type={{ $classType }}">{{ $classType }}</a>
-                </li>
-            @endforeach
+                @foreach ($classTypes as $classType)
+                    <li class="nav-item">
+                        <a class="nav-link text-dark type" href="{{ route('class') }}?school={{ $school }}&type={{ $classType }}">{{ $classType }}</a>
+                    </li>
+                @endforeach
+            @endisset            
         </ul>
 
     <!-- 課程表 -->

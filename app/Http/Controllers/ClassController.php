@@ -19,11 +19,31 @@ class ClassController extends Controller
 
     public function showClass(ClassValidate $request)
     {
+        // input資料設定
         $classId = $request->input('class', '');
         $school = $request->input('school', 'ntu');
         $classType = $request->input('type', '熱門課程');
+        $search = $request->input('search', '');
+
+        // 設定讀取頁數        
+        $classPage = $request->input('page', 1);
+        $classPerPage = $request->input('class_per_page', Config::get('constants.options.class_per_page'));
+        $titlePage = $request->input('page', 1);
+        $msgPage = $request->input('msg_page', 1);
+        $titlePerPage = $request->input('title_per_page', Config::get('constants.options.title_per_page'));
+        $msgPerPage = $request->input('msg_per_page', Config::get('constants.options.msg_per_page'));
         
-        
+        if ($search != '') {
+            $classes = ClassList::where('classId', 'like', "%$search%")
+            ->orWhere('className', 'like', "%$search%")
+            ->paginate($classPerPage);
+
+            return view('mooc.classList', [
+                'classes' => $classes,
+                'search' => $search,
+            ]);
+        }
+
         // 進入課程章節選單
         if ($classId != '') {
             // 若資料庫中沒有此classId則轉導
@@ -33,12 +53,6 @@ class ClassController extends Controller
 
             $conditions = array('classId' => $classId);
 
-            // 設定讀取頁數
-            $titlePage = $request->input('page', 1);
-            $msgPage = $request->input('msg_page', 1);
-            $titlePerPage = $request->input('title_per_page', Config::get('constants.options.title_per_page'));
-            $msgPerPage = $request->input('msg_per_page', Config::get('constants.options.msg_per_page'));
-        
             $classes = ClassList::where($conditions)->first();
             $titles = TitleList::where($conditions)->orderBy('titleId', 'asc')->paginate($titlePerPage);
             $messages = Message::where($conditions)->orderBy('id', 'asc')->paginate($msgPerPage, ['*'], 'msg_page');
@@ -56,9 +70,6 @@ class ClassController extends Controller
         if (($classType != '熱門課程') && (!in_array($classType, json_decode(Redis::get('classTypes_' . $school))))) {
             return redirect()->route('class');
         }
-
-        $classPage = $request->input('page', 1);
-        $classPerPage = $request->input('class_per_page', Config::get('constants.options.class_per_page'));
                
         // 進入課程選單
         $conditions = array(

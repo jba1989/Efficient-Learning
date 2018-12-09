@@ -22,10 +22,8 @@
                 //});
 
                 $("#findClass").click(function() {
-                    var inputStr = $("#searchClass").find("input").val();
-					var input = inputStr.split(" - ");
-					var classId = input[0];
-                    window.location.assign("{{ route('class') }}?class=" + classId);
+                    var input = $("#searchClass").find("input").val();					
+                    window.location.assign("{{ route('class') }}?search=" + input);
                 });
 
 				$.ajax({
@@ -34,11 +32,10 @@
 					url: "/api/class/getOptions",
 					data: {"_token": "{{ csrf_token() }}"},
 					success: function(response){
-						var optionsArr = jQuery.parseJSON(response.data);
-						console.log(optionsArr);
+						var optionsArr = jQuery.parseJSON(response.data);					
 						for (var index in optionsArr) {
 							var option = optionsArr[index];							
-							var optionStr = '<option value="' + option['classId'] + ' - ' + option['className'] + '">';
+							var optionStr = '<option value="' + option['className'] + '">';
 							$("#classList").append(optionStr);
 						}
 					}
