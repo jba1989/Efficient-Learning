@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Config;
 
 class ClassValidate extends FormRequest
 {
@@ -30,11 +31,11 @@ class ClassValidate extends FormRequest
      * @return array
      */
     public function rules()
-    {
+    {        
         return [
             'school' => [
                 'nullable',
-                Rule::in(['ntu', 'nthu', 'nctu']),
+                Rule::in(Config::get('constants.schools')),
             ],
             'type' => 'nullable|alpha_num|max:12',
             'class' => 'nullable|alpha_num|max:12',
