@@ -35,6 +35,7 @@
 					data: {"_token": "{{ csrf_token() }}"},
 					success: function(response){
 						var optionsArr = jQuery.parseJSON(response.data);
+						console.log(optionsArr);
 						for (var index in optionsArr) {
 							var option = optionsArr[index];							
 							var optionStr = '<option value="' + option['classId'] + ' - ' + option['className'] + '">';
@@ -127,8 +128,8 @@
 		@endif
 
 		<!-- JS Error message, default hide-->
-			<div class="container mt-5">
-				<div class="alert alert-warning alert-dismissible fade show d-none" role="alert">
+			<div class="container" >
+				<div class="alert alert-warning alert-dismissible mt-5 fade show d-none" role="alert">
 					<strong></strong>
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
