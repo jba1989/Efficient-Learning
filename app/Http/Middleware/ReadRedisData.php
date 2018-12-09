@@ -22,7 +22,10 @@ class ReadRedisData
     {        
         //  更新頁首下拉選單
         if (Redis::get('classOptions') == null) {            
-            Redis::set('classOptions', ClassList::select('classId', 'className')->get()->toArray());
+            $classOptions = ClassList::select('className')->get()->map(function($arr) {
+                return $arr['className'];
+            })->toArray();
+            Redis::set('classOptions', json_encode($classOptions));
         }
 
         // 更新各校課程類型清單

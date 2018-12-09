@@ -32,11 +32,10 @@
 					url: "/api/class/getOptions",
 					data: {"_token": "{{ csrf_token() }}"},
 					success: function(response){
-						var optionsArr = jQuery.parseJSON(response.data);					
-						for (var index in optionsArr) {
-							var option = optionsArr[index];							
-							var optionStr = '<option value="' + option['className'] + '">';
-							$("#classList").append(optionStr);
+						var options = jQuery.parseJSON(response.data);
+						for (var index in options) {												
+							var option = '<option value="' + options[index] + '">';
+							$("#classList").append(option);
 						}
 					}
 				});
