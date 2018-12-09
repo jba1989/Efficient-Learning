@@ -20,7 +20,7 @@ class CheckLogin
         // ajax 請求，判斷用戶是否登入
         if ($request->ajax()) {            
             if (Auth::guard($guard)->check() == false) {
-                return response()->json(['message' => '', 'errors' => ['message' => [trans('Login Please')]]], 403);
+                return response()->json(['message' => '', 'errors' => ['message' => [trans('auth.Login Please')]]], 403);
             } else {
                 return $next($request);
             }

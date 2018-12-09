@@ -94,8 +94,12 @@
                     }
                     $("#like_count").text(response.data.likeCount);
                     $("#dislike_count").text(response.data.dislikeCount);
-                }
-                
+                },
+                error: function(response){
+                    var data = response.responseJSON.errors.message;
+                    $(".alert").find("strong").text(data[0]);
+                    $(".alert").removeClass("d-none");
+                }                
             });
         });
 
@@ -123,6 +127,11 @@
                     } else {
                         $("#love_img").attr("src", "{{ asset('images/love.png') }}");
                     }
+                },
+                error: function(response){
+                    var data = response.responseJSON.errors.message;
+                    $(".alert").find("strong").text(data[0]);
+                    $(".alert").removeClass("d-none");
                 }
             });
         });
@@ -137,7 +146,9 @@
             <p class="font-italic text-center">{{ $classes->teacher }}</p>
 
             <hr class="my-4">
-            <p>{{ $classes->description }}</p>            
+            @foreach ($classes->description as $description)
+                <p>{{ $description }}</p>
+            @endforeach     
             <p class="text-center mt-2"><a class="badge badge-pill badge-info" href="#" role="button">{{ __('dictionary.ResourceURL') }}</a></p>
             
             <!-- 讚按鈕 -->

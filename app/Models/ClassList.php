@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class classList extends Model
+class ClassList extends Model
 {
     protected $table = 'class_list';
 
@@ -21,16 +21,19 @@ class classList extends Model
         'classId',
         'className',
         'teacher',
-        'likeCount',
-        'dislikeCount',
         'classType',
         'school',
         'countTitle',
+        'description',
+    ];
+
+    protected $casts = [
+        'description' => 'array',
     ];
 
     public function titles()
     {
-        return $this->hasMany('App\Models\TotalClass', 'classId', 'classId');
+        return $this->hasMany('App\Models\TitleList', 'classId', 'classId');
     }
 
     public function messages()

@@ -14,27 +14,50 @@
 		@yield('head-extension')   
 		<script>
 			$(document).ready(function() {
-                $("#searchClass").find("input").focus(function() {
+                $("#searchClass").find("input").mouseover(function() {
                     $("#searchClass").css("width","100%");
                 });
-                $("#searchClass").find("input").blur(function() {
-                    $("#searchClass").css("width","15em");
-                });
+                //$("#searchClass").find("input").mouseout(function() {
+                //    $("#searchClass").css("width","15em");
+                //});
 
                 $("#findClass").click(function() {
-                    var classId = $("#searchClass").find("input").val();
+                    var inputStr = $("#searchClass").find("input").val();
+					var input = inputStr.split(" - ");
+					var classId = input[0];
                     window.location.assign("{{ route('class') }}?class=" + classId);
                 });
+
+				$.ajax({
+					type: "get",
+					datatype: "json",
+					url: "/api/class/getOptions",
+					data: {"_token": "{{ csrf_token() }}"},
+					success: function(response){
+						var optionsArr = jQuery.parseJSON(response.data);
+						for (var index in optionsArr) {
+							var option = optionsArr[index];							
+							var optionStr = '<option value="' + option['classId'] + ' - ' + option['className'] + '">';
+							$("#classList").append(optionStr);
+						}
+					}
+				});
 
 			 	@yield('script-extension')   
 			});
     	</script>
-
+		<style>
+			.icon {
+				max-width: 200px;
+				max-height: 56px;
+				margin-right: 20px;
+			}
+		</style>
 	</head>
 	<body>
 		<!-- Nav -->
 		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-			<a class="navbar-brand" href="#">Carousel</a>
+			<img class="icon" src="{{ asset('images/icon.png') }}">
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -63,13 +86,8 @@
 		<!-- 課程搜尋input框 -->
 				<div class="input-group mr-2" id="searchClass" style="width:15em;">
 					<input type="text" id="searchClass" class="form-control" list="classList" placeholder="{{ __('dictionary.Search Class') }}">
-					<datalist id="classList">
-						@isset ($classOptions)
-							@foreach ($classOptions as $classOption)
-								<option value="{{ $classOption->classId }}">{{ $classOption->classId }} - {{ $classOption->className }}</option>
-							@endforeach
-						@endisset
-					</datalist>
+					<datalist id="classList"></datalist>
+					
 					<div class="input-group-append">
 						<button id="findClass" class="btn btn-outline-info" type="button">{{ __('dictionary.Submit') }}</button>
 					</div>
@@ -94,7 +112,7 @@
       	</nav>
 		<div style="height:56px;"></div>
 
-		<!-- Error message -->
+		<!-- PHP Error message -->
 		@if (isset($errors))
 			@foreach (($errors->all()) as $message)
 				<div class="container mt-5">
@@ -107,6 +125,16 @@
 				</div>
 			@endforeach
 		@endif
+
+		<!-- JS Error message, default hide-->
+			<div class="container mt-5">
+				<div class="alert alert-warning alert-dismissible fade show d-none" role="alert">
+					<strong></strong>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+			</div>
 
 		<!-- Banner -->
 			@yield('banner')

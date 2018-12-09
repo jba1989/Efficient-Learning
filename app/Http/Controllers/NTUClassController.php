@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ClassList;
-use App\Models\TotalClass;
+use App\Models\TitleList;
 
 class NTUClassController extends Controller
 {
@@ -17,9 +17,12 @@ class NTUClassController extends Controller
 
         foreach ($classIdArr as $classId) {
             $this->parseClassDescription($classId);
-            $this->parseClassTitle($classId);
-            //$this->videoSpider($classId, $count);
+            $this->parseClassTitle($classId);                    
         }
+
+        $this->parseClassType();
+
+        echo 'finished';
     }
   
     /**
@@ -65,16 +68,16 @@ class NTUClassController extends Controller
         $pattern = '/og:description" content="(.*)"\s?\/>/';
         preg_match_all($pattern, $response, $matches);
         if (count($matches[1]) > 0) {
-            $description = $matches[1][0];
+            $description = $matches[1];
         } else {
-            $description = null;
+            $description = array();
         }        
 
-        ClassList::where('classId', $classId)->update(['description' => $description]);
+        ClassList::where('classId', $classId)->update(['description' => json_encode($description)]);
     }
 
     /**
-     * 抓取上課次數,課程章節
+     * 抓取上課次數,課程章節,影片連結
      *
      * @param string
      * @param integer
@@ -102,30 +105,39 @@ class NTUClassController extends Controller
                 'classId' => $classId,
                 'titleId' => $i + 1,
                 'title' => $titles[$i],
+                'videoLink' => "http://ocw.aca.ntu.edu.tw/ntu-ocw/ocw/cou/$classId/$i",
             );
 
-            TotalClass::updateOrCreate($conditions, $contents);
+            TitleList::updateOrCreate($conditions, $contents);
         };
     }
 
     /**
-     * 抓取課程章節影片
-     *
-     * @param string
-     * @param integer
-     * @return array
+     * 抓取課程類型
      */
-    public function videoSpider($classId, $count)
-    {
-//        for ($i = 0; $i < $count; $i++) {
-//            $url = "http://ocw.aca.ntu.edu.tw/ntu-ocw/index.php/ocw/cou/$classId/$i";
-//            $response = $this->myCurl($url);
-//            $parseData = $this->strFind($response, '<div class="video">', '</iframe>', 1, FALSE);
-//            $result = $this->strFind($parseData, "src='", "'>", 1, FALSE);
-//            TotalClass::where('classId', $classId)->where('titleId', $i + 1)->update(['videoLink' => $result]);
-//        }
+    public function parseClassType()
+    {        
+        $typeArr = array(
+            '1' => '文史哲藝',
+            '2' => '法社管理',
+            '3' => '理工電資',
+            '4' => '生農醫衛',
+        );
+
+        foreach ($typeArr as $key => $val) {       
+            $url = 'http://ocw.aca.ntu.edu.tw/ntu-ocw/home/show-category/' . $key;
+            $response = $this->myCurl($url);
+            $pattern = "/<a href='\/ntu-ocw\/ocw\/cou\/(\S+)'>/";
+            preg_match_all($pattern, $response, $matches);
+            
+            if (count($matches[1]) > 0) {
+                foreach ($matches[1] as $classId) {
+                    ClassList::where('classId', $classId)->update(['classType' => $val]);
+                }
+            }
+        }
     }
-  
+
     /**
      * curl請求, 並返回網站內容
      *

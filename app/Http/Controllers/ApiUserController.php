@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ClassIdValidate;
+use App\Http\Requests\ClassValidate;
 use Validator;
 use Auth;
 
 class ApiUserController extends Controller
 {
-    public function show(ClassIdValidate $request)
+    public function show(ClassValidate $request)
     {
         $classId = $request->input('classId');
         if (Auth::check()) {
@@ -21,7 +21,7 @@ class ApiUserController extends Controller
         return response()->json(['data' => '', 'errMsg' => ''], 200);
     }
 
-    public function update(ClassIdValidate $request)
+    public function update(ClassValidate $request)
     {
         $classId = $request->input('classId');
         $favoriteArr = (isset(Auth::user()->favorite)) ? Auth::user()->favorite : array();
@@ -47,7 +47,7 @@ class ApiUserController extends Controller
         return response()->json(['data' => ['favorite' => $favorite], 'errMsg' => ''], 200);
     }
 
-    public function delete(ClassIdValidate $request)
+    public function delete(ClassValidate $request)
     {
         $classId = $request->input('classId');
         $favoriteArr = (isset(Auth::user()->favorite)) ? Auth::user()->favorite : array();

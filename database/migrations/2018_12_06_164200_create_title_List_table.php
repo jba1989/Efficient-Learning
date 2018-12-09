@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateClassListLikeTable extends Migration
+class CreateTitleListTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateClassListLikeTable extends Migration
      */
     public function up()
     {
-        Schema::create('class_list_like', function (Blueprint $table) {
+        Schema::create('title_list', function (Blueprint $table) {
             $table->increments('id');
             $table->string('classId', 12);
-            $table->json('likeCount')->nullable();
-            $table->json('dislikeCount')->nullable();
+            $table->integer('titleId', false, true);
+            $table->string('title', 500)->nullable();
+            $table->mediumText('videoLink')->nullable();
         });
     }
 
@@ -28,6 +29,6 @@ class CreateClassListLikeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('class_list_like');
+        Schema::dropIfExists('title_list');
     }
 }

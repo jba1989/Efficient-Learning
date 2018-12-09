@@ -5,14 +5,25 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ClassList;
 use App\Models\ClassListLike;
-use Illuminate\Validation\Rule;
-use App\Http\Requests\ClassIdValidate;
-use Validator;
+use Illuminate\Support\Facades\Redis;
+use App\Http\Requests\ClassValidate;
 use Auth;
+
 
 class ApiClassController extends Controller
 {
-    public function show(ClassIdValidate $request)
+    public function getOptions()
+    {
+        $options = Redis::get('classOptions');
+        if ($options == null) {
+            $options = ClassList::select('classId', 'className')->get();
+            Redis::set('classOptions', $options);
+        }
+        
+        return response()->json(['data' => $options, 'errMsg' => ''], 200);
+    }
+
+    public function show(ClassValidate $request)
     {
         $classId = $request->input('classId');
 
@@ -24,14 +35,13 @@ class ApiClassController extends Controller
             $likeCount = 0;
             $dislikeCount = 0;
         } else {
-            $likeArr = (isset($data->likeCount)) ? $data->likeCount : array();
-            $dislikeArr = (isset($data->dislikeCount)) ? $data->dislikeCount : array();
-
-            // like
-            $likeCount = count($likeArr);
-            $dislikeCount = count($dislikeArr);
+            $likeCount = $data->likeCount;
+            $dislikeCount = $data->dislikeCount;
 
             if (Auth::check()) {
+                $likeArr = (isset($data->likeUserList)) ? $data->likeUserList : array();
+                $dislikeArr = (isset($data->dislikeUserList)) ? $data->dislikeUserList : array();
+
                 if (in_array(Auth::user()->id, $likeArr)) {
                     $prefer = 'like';
                 } 
@@ -51,31 +61,20 @@ class ApiClassController extends Controller
         return response()->json(['data' => $data, 'errMsg' => ''], 200);
     }
 
-    public function update(Request $request)
+    public function update(ClassValidate $request)
     {
         $input = $request->all();
-
-        $rules = [
-            'classId' => 'bail|required|alpha_num|max:12',
-            'prefer' => Rule::in(['like', 'dislike']),
-        ];
-
-        $validator = Validator::make($input, $rules);
-        
-        if ($validator->fails()) {
-            return response()->json(['data' => '', 'errMsg' => ''], 403);
-        }
         
         $data = ClassListLike::where('classId', $input['classId'])->first();
 
         // 若無這筆資料則新建一個實例
         if (empty($data)) {
-            $data = new ClassListLike;            
+            $data = new ClassListLike;
         }
 
         // 資料設定
-        $likeArr = (isset($data->likeCount)) ? $data->likeCount : array();
-        $dislikeArr = (isset($data->dislikeCount)) ? $data->dislikeCount : array();
+        $likeArr = (isset($data->likeUserList)) ? $data->likeUserList : array();
+        $dislikeArr = (isset($data->dislikeUserList)) ? $data->dislikeUserList : array();
         $prefer = '';
 
         $inLikeIndex = array_search(Auth::user()->id, $likeArr);
@@ -110,8 +109,10 @@ class ApiClassController extends Controller
     
         // 寫入資料庫
         $data->classId = $input['classId'];
-        $data->likeCount = $likeArr;
-        $data->dislikeCount = $dislikeArr;
+        $data->likeUserList = $likeArr;
+        $data->dislikeUserList = $dislikeArr;
+        $data->likeCount = count($likeArr);
+        $data->dislikeCount = count($dislikeArr);
         $data->save();
 
         $data = array(

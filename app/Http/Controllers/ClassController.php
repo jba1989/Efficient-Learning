@@ -3,90 +3,68 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ClassValidate;
 use App\Models\ClassList;
-use App\Models\TotalClass;
+use App\Models\TitleList;
 use App\Models\Message;
-use Validator;
+use Illuminate\Support\Facades\Redis;
 use Config;
 
 class ClassController extends Controller
 {   
-    public function __construct()
-    {
-        $this->classOptions = ClassList::select('classId', 'className')->get();
-    }
-
     public function showIndex()
-    {
-        return view('mooc.index', ['classOptions' => $this->classOptions]);
+    {        
+        return view('mooc.index');
     }
 
-    public function showClass(Request $request)
+    public function showClass(ClassValidate $request)
     {
-        $input = $request->all();
+        $classId = $request->input('class', '');
+        $school = $request->input('school', '');
+        $classType = $request->input('type', '');
         $conditions = array();
-        $school = '';
-        $classType = '';
-
-        $rules = [
-            'school' => 'nullable|alpha_num|max:12',
-            'type' => 'nullable|alpha_num|max:12',
-            'classId' => 'nullable|alpha_num|max:12',
-            'page' => 'nullable|integer|max:4',
-            'msg_page' => 'nullable|integer|max:4',
-            'title_per_page' => 'nullable|integer|in([25, 50,100])',
-            'msg_per_page' => 'nullable|integer|in([25, 50,100])',
-        ];
-
-        $validator = Validator::make($input, $rules);
-
-        // 返回課程選單
-        if ($validator->fails()) {
-            return redirect("/class");
-        }
-
+        
         // 進入課程章節選單
-        if (isset($input['class'])) {
-            $conditions = array('classId' => $input['class']);
+        if ($classId != '') {
+            $conditions = array('classId' => $classId);
 
             // 設定讀取頁數
-            $title_page = (isset($input['page'])) ? $input['page'] : 1;
-            $msg_page = (isset($input['msg_page'])) ? $input['msg_page'] : 1;
-            $title_per_page = (isset($input['title_per_page'])) ? $input['title_per_page'] : Config::get('constants.options.title_per_page');
-            $msg_per_page = (isset($input['msg_per_page'])) ? $input['msg_per_page'] : Config::get('constants.options.msg_per_page');
+            $titlePage = $request->input('page', 1);
+            $msgPage = $request->input('msg_page', 1);
+            $titlePerPage = $request->input('title_per_page', Config::get('constants.options.title_per_page'));
+            $msgPerPage = $request->input('msg_per_page', Config::get('constants.options.msg_per_page'));
         
             $classes = ClassList::where($conditions)->first();
-            $titles = TotalClass::where($conditions)->orderBy('titleId', 'asc')->paginate($title_per_page);
-            $messages = Message::where($conditions)->orderBy('id', 'asc')->paginate($msg_per_page, ['*'], 'msg_page');
+            $titles = TitleList::where($conditions)->orderBy('titleId', 'asc')->paginate($titlePerPage);
+            $messages = Message::where($conditions)->orderBy('id', 'asc')->paginate($msgPerPage, ['*'], 'msg_page');
             
             return view('mooc.singleClass', [
-                'classOptions' => $this->classOptions,
                 'classes' => $classes,
                 'titles' => $titles,
                 'messages' => $messages,
-                'page' => $title_page,
-                'msg_page' => $msg_page,
+                'page' => $titlePage,
+                'msg_page' => $msgPage,
             ]);
         }
 
+        $classPage = $request->input('page', 1);
+        $classPerPage = $request->input('class_per_page', Config::get('constants.options.class_per_page'));
+
         // 進入課程選單
-        if (isset($input['school']) && $input['school'] != '') {
-            $school = $input['school'];
-            $conditions = array_merge($conditions, ['school' => $input['school']]);
+        if ($school != '') {
+            $conditions = array_merge($conditions, ['school' => $school]);
         }
 
-        if (isset($input['type']) && $input['type'] != '') {
-            $classType = $input['type'];
-            $conditions = array_merge($conditions, ['classType' => $input['type']]);
+        if ($classType != '') {
+            $conditions = array_merge($conditions, ['classType' => $classType]);
         }
-
-        $classes = ClassList::where($conditions)->orderBy('id', 'asc')->paginate(30);
+        
+        $classes = ClassList::where($conditions)->orderBy('id', 'asc')->paginate($classPerPage);
         
         return view('mooc.classList', [
-            'classOptions' => $this->classOptions,
             'classes' => $classes,
             'school' => $school,
-            'type' => $classType
+            'type' => $classType,
         ]);
     }
 }
