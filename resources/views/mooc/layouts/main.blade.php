@@ -142,7 +142,7 @@
 		<!-- Footer -->
 		<div class="w-100" style="height:64px"></div>
 		<footer class="blog-footer fixed-bottom bg-light mt-3 p-2">		
-			<p class="text-center pt-2">Blog template built for <a href="https://getbootstrap.com/">Bootstrap</a> by <a href="https://twitter.com/mdo">@mdo</a></p>
+			<p class="text-center pt-2">Made by CL with Laravel & Bootstrap</p>
 		</footer>
 
 		<!-- Optional JavaScript -->

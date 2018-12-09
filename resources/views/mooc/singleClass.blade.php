@@ -57,14 +57,14 @@
                 $("#dislike_count").text(response.data.dislikeCount);
                 switch (response.data.prefer) {
                     case "like":
-                        $("#like_img").attr("src", "{{ asset('images/like3.png') }}");
+                        $("#like_img").attr("src", "{{ asset('images/like2.png') }}");
                         break;
                     case "dislike":
-                        $("#dislike_img").attr("src", "{{ asset('images/like3.png') }}");
+                        $("#dislike_img").attr("src", "{{ asset('images/dislike2.png') }}");
                         break;
                     default:
-                        $("#like_img").attr("src", "{{ asset('images/like2.png') }}");
-                        $("#dislike_img").attr("src", "{{ asset('images/like2.png') }}");
+                        $("#like_img").attr("src", "{{ asset('images/like1.png') }}");
+                        $("#dislike_img").attr("src", "{{ asset('images/dislike1.png') }}");
                         break;
                 }
             }
@@ -84,12 +84,12 @@
                         $("#dislike_img").attr("src", "{{ asset('images/dislike1.png') }}");
                         break;
                     case "dislike":
-                        $("#like_img").attr("src", "{{ asset('images/dislike2.png') }}");
-                        $("#dislike_img").attr("src", "{{ asset('images/like1.png') }}");
+                        $("#like_img").attr("src", "{{ asset('images/like1.png') }}");
+                        $("#dislike_img").attr("src", "{{ asset('images/dislike2.png') }}");
                         break;
                     default:
                         $("#like_img").attr("src", "{{ asset('images/like1.png') }}");
-                        $("#dislike_img").attr("src", "{{ asset('images/like1.png') }}");
+                        $("#dislike_img").attr("src", "{{ asset('images/dislike1.png') }}");
                         break;
                     }
                     $("#like_count").text(response.data.likeCount);
