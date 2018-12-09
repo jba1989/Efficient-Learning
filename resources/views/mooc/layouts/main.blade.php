@@ -22,10 +22,8 @@
                 //});
 
                 $("#findClass").click(function() {
-                    var inputStr = $("#searchClass").find("input").val();
-					var input = inputStr.split(" - ");
-					var classId = input[0];
-                    window.location.assign("{{ route('class') }}?class=" + classId);
+                    var input = $("#searchClass").find("input").val();					
+                    window.location.assign("{{ route('class') }}?search=" + input);
                 });
 
 				$.ajax({
@@ -34,11 +32,10 @@
 					url: "/api/class/getOptions",
 					data: {"_token": "{{ csrf_token() }}"},
 					success: function(response){
-						var optionsArr = jQuery.parseJSON(response.data);
-						for (var index in optionsArr) {
-							var option = optionsArr[index];							
-							var optionStr = '<option value="' + option['classId'] + ' - ' + option['className'] + '">';
-							$("#classList").append(optionStr);
+						var options = jQuery.parseJSON(response.data);
+						for (var index in options) {												
+							var option = '<option value="' + options[index] + '">';
+							$("#classList").append(option);
 						}
 					}
 				});
@@ -127,8 +124,8 @@
 		@endif
 
 		<!-- JS Error message, default hide-->
-			<div class="container mt-5">
-				<div class="alert alert-warning alert-dismissible fade show d-none" role="alert">
+			<div class="container" >
+				<div class="alert alert-warning alert-dismissible mt-5 fade show d-none" role="alert">
 					<strong></strong>
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 						<span aria-hidden="true">&times;</span>

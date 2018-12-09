@@ -13,14 +13,8 @@ use Auth;
 class ApiClassController extends Controller
 {
     public function getOptions()
-    {
-        $options = Redis::get('classOptions');
-        if ($options == null) {
-            $options = ClassList::select('classId', 'className')->get();
-            Redis::set('classOptions', $options);
-        }
-        
-        return response()->json(['data' => $options, 'errMsg' => ''], 200);
+    {             
+        return response()->json(['data' => Redis::get('classOptions'), 'errMsg' => ''], 200);
     }
 
     public function show(ClassValidate $request)
