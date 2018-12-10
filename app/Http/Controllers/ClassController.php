@@ -33,6 +33,7 @@ class ClassController extends Controller
         $titlePerPage = $request->input('title_per_page', Config::get('constants.options.title_per_page'));
         $msgPerPage = $request->input('msg_per_page', Config::get('constants.options.msg_per_page'));
         
+        // 進入搜尋結果
         if ($search != '') {
             $classes = ClassList::where('classId', 'like', "%$search%")
             ->orWhere('className', 'like', "%$search%")
