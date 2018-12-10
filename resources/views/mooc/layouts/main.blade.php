@@ -109,6 +109,9 @@
       	</nav>
 		<div style="height:56px;"></div>
 
+		<!-- Banner -->
+		@yield('banner')
+
 		<!-- PHP Error message -->
 		@if (isset($errors))
 			@foreach (($errors->all()) as $message)
@@ -132,9 +135,6 @@
 					</button>
 				</div>
 			</div>
-
-		<!-- Banner -->
-			@yield('banner')
 
         <!-- Content -->
             @yield('content')            

@@ -14,12 +14,12 @@
 Auth::routes();
 
 
+Route::get('/member', 'MemberController@userInfo')->middleware('login')->name('member');
 
 // 課程頁面
 Route::prefix('index')->middleware('read.redis.data')->group(function () {
     Route::get('/', 'ClassController@showIndex')->name('index');
-    Route::get('/class', 'ClassController@showClass')->name('class');
-    Route::get('/member', 'MemberController@userInfo')->name('member');
+    Route::get('/class', 'ClassController@showClass')->name('class');    
 });
 
 // 留言板功能
@@ -39,7 +39,7 @@ Route::prefix('api')->group(function () {
         Route::delete('/delete', 'ApiMessageController@delete');
     });
 
-    // 課程讚數
+    // 課程相關
     Route::prefix('/class')->group(function () {
         Route::get('/getOptions', 'ApiClassController@getOptions');
         Route::get('/like', 'ApiClassController@show');
