@@ -31,7 +31,7 @@ class ReadRedisData
         // 更新各校課程類型清單
         foreach (Config::get('constants.schools') as $school) {
             if (Redis::get('classTypes_' . $school) == null) {  
-                $classTypes = ClassList::select('classType')->where('school', $school)->distinct()->get()->map(function($arr) {
+                $classTypes = ClassList::select('classType')->distinct()->where('school', $school)->get()->map(function($arr) {
                     return $arr['classType'];
                 })->toArray();
 
