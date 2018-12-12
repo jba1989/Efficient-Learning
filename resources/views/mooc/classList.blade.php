@@ -51,23 +51,21 @@
         </ul>
 
     <!-- 課程表 -->
-        <div class="my-5">
+        <div class="my-5 table-responsive">
             <table class="table table-striped">                
-                <thead>
-                <tr>
-                    <th class="text-right text-nowrap">{{ __('dictionary.ClassId') }}:</th>
-                    <th class="text-center text-nowrap">{{ __('dictionary.ClassName') }}:</th>
+                <thead class="thead-dark">
+                <tr>                    
+                    <th class="text-center text-nowrap w-50">{{ __('dictionary.ClassName') }}:</th>
                     <th class="text-center text-nowrap">{{ __('dictionary.Like') }}:</th>
                     <th class="text-center text-nowrap">{{ __('dictionary.School') }}:</th>
-                    <th class="text-center text-nowrap">{{ __('dictionary.Teacher') }}:</th>
+                    <th class="text-center text-nowrap w-25">{{ __('dictionary.Teacher') }}:</th>
                     <th class="text-center text-nowrap">{{ __('dictionary.ClassType') }}:</th>
                 </tr>
                 </thead>
-                <tbody>     
+                <tbody>
                     @foreach ($classes as $class)
-                    <tr>                    
-                        <td class="text-right">{{ $class->classId }}</td>
-                        <td class="pl-3"><a href="{{ route('class') }}?class={{ $class->classId }}" style="display:block;">{{ $class->className }}</a></td>
+                    <tr>
+                        <td class="pl-4"><a href="{{ route('class') }}?class={{ $class->classId }}" style="display:block;">{{ $class->className }}</a></td>
                     
                         @if ($class->likeCount != '')
                             <td class="text-center">{{ substr_count($class->likeCount, ',') + 1 }}</td>
