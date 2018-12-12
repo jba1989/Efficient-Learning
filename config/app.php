@@ -40,6 +40,9 @@ return [
     */
 
     'debug' => env('APP_DEBUG', false),
+    'log_level' => env('APP_LOG_LEVEL', 'error'),
+    'log_max_files' => 10,
+    'log' => 'daily',
 
     /*
     |--------------------------------------------------------------------------
