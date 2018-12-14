@@ -150,9 +150,16 @@
                 @foreach ($classes->description as $description)
                     <p>{{ $description }}</p>
                 @endforeach  
-            @endisset   
-            <p class="text-center mt-2"><a class="badge badge-pill badge-info" href="#" role="button">{{ __('dictionary.ResourceURL') }}</a></p>
-            
+            @endisset 
+
+            @if ($classes->school == 'NTU' )
+                <p class="text-center mt-2"><a class="badge badge-pill badge-info" href="{{ Config::get('constants.resource.ntu') }}{{ $classes->classId }}" role="button">{{ __('dictionary.ResourceURL') }}</a></p>
+            @elseif ($classes->school == 'NTHU' )
+                <p class="text-center mt-2"><a class="badge badge-pill badge-info" href="{{ Config::get('constants.resource.nthu') }}{{ $classes->classId }}" role="button">{{ __('dictionary.ResourceURL') }}</a></p>
+            @elseif ($classes->school == 'NCTU' )
+                <p class="text-center mt-2"><a class="badge badge-pill badge-info" href="{{ Config::get('constants.resource.nctu') }}{{ $classes->classId }}" role="button">{{ __('dictionary.ResourceURL') }}</a></p>
+            @endif
+
             <!-- 讚按鈕 -->
             <table class="mx-auto">
                 <tr>
