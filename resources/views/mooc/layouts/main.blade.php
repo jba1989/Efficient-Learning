@@ -140,7 +140,7 @@
             @yield('content')            
 
 		<!-- Footer -->
-		<div class="w-100" style="height:64px"></div>
+		<div class="w-100" style="height:64px;"></div>
 		<footer class="blog-footer fixed-bottom bg-light mt-3 p-2">		
 			<p class="text-center pt-2">Made by CL with Laravel & Bootstrap</p>
 		</footer>

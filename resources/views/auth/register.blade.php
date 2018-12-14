@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <div class="row position-relative justify-content-center" style="top: 100px;">
+    <div class="row position-relative justify-content-center" style="top: 3em;">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('auth.Register') }}</div>
