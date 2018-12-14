@@ -11,4 +11,9 @@ return [
         'nthu',
         'nctu',
     ],
+    'resource' => [        
+        'ntu' => 'http://ocw.aca.ntu.edu.tw/ntu-ocw/ocw/cou/',
+        'nthu' => '',
+        'nctu' => 'http://ocw.nctu.edu.tw/course_detail.php?nid=',
+    ]
 ];
