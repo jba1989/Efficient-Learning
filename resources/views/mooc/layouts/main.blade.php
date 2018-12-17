@@ -60,13 +60,13 @@
 			</button>
         	<div class="collapse navbar-collapse" id="navbarCollapse">
 				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active">
+					<li class="nav-item active ml-3 ml-md-0">
 						<a class="nav-link text-nowrap" href="{{ route('index') }}">{{ __('dictionary.HomePage') }} <span class="sr-only">(current)</span></a>
 					</li>
-					<li class="nav-item">
+					<li class="nav-item active ml-3 ml-md-0">
 						<a class="nav-link text-nowrap" href="{{ route('member') }}">{{ __('dictionary.Account') }}</a>
 					</li>
-					<li class="nav-item mr-5">
+					<li class="nav-item mr-5 mb-1 ml-md-0">
 						<div class="btn-group">
 							<button type="button" class="btn btn-dark dropdown-toggle text-nowrap" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								{{ __('dictionary.Select By School') }}
@@ -75,9 +75,9 @@
 								<a class="dropdown-item" href="{{ route('class') }}?school=ntu">{{ __('dictionary.NTU') }}</a>
 								<a class="dropdown-item" href="{{ route('class') }}?school=nthu">{{ __('dictionary.NTHU') }}</a>
 								<a class="dropdown-item" href="{{ route('class') }}?school=nctu">{{ __('dictionary.NCTU') }}</a>
-							</div>						
+							</div>
 						</div>
-					</li>					
+					</li>
 				</ul>
 
 		<!-- 課程搜尋input框 -->
@@ -93,14 +93,14 @@
 		<!-- 登入等按鈕 -->
 				<ul class="navbar-nav mr-2em">
 					@if (Auth::check())
-						<li class="nav-item">
+						<li class="nav-item active ml-3 ml-md-0">
 							<a class="nav-link text-nowrap" href="{{ route('logout') }}">{{ __('auth.Logout') }}</a>
 						</li>
 					@else
-						<li class="nav-item">
+						<li class="nav-item active ml-3 ml-md-0">
 							<a class="nav-link text-nowrap" href="{{ route('login') }}">{{ __('auth.Login') }}</a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item active ml-3 ml-md-0">
 							<a class="nav-link text-nowrap" href="{{ route('register') }}">{{ __('auth.Register') }}</a>
 						</li>
 					@endif
