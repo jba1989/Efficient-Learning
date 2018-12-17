@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <div class="row position-relative justify-content-center" style="top: 3em;">
+    <div class="row justify-content-center mt-3 mt-md-5" style="min-height: 550px;">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('auth.Reset Password') }}</div>
