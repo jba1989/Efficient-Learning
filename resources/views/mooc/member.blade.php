@@ -53,14 +53,13 @@
                 @isset ($favorites)
                     @foreach ($favorites as $favorite)
                         <div class="btn-group mb-4" role="group" id="{{ $favorite['classId'] }}">
-                            <button type="button" class="btn bg-white col-11 text-dark" onclick="gotoClass('{{ $favorite["classId"] }}')">{{ $favorite['className'] }}</button>
+                            <button type="button" class="btn bg-white col-11 text-dark text-truncate" onclick="gotoClass('{{ $favorite["classId"] }}')">{{ $favorite['className'] }}</button>
                             <button type="button" class="btn btn-danger col-1" onclick="deleteFavorite('{{ $favorite["classId"] }}')">&times;</button>
                         </div>
                     @endforeach
                 @endisset
                 </div>
-                
-            </div>            
+            </div>
         </div>
     </div>
 @endsection
