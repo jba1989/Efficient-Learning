@@ -45,16 +45,16 @@ class NCTUClassController extends Controller
                     );                    
                     
                     $contents = array(
-                        'classId' => $classContents[1][$j],
-                        'className' => $classContents[2][$j],
-                        'teacher' => $classContents[3][$j],
-                        'classType' => $classTypeNameArr[$i],
+                        'classId' => trim($classContents[1][$j]),
+                        'className' => trim($classContents[2][$j]),
+                        'teacher' => trim($classContents[3][$j]),
+                        'classType' => trim($classTypeNameArr[$i]),
                         'school' => 'NCTU',
                         'description' => $this->parseClassDescription($classContents[1][$j]),
                     );
 
                     // 寫入資料庫
-                    ClassList::firstOrCreate($conditions, $contents);
+                    ClassList::updateOrCreate($conditions, $contents);
 
                     // 依照每個課程id抓取單一課程上課次數,課程章節,寫入資料庫
                     $this->parseClassTitle($classContents[1][$j]);
