@@ -8,7 +8,7 @@ class ClassList extends Model
 {
     protected $table = 'class_list';
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $guarded = [
         'id',

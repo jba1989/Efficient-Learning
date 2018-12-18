@@ -8,7 +8,7 @@ class TitleList extends Model
 {
     protected $table = 'title_list';
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $guarded = [
         'id',

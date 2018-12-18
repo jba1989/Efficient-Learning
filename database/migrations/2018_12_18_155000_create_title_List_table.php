@@ -19,6 +19,7 @@ class CreateTitleListTable extends Migration
             $table->integer('titleId', false, true);
             $table->string('title', 500)->nullable();
             $table->mediumText('videoLink')->nullable();
+            $table->timestamps();
         });
     }
 
