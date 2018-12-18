@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\UpdateNtu::class,
+        Commands\UpdateNctu::class,
     ];
 
     /**
@@ -24,8 +25,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command('update:ntu')->weekly()->withoutOverlapping();;
+        $schedule->command('update:nctu')->weekly()->withoutOverlapping();;
     }
 
     /**
