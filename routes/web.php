@@ -55,7 +55,3 @@ Route::prefix('api')->group(function () {
 });
 
 Route::get('/logout', 'Auth\LoginController@logout')->middleware('login')->name('logout');
-
-// 重新抓取課程資訊
-Route::get('/update/ntu', 'NTUClassController@update');
-Route::get('/update/nctu', 'NCTUClassController@update');
