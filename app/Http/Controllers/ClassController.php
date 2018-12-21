@@ -10,6 +10,7 @@ use App\Models\Message;
 use Illuminate\Support\Facades\Redis;
 use Config;
 use Exception;
+use Log;
 
 class ClassController extends Controller
 {   

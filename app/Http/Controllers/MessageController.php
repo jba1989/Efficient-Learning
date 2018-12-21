@@ -7,6 +7,7 @@ use App\Http\Requests\MessageValidate;
 use Auth;
 use Exception;
 use DB;
+use Log;
 
 class MessageController extends Controller
 {        

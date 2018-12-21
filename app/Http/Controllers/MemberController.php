@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ClassList;
 use Auth;
 use Exception;
+use Log;
 
 class MemberController extends Controller
 {

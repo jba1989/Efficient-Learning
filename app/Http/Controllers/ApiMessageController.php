@@ -7,6 +7,7 @@ use App\Models\Message;
 use App\Http\Requests\ApiMessageValidate;
 use Auth;
 use Exception;
+use Log;
 use DB;
 
 class ApiMessageController extends Controller
@@ -61,7 +62,7 @@ class ApiMessageController extends Controller
             DB::commit();
 
             if ($status) {
-                return response()->json(['message' => '', 'errors' => array()], 200);
+                return response()->json(['message' => $message, 'errors' => array()], 200);
             } else {            
                 $errMsg = array(trans('dictionary.Edit') . trans('dictionary.Fail'));
                 return response()->json(['message' => '', 'errors' => ['message' => $errMsg]], 403);

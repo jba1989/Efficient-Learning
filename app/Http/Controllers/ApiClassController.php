@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Redis;
 use App\Http\Requests\ClassValidate;
 use Auth;
 use Exception;
+use Log;
 use DB;
 
 class ApiClassController extends Controller

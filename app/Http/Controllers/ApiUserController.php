@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ClassValidate;
 use Auth;
 use Exception;
+use Log;
 use DB;
+
 class ApiUserController extends Controller
 {
     public function show(ClassValidate $request)
