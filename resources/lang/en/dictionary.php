@@ -40,4 +40,6 @@ return [
     // 提示
     'Success' => 'Success',
     'Fail' => 'Fail',
+    'Search Fail' => "We don't have this data.",
+    'Wrong ClassId' => 'Wrong ClassId',
 ];

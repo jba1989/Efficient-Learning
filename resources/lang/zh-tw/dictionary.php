@@ -40,4 +40,6 @@ return [
     // 提示
     'Success' => '成功',
     'Fail' => '失敗',
+    'Search Fail' => '查無此資料',
+    'Wrong ClassId' => '不存在此課程ID',
 ];
