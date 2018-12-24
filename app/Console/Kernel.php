@@ -53,7 +53,7 @@ class Kernel extends ConsoleKernel
                     $message->to('jba1989@gmail.com');
                     $message->subject('完成更新台大課程');
                 });
-            });
+            })->evenInMaintenanceMode();
 
         // 更新交大課程
         $schedule
@@ -72,16 +72,17 @@ class Kernel extends ConsoleKernel
                     $message->to('jba1989@gmail.com');
                     $message->subject('開始更新交大課程');
                 });
-            });
+            })->evenInMaintenanceMode();
 
         // 維護結束
-        $schedule->command('down')->weekly()->mondays()->at('4:30')->after(function () {
-            Log::info('維護結束');
-            Mail::raw('維護結束', function($message) {
-                $message->to('jba1989@gmail.com');
-                $message->subject('維護結束');
-            });
-        });
+        $schedule->command('up')->weekly()->mondays()->at('4:30')
+            ->after(function () {
+                Log::info('維護結束');
+                Mail::raw('維護結束', function($message) {
+                    $message->to('jba1989@gmail.com');
+                    $message->subject('維護結束');
+                });
+            })->evenInMaintenanceMode();
     }
 
     /**
