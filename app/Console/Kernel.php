@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Config;
 use Mail;
 use Log;
 
@@ -28,7 +29,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // 維護開始
-        $schedule->command('down')->weekly()->mondays()->at('3:00')->after(function () {
+        $schedule->command('down')->weekly()->mondays()->at(Config::get('maintain.down'))->after(function () {
             Log::info('維護開始');
             Mail::raw('維護開始', function($message) {
                 $message->to('jba1989@gmail.com');
@@ -39,7 +40,7 @@ class Kernel extends ConsoleKernel
         // 更新台大課程
         $schedule
             ->command('update:ntu')
-            ->weekly()->mondays()->at('3:10')
+            ->weekly()->mondays()->at(Config::get('maintain.ntu_update_at'))
             ->before(function () {
                 Log::info('開始更新台大課程');
                 Mail::raw('開始更新台大課程', function($message) {
@@ -58,7 +59,7 @@ class Kernel extends ConsoleKernel
         // 更新交大課程
         $schedule
             ->command('update:nctu')
-            ->weekly()->mondays()->at('3:10')
+            ->weekly()->mondays()->at(Config::get('maintain.nctu_update_at'))
             ->before(function () {
                 Log::info('開始更新台大課程');
                 Mail::raw('開始更新交大課程', function($message) {
@@ -75,7 +76,7 @@ class Kernel extends ConsoleKernel
             })->evenInMaintenanceMode();
 
         // 維護結束
-        $schedule->command('up')->weekly()->mondays()->at('4:30')
+        $schedule->command('up')->weekly()->mondays()->at(Config::get('maintain.up'))
             ->after(function () {
                 Log::info('維護結束');
                 Mail::raw('維護結束', function($message) {
