@@ -7,7 +7,7 @@ return [
     'NCTU' => '交通大學',
 
     // NavBar選單
-    'Website Name' => '開放式課程討論區',
+    'Website Name' => 'Efficient Learning',
     'HomePage' => '首頁',
     'Account' => '會員資料',
     'Favorite' => '我的最愛',

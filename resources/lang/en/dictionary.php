@@ -7,7 +7,7 @@ return [
     'NCTU' => 'Chiao Tung University',
 
     // Items of nav bar.
-    'Web site Name' => 'Mooc',
+    'Web site Name' => 'Efficient Learning',
     'HomePage' => 'HomePage',
     'Account' => 'Account',
     'Favorite' => 'Favorite',
