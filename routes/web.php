@@ -14,27 +14,23 @@
 Auth::routes();
 
 
-Route::get('/member', 'MemberController@userInfo')->middleware('login')->name('member');
+Route::get('/member', 'MemberController@userInfo')->middleware('check.login')->name('member');
 
 // 課程頁面
 Route::prefix('index')->middleware('read.redis.data')->group(function () {
     Route::get('/', 'ClassController@showIndex')->name('index');
-    Route::get('/class', 'ClassController@showClass')->name('class');    
+    Route::get('/class', 'ClassController@showClass')->middleware('check.classId')->name('class');
 });
 
 // 留言板功能
-Route::prefix('message')->group(function () {
-    Route::post('/create', 'MessageController@create')->middleware('login');
-    Route::put('/update', 'MessageController@update');
-    Route::get('/show/{classId}', 'MessageController@show');
-    Route::delete('/delete', 'MessageController@delete');
+Route::prefix('message')->middleware(['check.login', 'check.classId'])->group(function () {
+    Route::post('/create', 'MessageController@create');
 });
 
 // API
 Route::prefix('api')->group(function () {
     // 留言板功能
-    Route::prefix('/message')->group(function () {
-        Route::post('/create', 'ApiMessageController@create');
+    Route::prefix('/message')->middleware('check.login')->group(function () {
         Route::put('/update', 'ApiMessageController@update');
         Route::delete('/delete', 'ApiMessageController@delete');
     });
@@ -42,16 +38,16 @@ Route::prefix('api')->group(function () {
     // 課程相關
     Route::prefix('/class')->group(function () {
         Route::get('/getOptions', 'ApiClassController@getOptions');
-        Route::get('/like', 'ApiClassController@show');
-        Route::put('/like', 'ApiClassController@update')->middleware('login');
+        Route::get('/like', 'ApiClassController@show')->middleware('check.classId');
+        Route::put('/like', 'ApiClassController@update')->middleware(['check.login', 'check.classId']);
     });
 
     // 我的最爱功能
     Route::prefix('/user')->group(function () {
         Route::get('/show', 'ApiUserController@show');
-        Route::put('/update', 'ApiUserController@update')->middleware('login');
-        Route::delete('/delete', 'ApiUserController@delete')->middleware('login');
+        Route::put('/update', 'ApiUserController@update')->middleware(['check.login', 'check.classId']);
+        Route::delete('/delete', 'ApiUserController@delete')->middleware(['check.login', 'check.classId']);
     });
 });
 
-Route::get('/logout', 'Auth\LoginController@logout')->middleware('login')->name('logout');
+Route::get('/logout', 'Auth\LoginController@logout')->middleware('check.login')->name('logout');

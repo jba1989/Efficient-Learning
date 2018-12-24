@@ -4,8 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 use Exception;
-Use Redis;
 use Log;
 
 
@@ -24,18 +24,22 @@ class CheckClassId
         try {
             $errMsg = trans('dictionary.Wrong ClassId');
 
-            // 若不存在此classId則返回
-            if (!in_array($input['classId'], json_decode(Redis::get('classIdList')))) {
-                if ($request->ajax()) {
-                    return response()->json(['message' => '', 'errors' => ['message' => $errMsg]], 403);
-                }
-        
-                if (!in_array($input['classId'], json_decode(Redis::get('classIdList')))) {
-                    return redirect()->back()->withErrors(trans('dictionary.Wrong ClassId'));
-                }
+            if ($request->input('classId') != null) {
+                $classId = $request->input('classId');
+            } elseif ($request->query('class') != null) {
+                $classId = $request->query('class');
             }
 
-            return $next($request);
+            // 若不存在此classId則返回
+            if (isset($classId) && (!in_array($classId, json_decode(Redis::get('classIdList'))))) {
+                if ($request->ajax()) {
+                    return response()->json(['message' => '', 'errors' => ['message' => $errMsg]], 403);
+                } else {
+                    return redirect()->back()->withErrors(trans('dictionary.Wrong ClassId'));
+                }
+            } else {
+                return $next($request);
+            }            
         } catch (Exception $err) {
             Log::error($err);
         }
